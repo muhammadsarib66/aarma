@@ -1,7 +1,6 @@
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
 
@@ -16,6 +15,7 @@ const FAQ = () => {
   const handleChange =
     (panel: any) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
+      console.log(event)
     };
   return (
     <section className="h-[80vh] bg-onSecondary flex flex-col py-20 gap-12 items-center">
