@@ -1,0 +1,9 @@
+.HeroDiv{
+    background: url('../../assets//images/Hero.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    object-fit: fill;
+
+    
+} 
