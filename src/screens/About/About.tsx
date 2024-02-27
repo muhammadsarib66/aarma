@@ -54,7 +54,7 @@ const About = () => {
               <span className="absolute flex  items-center justify-center w-2 h-2 bg-green-200 rounded-full -start-1 ring-2 ring-white dark:ring-gray-300 "></span>
               <h3 className=" text-onPrimary text-xl font-medium leading-tight">
                 {item.label}
-              </h3>https://mui.com/material-ui/react-paper/
+              </h3>
               <img
               key={index}
               className="md:hidden my-2 h-52 md:max-w-[320px] object-contain  "
