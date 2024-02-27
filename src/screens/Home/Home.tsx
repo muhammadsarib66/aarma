@@ -1,6 +1,7 @@
 import SignUp from "../../components/SignUp";
 import SubDetail from "../../components/SubDetail";
 import About from "../About/About";
+import FAQ from "../FAQ/FAQ";
 
 import Hero from "../Hero/Hero";
 import Testimonial from "../Testimonial/Testimonial";
@@ -16,6 +17,7 @@ const Home = () => {
     </div>
     <SubDetail />
     <Testimonial/>
+    <FAQ/>
 
     </>
   );

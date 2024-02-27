@@ -33,7 +33,7 @@ const About = () => {
   return (
     <section className="relative -top-28">
       <div className="mb-8">
-        <h2 className="text-4xl font-semibold text-onPrimary md:max-w-[749px]">
+        <h2 className="text-2xl md:text-4xl font-semibold text-onPrimary md:max-w-[749px]">
           Your Business, Our Priority Join us for Exceptional Service
         </h2>
       </div>
@@ -54,7 +54,7 @@ const About = () => {
               <span className="absolute flex  items-center justify-center w-2 h-2 bg-green-200 rounded-full -start-1 ring-2 ring-white dark:ring-gray-300 "></span>
               <h3 className=" text-onPrimary text-xl font-medium leading-tight">
                 {item.label}
-              </h3>
+              </h3>https://mui.com/material-ui/react-paper/
               <img
               key={index}
               className="md:hidden my-2 h-52 md:max-w-[320px] object-contain  "

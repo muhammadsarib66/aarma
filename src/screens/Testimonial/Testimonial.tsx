@@ -33,7 +33,7 @@ const Testimonial = () => {
         {
             test.map((item,ind)=>(
                 <div key={ind} className='w-72  md:w-80 flex flex-col gap-5'>   
-                <div className='w-80 h-72 shadow-xl hover:scale-105 duration-300 '>
+                <div className='md:w-80 h-72 shadow-xl hover:scale-105 duration-300 '>
 
                     <img src={item.image} alt="img" className='' />
                     </div>
