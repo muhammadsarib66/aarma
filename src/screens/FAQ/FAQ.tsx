@@ -5,17 +5,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
 
 const FAQ = () => {
-  // const [expendedd, setExpanded] = useState(false)
-
-  // const handleExpansion = () => {
-  //   setExpanded((prevExpanded) => !prevExpanded);
-  // };
   const [expanded, setExpanded] = useState<any | false>(false);
 
   const handleChange =
     (panel: any) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
-      console.log(event)
+      console.log(event);
     };
   return (
     <section className="h-[80vh] bg-onSecondary flex flex-col py-20 gap-12 items-center">
@@ -26,10 +21,9 @@ const FAQ = () => {
       </div>
       <div className="w-[90%] md:w-[60%] ">
         {[1, 2, 3, 4].map((item, ind) => (
-         
           <Accordion
-            key={ind}  
-            sx={{marginBottom: '20px'}}
+            key={ind}
+            sx={{ marginBottom: "20px" }}
             expanded={expanded === item}
             onChange={handleChange(item)}
           >
@@ -38,8 +32,8 @@ const FAQ = () => {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <h3 className=" text-lg md:text-xl font-semibold text-onPrimary" >
-               Q:{ind+1 }  Why do I partner with AARMA
+              <h3 className=" text-lg md:text-xl font-semibold text-onPrimary">
+                Q:{ind + 1} Why do I partner with AARMA
               </h3>
             </AccordionSummary>
             <AccordionDetails>

@@ -1,16 +1,23 @@
 import InputField from "./InputField";
 import { MyDropDown } from "./MyDropDown";
 import PrmaryBtn from "./PrmaryBtn";
+import { useNavigate } from "react-router-dom";
 
 interface SignUp {}
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const handleBusinessTypeSelect = (item: any) => {
     console.log(item);
   };
   const handleCitySelect = (item: any) => {
     console.log(item);
   };
+
+const handleGetStarted = () => {
+
+  navigate('/personaldetail')
+}
 
   return (
     <section className="relative -top-52 md:-top-44  py-10 px-7 bg-secondary  rounded-3xl max-w-[400px] min-h-fit ">
@@ -39,8 +46,9 @@ const SignUp = () => {
           arrVale={["Hyderabad", "Karachi", "Lahore", "Islamabad"]}
         />
         <PrmaryBtn
+        onClick={handleGetStarted}
           btnText="Get Started"
-          style="h-12 flex justify-center items-center bg-[#F33434]   text-secondary"
+          style="h-12 flex rounded-lg justify-center items-center bg-[#F33434]   text-secondary"
         />
       </div>
       <div className="">

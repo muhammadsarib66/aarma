@@ -1,0 +1,19 @@
+.Form1Div {
+  background-image: url("../../assets//Forms//Form1.png");
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.Form2Div {
+  background-image: url("../../assets//Forms//Form2.png");
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.Form3Div {
+  background-image: url("../../assets//Forms/Form3.png");
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

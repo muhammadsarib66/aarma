@@ -34,9 +34,9 @@ export const MyDropDown = ({title,arrVale , onSelect}:any) => {
         <ul
           className={` duration-300 ${
             isOpen ? "scale-100" : "scale-0"
-          } text-placeHolder absolute w-full overflow-y-auto h-40  z-10   rounded-md bg-onSecondary`}
+          } text-placeHolder absolute w-full overflow-y-auto max-h-40  z-10   rounded-md bg-onSecondary`}
         >
-          {arrVale?.map((item:any,ind : any) => (
+          {arrVale?.map((item:any, ind : any) => (
             <li key={ind}
               onClick={HandleSelectedValue(item)}
               className=" px-2 py-2 cursor-pointer hover:bg-[#E8F0FE] bg-secondary "
