@@ -14,10 +14,7 @@ const SignUp = () => {
     console.log(item);
   };
 
-const handleGetStarted = () => {
 
- 
-}
 const HandeSubmit = (e: any)=>{
   e.preventDefault()
   console.log('form')
