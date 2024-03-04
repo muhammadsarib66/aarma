@@ -16,6 +16,11 @@ const SignUp = () => {
 
 const handleGetStarted = () => {
 
+ 
+}
+const HandeSubmit = (e: any)=>{
+  e.preventDefault()
+  console.log('form')
   navigate('/personaldetail')
 }
 
@@ -26,6 +31,7 @@ const handleGetStarted = () => {
           Let’s start! It should only take a few minutes.
         </h2>
       </div>
+      <form onSubmit={HandeSubmit}>
       <div className="my-4 flex flex-col ">
         <InputField
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => e.target.value}
@@ -46,11 +52,13 @@ const handleGetStarted = () => {
           arrVale={["Hyderabad", "Karachi", "Lahore", "Islamabad"]}
         />
         <PrmaryBtn
-        onClick={handleGetStarted}
+        // onClick={handleGetStarted}
           btnText="Get Started"
+          type="submit"
           style="h-12 flex rounded-lg justify-center items-center bg-[#F33434]   text-secondary"
         />
       </div>
+      </form>
       <div className="">
         <p className="text-onPrimary text-sm">
           I already have an account{" "}

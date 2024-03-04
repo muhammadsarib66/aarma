@@ -17,3 +17,14 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+.PackageFormDiv {
+  background-image: url("../../assets//Forms/Packages.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  /* background-size: contain; */
+/* background-size: unset ; */
+
+
+  background-color: darkblue;
+}

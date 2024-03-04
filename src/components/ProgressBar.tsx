@@ -75,9 +75,9 @@ export default function PrograssBar({navigateTo}:any) {
         <span className="flex gap-2 md:gap-4">
 
       {Incprogress > 10 && (
-      <PrmaryBtn  onClick={HandleBack} style=" bg-placeHolder  flex rounded-full w-fit justify-center text-sm md:text-base items-center  text-secondary  p-2 md:px-3 md:py-2"  btnText='Back' />
+      <PrmaryBtn  onClick={HandleBack} style=" bg-placeHolder  flex rounded-full w-fit justify-center text-sm md:text-base items-center  text-secondary  p-2 md:px-3 md:py-2 bg-onSecondary"  btnText='Back' />
       )}
-      <PrmaryBtn  onClick={HandleNext} style="  flex rounded-full w-fit justify-center items-center text-sm md:text-base text-secondary   p-2 md:px-3 md:py-2"  btnText='Save & Continue' />
+      <PrmaryBtn  onClick={HandleNext} style=" bg-primary flex rounded-full w-fit justify-center items-center text-sm md:text-base text-secondary   p-2 md:px-3 md:py-2"  btnText='Save & Continue' />
         </span>
         </div>
     </Box>

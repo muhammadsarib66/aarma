@@ -1,11 +1,23 @@
-const PrmaryBtn = ({ btnText, style, onClick }: any) => {
+const PrmaryBtn = ({ btnText, style, onClick, type }: any) => {
   return (
-    <div
-      onClick={onClick}
-      className={`${style}  cursor-pointer    bg-primary `}
-    >
-      {btnText}
-    </div>
+    <>
+      {type ? (
+        <button
+          type={type}
+          onClick={onClick}
+          className={`${style}  cursor-pointer`}
+        >
+          {btnText}
+        </button>
+      ) : (
+        <div
+          onClick={onClick}
+          className={`${style}  cursor-pointer     `}
+        >
+          {btnText}
+        </div>
+      )}
+    </>
   );
 };
 
