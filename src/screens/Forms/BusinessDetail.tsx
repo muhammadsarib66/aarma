@@ -29,7 +29,7 @@ const BusinessDetail = () => {
         </div>
       </div>
       <div className="flex-1 flex py-14 justify-between flex-col bg-secondary">
-        <div className=" px-8 md:px-24 ">
+        <div className=" my-4 px-8 md:px-24 ">
           <div className=" max-w-[530px] flex flex-col gap-4">
             <h1 className="text-onPrimary font-bold text-xl md:text-3xl ">
               Business Details

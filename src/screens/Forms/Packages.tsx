@@ -14,7 +14,7 @@ const Packages = () => {
         </div>
       </div>
       <div className="flex-1 flex py-14 justify-between flex-col bg-secondary">
-        <div className=" px-8 mb-8  lg:px-24 ">
+        <div className=" px-8 my-4  lg:px-24 ">
           <div className=" max-w-[530px] flex flex-col gap-4">
             <h1 className="text-onPrimary font-bold text-xl md:text-3xl ">
               Packages
@@ -45,7 +45,7 @@ const Packages = () => {
         <div>
         </div>
         <div className="mt-4">
-          <PrograssBar />
+          <PrograssBar navigateTo='/uploadimage' />
         </div>
       </div>
     </section>

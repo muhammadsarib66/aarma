@@ -5,26 +5,41 @@
   background-size: cover;
 }
 .Form2Div {
-  background-image: url("../../assets//Forms//Form2.png");
+  background-image: url("../../assets/Forms//Form2.png");
   background-position: right;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .Form3Div {
-  background-image: url("../../assets//Forms/Form3.png");
+  background-image: url("../../assets/Forms/Form3.png");
   background-position: right;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .PackageFormDiv {
-  background-image: url("../../assets//Forms/Packages.png");
+  background-image: url("../../assets/Forms/Packages.png");
   background-position: center;
   background-repeat: no-repeat;
-  /* background-size: contain; */
-/* background-size: unset ; */
-
-
   background-color: darkblue;
+}
+.uploadImgFormDiv{
+  background-image: url("../../assets/Forms/Form5.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover ;
+}
+.ContactUsDiv{
+  background-image: url("../../assets/images/contactus.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover ;
+}
+.AboutUsPage{
+  background-image:  url('../../assets//images/aboutus.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
 }

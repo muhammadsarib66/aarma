@@ -6,6 +6,7 @@ const InputField = ({
   value,
   style,
   label,
+  Name
 }: any) => {
   const isFileInput = type === "file";
 
@@ -31,6 +32,7 @@ const InputField = ({
           placeholder={placeholder}
           onChange={onChange}
           value={value}
+          name={Name}
           required
         />
       )}

@@ -13,7 +13,7 @@ const FAQ = () => {
       console.log(event);
     };
   return (
-    <section className="h-[80vh] bg-onSecondary flex flex-col py-20 gap-12 items-center">
+    <section className="min-h-[100vh] bg-onSecondary flex flex-col py-20 gap-12 items-center">
       <div>
         <h2 className="text-2xl md:text-3xl text-onPrimary font-semibold text-center pt-8">
           Frequently Asked Questions

@@ -23,5 +23,15 @@ input::placeholder::after {
   margin-left: 2px; /* Adjust spacing as needed */
 }
 
+.active{
+  border : 2px solid red
+}
+.MadalMailIcon{
+  background: url("./assets//images//mail.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  
+}
 
 
