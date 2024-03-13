@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import imgUpl from "../../assets/images/uploaImg.png";
 import InputField from "../../components/InputField";
 import TextArea from "../../components/TextArea";
