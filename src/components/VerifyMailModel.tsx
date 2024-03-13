@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 import { setIsModelClose } from "../features/slicer/Slicer";
 import PrmaryBtn from "./PrmaryBtn";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,7 @@ const style = {
 
 const VerifyMailModel = () => {
   const navigate = useNavigate()
-  const { isModalOpen, SignUpData } = useSelector((state: RootState) => state.Slicer);
+  const { isModalOpen, SignUpData } = useSelector((state: any) => state.Slicer);
   const dispatch = useDispatch();
   const handleClose = () => dispatch(setIsModelClose());
   const handleNextPage = ()=>{

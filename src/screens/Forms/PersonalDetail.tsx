@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import imgUpl from "../../assets/images/uploaImg.png";
 import InputField from "../../components/InputField";
 import TextArea from "../../components/TextArea";
@@ -75,7 +75,7 @@ const PersonalDetail = () => {
               className="hidden"
             />
             {selectedCoverImg ? <img
-              src={URL.createObjectURL(selectedCoverImg)}
+              src={URL.createObjectURL(new Blob([selectedProfileImg]))}
               className=" max-h-36 w-full  object-cover object-fit rounded-md"
             />
             :<span className="w-60 flex flex-col items-center gap-4 ">
@@ -95,7 +95,7 @@ const PersonalDetail = () => {
               className="hidden"
             />
             {selectedProfileImg ? <img
-              src={URL.createObjectURL(selectedProfileImg)}
+              src={URL.createObjectURL(new Blob([selectedProfileImg]))}
               className=" max-h-36 w-36  object-cover object-fit rounded-full"
             />
             :<span className="w-60 flex flex-col items-center gap-4 ">
