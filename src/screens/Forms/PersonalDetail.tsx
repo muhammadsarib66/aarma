@@ -75,7 +75,7 @@ const PersonalDetail = () => {
               className="hidden"
             />
             {selectedCoverImg ? <img
-              src={URL.createObjectURL(new Blob([selectedProfileImg]))}
+              src={URL.createObjectURL(new Blob([selectedCoverImg]))}
               className=" max-h-36 w-full  object-cover object-fit rounded-md"
             />
             :<span className="w-60 flex flex-col items-center gap-4 ">
