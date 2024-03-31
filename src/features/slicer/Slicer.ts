@@ -1,5 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export const baseUrl = "http://139.84.209.189:3002/";
+export const token = "";
+export const config = {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+};
+
 const initialState = {
   testValue: 1,
   isLoading: false,

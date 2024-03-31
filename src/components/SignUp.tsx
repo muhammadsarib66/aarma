@@ -1,63 +1,65 @@
 import { useState } from "react";
 import InputField from "./InputField";
-import { MyDropDown } from "./MyDropDown";
 import PrmaryBtn from "./PrmaryBtn";
 import VerfyMailModel from "./VerifyMailModel";
-import { useDispatch } from "react-redux";
-import { setIsModalOpen, setSignUpForm } from "../features/slicer/Slicer";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsModalOpen } from "../features/slicer/Slicer";
 import { toast } from "react-toastify";
+import {
+  createAccountApi,
+  setReqAccData,
+} from "../features/slicer/RequestAccountSlicer";
+import Loader from "./Loader";
 
 const SignUp = () => {
+  const { isLoading } = useSelector((state: any) => state.RequestAccountSlicer);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    phone: "",
-    businessType: "",
-    city: "",
+    phoneNumber: "",
+    password: "",
+    fullname: "",
   });
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    console.log(e.target.value);
   };
-  const handleBusinessTypeSelect = (item: string) => {
-    setFormData({
-      ...formData,
-      businessType: item,
-    });
-    console.log(item);
-  };
+  // const handleBusinessTypeSelect = (item: string) => {
+  //   setFormData({
+  //     ...formData,
+  //     businessType: item,
+  //   });
+  //   console.log(item);
+  // };
 
-  const handleCitySelect = (item: any) => {
-    console.log(item);
-    setFormData({
-      ...formData,
-      city: item,
-    });
-  };
+  // const handleCitySelect = (item: any) => {
+  //   console.log(item);
+  //   setFormData({
+  //     ...formData,
+  //     city: item,
+  //   });
+  // };
 
   const HandeSubmit = (e: any) => {
     e.preventDefault();
-    console.log("form");
-    console.log("Form Data:", formData);
-    // navigate('/personaldetail')
     if (
       formData.firstName &&
       formData.lastName &&
       formData.email &&
-      formData.phone &&
-      formData.businessType &&
-      formData.city
+      formData.phoneNumber &&
+      formData.password
     ) {
-      dispatch(setSignUpForm(formData));
-      dispatch(setIsModalOpen())
-    }
-    else{
-      toast.error("Please Fill All feilds")
+      localStorage.setItem("formData", JSON.stringify(formData));
+      dispatch(createAccountApi(formData)); // Fix: Pass formData as an argument to createAccountApi
+      setTimeout(() => {
+        if (!isLoading) dispatch(setIsModalOpen());
+      }, 3000);
+    } else {
+      toast.error("Please Fill All feilds");
     }
   };
 
@@ -85,36 +87,36 @@ const SignUp = () => {
             placeholder="Business Owner Last Name *"
           />
           <InputField
+            Name="fullname"
+            onChange={(e: any) => handleInput(e)}
+            value={formData.fullname}
+            type="text"
+            placeholder="Business Owner Full Name *"
+          />
+          <InputField
             Name="email"
             onChange={(e: any) => handleInput(e)}
             value={formData.email}
             type="email"
             placeholder="Enter Your Business Email *"
           />
-          <MyDropDown
-            onSelect={handleBusinessTypeSelect}
-            title="Business Type *"
-            arrVale={[
-              "Hair Saloon",
-              "Hall Managment",
-              "Boutique",
-              "Barbar Shop",
-            ]}
-          />
+
           <InputField
-            Name="phone"
+            Name="phoneNumber"
             onChange={(e: any) => handleInput(e)}
-            value={formData.phone}
+            value={formData.phoneNumber}
             type="number"
             placeholder="Mobile Phone  *"
           />
-          <MyDropDown
-            onSelect={handleCitySelect}
-            title="Select Your City *"
-            arrVale={["Hyderabad", "Karachi", "Lahore", "Islamabad"]}
+          <InputField
+            Name="password"
+            onChange={(e: any) => handleInput(e)}
+            value={formData.password}
+            type="text"
+            placeholder="Enter Your Password *"
           />
+
           <PrmaryBtn
-            // onClick={handleGetStarted}
             btnText="Get Started"
             type="submit"
             style="h-12 flex rounded-lg justify-center items-center bg-[#F33434]   text-secondary"
@@ -129,6 +131,7 @@ const SignUp = () => {
           </span>
         </p>
       </div>
+      {isLoading && <Loader />}
       <VerfyMailModel />
     </section>
   );

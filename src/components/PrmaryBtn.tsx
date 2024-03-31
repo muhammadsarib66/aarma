@@ -3,6 +3,7 @@ const PrmaryBtn = ({ btnText, style, onClick, type }: any) => {
     <>
       {type ? (
         <button
+
           type={type}
           onClick={onClick}
           className={`${style}  cursor-pointer`}
