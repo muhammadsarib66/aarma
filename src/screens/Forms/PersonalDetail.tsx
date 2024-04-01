@@ -7,9 +7,9 @@ import PrmaryBtn from "../../components/PrmaryBtn";
 const PersonalDetail = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedCoverImg, setSelectedCoverImg] = useState('');
+  const fileInputRefCover = useRef<HTMLInputElement>(null);
   const [selectedProfileImg, setSelectedProfileImg] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const fileInputRefCover = useRef<HTMLInputElement>(null);
   const fileInputRefProfile = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {

@@ -3,8 +3,10 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InputField from "../../components/InputField";
+import { ProfileInfoApi } from "../../features/slicer/ProfileInfoSlicer";
+import Loader from "../../components/Loader";
 
 const style = {
   position: "absolute" as "absolute",
@@ -19,7 +21,10 @@ const style = {
 };
 
 export default function ProfileInfoModal() {
+  const dispatch = useDispatch()
   const { categoryData } = useSelector((state: any) => state.CategorySlicer);
+  const {isLoading} = useSelector((state:any)=> state.ProfileInfoSlicer)
+  // console.log(state)
   const [open, setOpen] = React.useState(false);
   const [selectedOptions, setSelectedOptions] = useState<any>([]);
   const [bio , setBio] = useState('')
@@ -56,8 +61,9 @@ export default function ProfileInfoModal() {
          tagline,
         categories: selectedOptions,
         };
-    console.log(Obj)      
-    
+        console.log(Obj)      
+        dispatch(ProfileInfoApi(Obj))
+        // toast.success('Profile Info Added')
     setBio('')
     setTagline('')
     setSelectedOptions([])
@@ -77,6 +83,8 @@ export default function ProfileInfoModal() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
+        <>
+        {isLoading && <Loader/>}
         <Box sx={style}>
           <h1 className="text-2xl font-bold text-onPrimary pb-2">
             Complete Your Bio
@@ -106,7 +114,7 @@ export default function ProfileInfoModal() {
             <h2 className="text-xl font-semibold text-onPrimary pb-2 ">
               Select Categories
             </h2>
-            {categoryData.map((option) => (
+            {categoryData &&  categoryData?.map((option) => (
               <div className=" flex gap-3 py-1 " key={option._id}>
                 <input
                   type="checkbox"
@@ -124,6 +132,8 @@ export default function ProfileInfoModal() {
             </Button>
           </div>
         </Box>
+        </>
+
       </Modal>
     </div>
   );

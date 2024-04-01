@@ -9,7 +9,6 @@ export const getAllCatApi = createAsyncThunk(
     return await axios
       .get(`${baseUrl}categories/categories`)
       .then((resp) => {
-        console.log(resp.data.data);
         // toast.success(resp.data.message);
         return resp.data.data;
       })
@@ -42,7 +41,6 @@ const CategorySlicer = createSlice({
     builder.addCase(getAllCatApi.fulfilled, (state, action) => {
       state.isLoading = false;
       state.categoryData = action.payload
-      console.log("fulfilled", action.payload);
     });
     builder.addCase(getAllCatApi.rejected, (state) => {
       state.isLoading = false;

@@ -2,11 +2,6 @@ import Navbar from "./components/Navbar";
 import ScrollToTop from "./components/ScrollToTop";
 import AboutUs from "./screens/About/AboutUs";
 import ContactUs from "./screens/ContactUs";
-// import BusinessDetail from "./screens/Forms/BusinessDetail";
-// import ContactDetail from "./screens/Forms/ContactDetail";
-// import Packages from "./screens/Forms/Packages";
-// import PersonalDetail from "./screens/Forms/PersonalDetail";
-// import UpoadImages from "./screens/Forms/UpoadImages";
 import Home from "./screens/Home/Home";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,8 +18,8 @@ function App() {
   const navigate = useNavigate();
 
   const { UserData } = useSelector((state: any) => state.LoginSlicer);
-  const { ProfileData } = useSelector((state: any) => state.GetMyProfile);
-  console.log(ProfileData);
+  // const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
+  // console.log(ProfileData);
   // console.log(token);
   const isAuthenticated = UserData?.email;
   // console.log(isAuthenticated);

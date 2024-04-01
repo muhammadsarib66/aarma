@@ -34,7 +34,7 @@ const initialState = {
   isError: false,
   //   UserData: "",
 };
-const ProfileVerificationSlicer = createSlice({
+const ProfileVerifySlicer = createSlice({
   name: "ProfileVerificationApi",
   initialState,
   reducers: {
@@ -60,4 +60,4 @@ const ProfileVerificationSlicer = createSlice({
 });
 
 // export const {setReqAccData} = LoginSlicer.actions;
-export default ProfileVerificationSlicer.reducer;
+export default ProfileVerifySlicer.reducer;

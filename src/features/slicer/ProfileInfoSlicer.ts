@@ -1,16 +1,17 @@
+// event-managers/complete-profile-info
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "./Slicer";
 import { toast } from "react-toastify";
 
-export const ProfileUploadProfileApi: any = createAsyncThunk(
-  "aarma/ProfileUploadProfileApi",
+export const ProfileInfoApi: any = createAsyncThunk(
+  "aarma/ProfileinfoApi",
   async (infoData: any) => {
     console.log(infoData);
     const token = localStorage.getItem("token");
 
     return await axios
-      .post(`${baseUrl}event-managers/upload-profile`, infoData, {
+      .post(`${baseUrl}event-managers/complete-profile-info`, infoData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -35,24 +36,22 @@ const initialState = {
   //   UserData: "",
 };
 const ProfileInfoSlicer = createSlice({
-  name: "AddInfo",
+  name: "profileInfo",
   initialState,
   reducers: {
-    // setReqAccData : (state,action)=>{
-    //     state.ReqAccData = action.payload
-    // }
+  
   },
 
   extraReducers: (builder) => {
-    builder.addCase(ProfileUploadProfileApi.pending, (state) => {
+    builder.addCase(ProfileInfoApi.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(ProfileUploadProfileApi.fulfilled, (state, action) => {
+    builder.addCase(ProfileInfoApi.fulfilled, (state, action) => {
       state.isLoading = false;
-
+        console.log(action.payloed , 'submited')
       // console.log(localStorage.getItem("token"));
     });
-    builder.addCase(ProfileUploadProfileApi.rejected, (state) => {
+    builder.addCase(ProfileInfoApi.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });

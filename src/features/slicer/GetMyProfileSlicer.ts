@@ -11,7 +11,6 @@ export const GetMyProfile: any = createAsyncThunk(
       if (!token) {
         throw new Error("Token not found");
       }
-
       const response = await axios.get(`${baseUrl}event-managers/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -21,7 +20,7 @@ export const GetMyProfile: any = createAsyncThunk(
       toast.success(response.data.message);
       console.log(response);
 
-      return response.data;
+      return response.data.data;
     } catch (error: any) {
       // Handle the error
       if (error.response) {
