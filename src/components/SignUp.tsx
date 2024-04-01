@@ -10,6 +10,7 @@ import {
   setReqAccData,
 } from "../features/slicer/RequestAccountSlicer";
 import Loader from "./Loader";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const { isLoading } = useSelector((state: any) => state.RequestAccountSlicer);
@@ -127,7 +128,10 @@ const SignUp = () => {
         <p className="text-onPrimary text-sm">
           I already have an account{" "}
           <span className="underline font-semibold text-primary cursor-pointer">
-            Sign In
+            <Link to={"/login"}>
+
+            Login
+            </Link>
           </span>
         </p>
       </div>

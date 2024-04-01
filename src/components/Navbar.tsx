@@ -39,7 +39,7 @@ const Navbar = () => {
         </h1>
         <div className="flex gap-8  text-primary bg-onSecondary  px-4  lg:px-16  py-2 rounded-full">
           {NavTabs?.map((tab, ind) => (
-            <p  key={ind} onClick={() => setActiveTab(tab.link)}>
+            <p key={ind} onClick={() => setActiveTab(tab.link)}>
               <Link
                 className={`${
                   activeTab == tab.link
@@ -47,7 +47,6 @@ const Navbar = () => {
                     : ""
                 }`}
                 to={tab.link}
-               
               >
                 {tab.title}
 
@@ -57,10 +56,12 @@ const Navbar = () => {
           ))}
         </div>
         <div>
-          <PrmaryBtn
-            btnText="Login"
-            style="bg-secondary text-primary py-1 px-4 rounded-full"
-          />
+          <Link to="/login">
+            <PrmaryBtn
+              btnText="Login"
+              style="bg-secondary text-primary py-1 px-4 rounded-full"
+            />
+          </Link>
         </div>
       </section>
       <section className="md:hidden fixed flex justify-between items-center bg-primary px-4 md:px-20 h-16 md:h-20 w-full z-20 ">
@@ -114,10 +115,12 @@ const Navbar = () => {
             })}
           </ul>
           <div className="   pt-4   ">
-            <PrmaryBtn
-              style="text-sm  bg-primary text-secondary p-2 rounded-md uppercase"
-              btnText="Sign In"
-            />
+            <Link to="/login">
+              <PrmaryBtn
+                style="text-sm  bg-primary text-secondary p-2 rounded-md uppercase"
+                btnText="Login "
+              />
+            </Link>
           </div>
         </div>
       </section>

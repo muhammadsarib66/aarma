@@ -3,15 +3,6 @@ import axios from "axios";
 import { baseUrl } from "./Slicer";
 import { toast } from "react-toastify";
 
-// interface UserData {
-//     firstName: string;
-//     lastName: string;
-//     email: string;
-//     phoneNumber: string | number;
-//     password: string;
-//     fullname: string;
-
-//   }
 export const createAccountApi = createAsyncThunk(
     "aarma/createAccount",
     async (userData , { dispatch }) => {
@@ -19,11 +10,19 @@ export const createAccountApi = createAsyncThunk(
       return await axios
         .post(`${baseUrl}users/request-account`, userData)
         .then((resp) => {
-            toast.success(resp.data.message)
+            console.log(resp.status)
+            // if(resp.status === 400){
+            //     toast.error("email already exist")
+            //     alert('email already exist')
+            // }
+            // else{
+                toast.success(resp.data.message)
+            // }
             console.log(resp.data)
           return resp.data;
         })
         .catch((err) => {
+            toast.error(err.data.message)
             console.log(err.data)
           return err.message;
         });
