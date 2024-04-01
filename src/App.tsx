@@ -22,6 +22,7 @@ import Analatics from "./screens/analatics/Analatics";
 import Bookings from "./screens/Booking/Bookings";
 import { useEffect } from "react";
 import { LoginAccApi } from "./features/slicer/LoginSlicer";
+import { getAllCatApi } from "./features/slicer/CategorySlicer";
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ function App() {
       } catch (error: any) {
         console.error("Error parsing saved credentials:", error.message);
       }
+      dispatch(getAllCatApi())
     }
   }, []);
 
