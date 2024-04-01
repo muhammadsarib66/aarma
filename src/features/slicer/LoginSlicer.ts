@@ -6,12 +6,12 @@ import { toast } from "react-toastify";
 export const LoginAccApi: any = createAsyncThunk(
   "aarma/loginacc",
   async (loginCredential: any, { dispatch }) => {
-    console.log(loginCredential);
+    // console.log(loginCredential);
     return await axios
       .post(`${baseUrl}users/eventmanager-login`, loginCredential)
       .then((resp) => {
         toast.success("login Succesfull");
-        console.log(resp.data);
+        // console.log(resp.data);
         if (resp.data) {
           localStorage.setItem(
             "ArmaCredienials",

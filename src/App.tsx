@@ -8,12 +8,7 @@ import ContactUs from "./screens/ContactUs";
 // import PersonalDetail from "./screens/Forms/PersonalDetail";
 // import UpoadImages from "./screens/Forms/UpoadImages";
 import Home from "./screens/Home/Home";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./screens/Login/Login";
 import Dashboard from "./screens/Dashboard/Dashboard";
@@ -27,7 +22,8 @@ function App() {
   const navigate = useNavigate();
 
   const { UserData } = useSelector((state: any) => state.LoginSlicer);
-
+  const { ProfileData } = useSelector((state: any) => state.GetMyProfile);
+  console.log(ProfileData);
   // console.log(token);
   const isAuthenticated = UserData?.email;
   // console.log(isAuthenticated);
