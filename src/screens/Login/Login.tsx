@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import loginImg from "../../assets/Forms/Form1.png";
@@ -12,24 +12,25 @@ interface FormValues {
   password: string;
 }
 const Login: React.FC = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate(); 
-    const {isLoading} = useSelector((state:any)=>state.LoginSlicer);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isLoading } = useSelector((state: any) => state.LoginSlicer);
   const [isVisible, setIsVisible] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
+      .min(6, "Password not match")
       .required("Password is required"),
   });
-  const handleSubmit = async (values: FormValues, { resetForm }) => {
+  const handleSubmit = async (values: FormValues, { resetForm }: any) => {
     try {
       setSubmitting(true);
       // Perform form submission logic here
       console.log(values);
-      dispatch(LoginAccApi(values))
-      navigate('/dashboard')
+      dispatch(LoginAccApi(values));
+      // navigate("Dashboard");
+      // window.location.reload();
       // Set submitting to false after successful submission
       resetForm();
       setSubmitting(false);
@@ -39,7 +40,25 @@ const Login: React.FC = () => {
       setSubmitting(false);
     }
   };
+  const savedCredentials = localStorage.getItem("ArmaCredienials");
 
+  useEffect(() => {
+    // Check if there are saved credentials in local storage
+
+    // console.log(savedCredentials);
+    if (savedCredentials) {
+      // console.log(savedCredentials);
+      try {
+        const parsedCredentials = JSON.parse(savedCredentials);
+        // Automatically log in with saved credentials
+        dispatch(LoginAccApi(parsedCredentials));
+        // Navigate to "/Operations2"
+        navigate("/Dashboard");
+      } catch (error: any) {
+        console.error("Error parsing saved credentials:", error.message);
+      }
+    }
+  }, [handleSubmit]);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -51,9 +70,7 @@ const Login: React.FC = () => {
 
   return (
     <section className="flex pt-14 md:pt-20 ">
-        {
-            isLoading && <Loader />
-        }
+      {isLoading && <Loader />}
       <div className=" hidden md:flex flex-1  ">
         <img src={loginImg} className=" object-cover w-full h-screen " />
       </div>

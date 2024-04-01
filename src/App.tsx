@@ -8,54 +8,87 @@ import ContactUs from "./screens/ContactUs";
 // import PersonalDetail from "./screens/Forms/PersonalDetail";
 // import UpoadImages from "./screens/Forms/UpoadImages";
 import Home from "./screens/Home/Home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./screens/Login/Login";
 import Dashboard from "./screens/Dashboard/Dashboard";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Analatics from "./screens/analatics/Analatics";
+import Bookings from "./screens/Booking/Bookings";
+import { useEffect } from "react";
+import { LoginAccApi } from "./features/slicer/LoginSlicer";
 function App() {
-  const [token, setToken] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { UserData } = useSelector((state: any) => state.LoginSlicer);
+
+  // console.log(token);
+  const isAuthenticated = UserData?.email;
+  // console.log(isAuthenticated);
+
+  const savedCredentials = localStorage.getItem("ArmaCredienials");
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
-  }, [token]);
+    // Check if there are saved credentials in local storage
+
+    // console.log(savedCredentials);
+    if (savedCredentials) {
+      // console.log(savedCredentials);
+      try {
+        const parsedCredentials = JSON.parse(savedCredentials);
+        // Automatically log in with saved credentials
+        dispatch(LoginAccApi(parsedCredentials));
+        // Navigate to "/Operations2"
+        navigate("/Dashboard");
+      } catch (error: any) {
+        console.error("Error parsing saved credentials:", error.message);
+      }
+    }
+  }, []);
+
   return (
     <>
-      
-      <Router>
+      <>
         <Navbar />
         <ScrollToTop />
         <Routes>
           <>
-          {!token && (
-            <>
-            <Route path="/*" element={<Home />} />
-            <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/login" element={<Login />} />
-            </>
-            )
-          }
-          {token && (
-            <>
-            <Route exact path="/*" element={<Dashboard />} />
-            </>
-          )}
-
+            {!isAuthenticated && (
+              <>
+                <Route path="/*" element={<Home />} />
+                <Route path="/contactus" element={<ContactUs />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/login" element={<Login />} />
+              </>
+            )}
+            {isAuthenticated && (
+              <>
+                <Route path="/*" element={<Dashboard />} />
+                <Route path="/Dashboard" element={<Dashboard />} />
+                <Route path="/Analytics" element={<Analatics />} />
+                <Route path="/Bookings" element={<Bookings />} />
+              </>
+            )}
           </>
         </Routes>
-      </Router>
-      
+      </>
     </>
   );
 }
 
 export default App;
 
-{/* <Route path="/personaldetail" element={<PersonalDetail/>} />
+{
+  /* <Route path="/personaldetail" element={<PersonalDetail/>} />
 <Route path="/contactdetail" element={<ContactDetail/>} />
 <Route path="/businessdetail" element={<BusinessDetail/>} />
 <Route path="/packages" element={<Packages/>} />
 <Route path="/uploadimage" element={<UpoadImages />} />
-*/}
+*/
+}

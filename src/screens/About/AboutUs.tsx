@@ -8,15 +8,16 @@ const AboutUs = () => {
   return (
     <section className=" pt-14 md:pt-20">
       <div className="AboutUsPage h-[530px]">
-        <h1 className="text-secondary text-4xl uppercase font-bold pl-14 md:pl-40 pt-32 md:pt-52">
+        {/* <h1 className="text-secondary text-4xl uppercase font-bold pl-14 md:pl-40 pt-32 md:pt-52">
           About Us
-        </h1>
+        </h1> */}
       </div>
 
       <div className="grid gap-8 md:gap-3 grid-cols-1 md:grid-cols-2  place-items-center bg-gradient-to-r from-[#E9F3F3] via-[#E0E6FF] to-[#F2F0FF] p-8 md:p-20">
         <div className="col-span-1 flex items-start justify-center flex-col gap-6">
           <h1 className="text-3xl  font-semibold text-onPrimary">
-          <span className="text-[#8584a5]">Farewell </span>Anxietys , <br/>    Greetings  <span className="text-[#8584a5] ">Recollection</span>
+            <span className="text-[#8584a5]">Farewell </span>Anxietys , <br />{" "}
+            Greetings <span className="text-[#8584a5] ">Recollection</span>
           </h1>
           <p>
             In the quiet embrace of tranquility, Anxieties bid adieu,

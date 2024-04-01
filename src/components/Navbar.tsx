@@ -1,9 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
 import PrmaryBtn from "./PrmaryBtn";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Avatar from "@mui/material/Avatar";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("/home");
+  const { UserData } = useSelector((state: any) => state.LoginSlicer);
+  const isAuthenticated = UserData?.email;
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleClose2 = () => {
+    setAnchorEl(null);
+    console.log("logout");
+    localStorage.removeItem("ArmaCredienials");
+    localStorage.removeItem("token");
+    window.location.reload();
+    navigate("/login");
+  };
+
   const NavTabs = [
     {
       title: "Home",
@@ -23,7 +46,25 @@ const Navbar = () => {
     //   icon: "fa-solid fa-store",
     // },
   ];
-
+  const NavTabs2 = [
+    {
+      title: "Dashboard",
+      link: "/Dashboard",
+    },
+    {
+      title: "Bookings",
+      link: "/Bookings",
+    },
+    {
+      title: "Analytics",
+      link: "/Analytics",
+    },
+    // {
+    //   title: "My Business",
+    //   link: "/dashboard",
+    //   icon: "fa-solid fa-store",
+    // },
+  ];
   const handleOpenNav = () => {
     setIsOpen(!isOpen);
   };
@@ -38,30 +79,75 @@ const Navbar = () => {
           aarma business
         </h1>
         <div className="flex gap-8  text-primary bg-onSecondary  px-4  lg:px-16  py-2 rounded-full">
-          {NavTabs?.map((tab, ind) => (
-            <p key={ind} onClick={() => setActiveTab(tab.link)}>
-              <Link
-                className={`${
-                  activeTab == tab.link
-                    ? "border-b-2 border-primary duration-300 transition text-black"
-                    : ""
-                }`}
-                to={tab.link}
-              >
-                {tab.title}
+          {!isAuthenticated ? (
+            <>
+              {NavTabs?.map((tab, ind) => (
+                <p key={ind} onClick={() => setActiveTab(tab.link)}>
+                  <Link
+                    className={`${
+                      activeTab == tab.link
+                        ? "border-b-2 border-primary duration-300 transition text-black"
+                        : ""
+                    }`}
+                    to={tab.link}
+                  >
+                    {tab.title}
 
-                {/* {tab?.icon && <i className={`pl-2 ${tab?.icon}`}></i>} */}
-              </Link>
-            </p>
-          ))}
+                    {/* {tab?.icon && <i className={`pl-2 ${tab?.icon}`}></i>} */}
+                  </Link>
+                </p>
+              ))}
+            </>
+          ) : (
+            <>
+              {NavTabs2?.map((tab, ind) => (
+                <p key={ind} onClick={() => setActiveTab(tab.link)}>
+                  <Link
+                    className={`${
+                      activeTab == tab.link
+                        ? "border-b-2 border-primary duration-300 transition text-black"
+                        : ""
+                    }`}
+                    to={tab.link}
+                  >
+                    {tab.title}
+
+                    {/* {tab?.icon && <i className={`pl-2 ${tab?.icon}`}></i>} */}
+                  </Link>
+                </p>
+              ))}
+            </>
+          )}
         </div>
         <div>
-          <Link to="/login">
-            <PrmaryBtn
-              btnText="Login"
-              style="bg-secondary text-primary py-1 px-4 rounded-full"
-            />
-          </Link>
+          {!isAuthenticated ? (
+            <Link to="/login">
+              <PrmaryBtn
+                btnText="Login"
+                style="bg-secondary text-primary py-1 px-4 rounded-full"
+              />
+            </Link>
+          ) : (
+            <div>
+              <Avatar
+                onClick={handleClick}
+                alt="Remy Sharp"
+                src="/static/images/avatar/1.jpg"
+              />
+
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem onClick={handleClose2}>Logout</MenuItem>
+              </Menu>
+            </div>
+          )}
         </div>
       </section>
       <section className="md:hidden fixed flex justify-between items-center bg-primary px-4 md:px-20 h-16 md:h-20 w-full z-20 ">
