@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
+import LogoImg from "../assets/images/AboutusImg2.png";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("/home");
@@ -18,7 +19,7 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleClose2 = () => {
+  const handleClose2: any = () => {
     setAnchorEl(null);
     console.log("logout");
     localStorage.removeItem("ArmaCredienials");
@@ -129,11 +130,7 @@ const Navbar = () => {
             </Link>
           ) : (
             <div>
-              <Avatar
-                onClick={handleClick}
-                alt="Remy Sharp"
-                src="/static/images/avatar/1.jpg"
-              />
+              <Avatar alt="Remy Sharp" src={LogoImg} onClick={handleClick} />
 
               <Menu
                 id="basic-menu"

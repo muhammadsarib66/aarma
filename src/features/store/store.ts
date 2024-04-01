@@ -4,13 +4,21 @@ import RequestAccountSlicer from "../slicer/RequestAccountSlicer";
 import VerifyOtpSlicer from "../slicer/VerifyOtpSlicer";
 import LoginSlicer from "../slicer/LoginSlicer"
 import CategorySlicer from "../slicer/CategorySlicer";
+import ProfileUploadProfileApi from "../slicer/ProfileUploadProfileApi";
+import ProfileUploadCover from "../slicer/ProfileUploadCover";
+// import { ProfileVerificationApi } from "../slicer/ProfileVerification";
+import GetMyProfile from "../slicer/GetMyProfile";
 export const store = configureStore({
   reducer: {
     Slicer,
     RequestAccountSlicer,
     VerifyOtpSlicer,
     LoginSlicer,
-    CategorySlicer
+    CategorySlicer,
    
+    ProfileUploadProfileApi,
+    ProfileUploadCover,
+    // ProfileVerificationApi,
+    GetMyProfile,
   },
 });
