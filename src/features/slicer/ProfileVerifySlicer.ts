@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "./Slicer";
 import { toast } from "react-toastify";
+import { GetMyProfile } from "./GetMyProfileSlicer";
 
 export const ProfileVerificationApi: any = createAsyncThunk(
   "aarma/ProfileVerificationApi",
@@ -17,6 +18,7 @@ export const ProfileVerificationApi: any = createAsyncThunk(
       })
       .then((resp) => {
         toast.success(resp?.data?.message);
+        dispatch(GetMyProfile())
         console.log(resp.data);
 
         return resp.data;

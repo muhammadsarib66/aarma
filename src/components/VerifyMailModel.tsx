@@ -24,6 +24,7 @@ const VerifyMailModel = ({ formData }: any) => {
   const { ReqAccData, isLoader } = useSelector(
     (state: any) => state.RequestAccountSlicer
   );
+ 
   const [otp, setOTP] = useState(["", "", "", "", "", ""]);
   const [verifyData, setVerifyData] = useState(ReqAccData);
   // console.log(ReqAccData)

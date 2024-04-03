@@ -1,24 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "./Slicer";
 
-export const GetMyProfile: any = createAsyncThunk(
-  "aarma/GetMyProfile",
+export const GetPortfolioAPi: any = createAsyncThunk(
+  "aarma/GetPortfolio",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
-      const response = await axios.get(`${baseUrl}event-managers/me`, {
+      const response = await axios.get(`${baseUrl}portfolio/my-portfolios`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       toast.success(response.data.message);
-      console.log(response);
+      console.log(response?.data?.data);
 
       return response.data.data;
     } catch (error: any) {
@@ -26,7 +27,7 @@ export const GetMyProfile: any = createAsyncThunk(
       if (error.response) {
         // Request was made and server responded with status code that falls out of the range of 2xx
         toast.error(error.response.data.message);
-        console.log(error.response.data);
+        console.log(error.response);
       } else if (error.request) {
         // The request was made but no response was received
         toast.error("No response received from the server");
@@ -46,30 +47,30 @@ export const GetMyProfile: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
-  ProfileData: [],
+  PortfolioData: [],
 };
 
-const GetMyProfileSlicer = createSlice({
-  name: "GetMyProfile",
+const GetPorfolioSlicer = createSlice({
+  name: "Getportfolio",
   initialState,
   reducers: {
     // Reducer logic here
   },
   extraReducers: (builder) => {
-    builder.addCase(GetMyProfile.pending, (state) => {
+    builder.addCase(GetPortfolioAPi.pending, (state) => {
       state.isLoading = true;
       state.isError = false;
     });
-    builder.addCase(GetMyProfile.fulfilled, (state, action) => {
+    builder.addCase(GetPortfolioAPi.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isError = false;
-      state.ProfileData = action.payload;
+      state.PortfolioData = action.payload;
     });
-    builder.addCase(GetMyProfile.rejected, (state) => {
+    builder.addCase(GetPortfolioAPi.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });
   },
 });
 
-export default GetMyProfileSlicer.reducer;
+export default GetPorfolioSlicer.reducer;

@@ -9,7 +9,7 @@ import { ProfileInfoApi } from "../../features/slicer/ProfileInfoSlicer";
 import Loader from "../../components/Loader";
 
 const style = {
-  position: "absolute" as "absolute",
+position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -23,8 +23,9 @@ const style = {
 export default function ProfileInfoModal() {
   const dispatch = useDispatch()
   const { categoryData } = useSelector((state: any) => state.CategorySlicer);
-  const {isLoading} = useSelector((state:any)=> state.ProfileInfoSlicer)
-  // console.log(state)
+  const {isLoading} = useSelector((state:any)=> state.ProfileInfoSlicer);
+  const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
+  console.log( ProfileData)
   const [open, setOpen] = React.useState(false);
   const [selectedOptions, setSelectedOptions] = useState<any>([]);
   const [bio , setBio] = useState('')
@@ -72,10 +73,15 @@ export default function ProfileInfoModal() {
 
   return (
     <div>
-      <i
-        onClick={handleOpen}
+      <span className="flex gap-3">
+      <i className={`fa-solid ${ProfileData?.categories?.length>0 && ProfileData?.tagline && ProfileData?.bio && ProfileData?.email  && ProfileData?.firstName&& ProfileData?.lastName ?"text-green-500" : "text-gray-300"} text-2xl fa-circle-check`}></i>
+      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${open?"fa-chevron-up" :"fa-chevron-down"}`}></i>
+      {/* <i
+        
+        
         className="text-blue-600 cursor-pointer text-2xl fa-solid fa-pencil"
-      ></i>
+        ></i> */}
+        </span>
 
       <Modal
         open={open}

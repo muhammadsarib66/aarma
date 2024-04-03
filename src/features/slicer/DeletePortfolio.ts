@@ -1,26 +1,28 @@
-// event-managers/complete-profile-info
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "./Slicer";
 import { toast } from "react-toastify";
 import { GetMyProfile } from "./GetMyProfileSlicer";
+import { GetPortfolioAPi } from "./GetPorfolioSlicer";
 
-export const ProfileInfoApi: any = createAsyncThunk(
-  "aarma/ProfileinfoApi",
-  async (infoData: any , {dispatch}) => {
-    console.log(infoData);
+export const DeletePortfolioAPi: any = createAsyncThunk(
+  "aarma/DeletePortfolioAPi",
+  async (id: any, { dispatch }) => {
+    console.log(id);
     const token = localStorage.getItem("token");
 
     return await axios
-      .post(`${baseUrl}event-managers/complete-profile-info`, infoData, {
+      .post(`${baseUrl}portfolio/delete-portfolio`, {portfolioId:id}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((resp) => {
         toast.success(resp?.data?.message);
-        dispatch(GetMyProfile())
-        console.log(resp.data);
+        dispatch(GetMyProfile());
+        dispatch(GetPortfolioAPi())
+        console.log(resp.data.data);
 
         return resp.data;
       })
@@ -35,25 +37,25 @@ export const ProfileInfoApi: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
-  //   UserData: "",
 };
-const ProfileInfoSlicer = createSlice({
-  name: "profileInfo",
+const DeletePortfolio = createSlice({
+  name: "delPortFolio",
   initialState,
   reducers: {
-  
+    // setReqAccData : (state,action)=>{
+    //     state.ReqAccData = action.payload
+    // }
   },
 
   extraReducers: (builder) => {
-    builder.addCase(ProfileInfoApi.pending, (state) => {
+    builder.addCase(DeletePortfolioAPi.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(ProfileInfoApi.fulfilled, (state, action) => {
+    builder.addCase(DeletePortfolioAPi.fulfilled, (state) => {
       state.isLoading = false;
-        console.log(action.payloed , 'submited')
       // console.log(localStorage.getItem("token"));
     });
-    builder.addCase(ProfileInfoApi.rejected, (state) => {
+    builder.addCase(DeletePortfolioAPi.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });
@@ -61,4 +63,4 @@ const ProfileInfoSlicer = createSlice({
 });
 
 // export const {setReqAccData} = LoginSlicer.actions;
-export default ProfileInfoSlicer.reducer;
+export default DeletePortfolio.reducer;

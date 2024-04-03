@@ -22,7 +22,9 @@ const style = {
 export default function UploadProfileModel() {
     const dispatch = useDispatch()
     const {isLoading} = useSelector((state:any)=> state.ProfileUploadSlicer)
-  const [open, setOpen] = useState(false);
+    const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
+
+    const [open, setOpen] = useState(false);
   const [selectedProfileImg, setSelectedProfileImg] = useState("");
   const fileInputRefProfile = useRef<HTMLInputElement>(null);
   const handleOpen = () => setOpen(true);
@@ -51,10 +53,11 @@ export default function UploadProfileModel() {
   };
   return (
     <div>
-      <i
-        onClick={handleOpen}
-        className="text-blue-600 cursor-pointer text-2xl fa-solid fa-pencil"
-      ></i>
+       <span className="flex gap-3">
+      <i className={`fa-solid ${ ProfileData?.profile && ProfileData?.email  && ProfileData?.firstName&& ProfileData?.lastName ?"text-green-500" : "text-gray-300"} text-2xl fa-circle-check`}></i>
+      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${open?"fa-chevron-up" :"fa-chevron-down"}`}></i>
+      
+        </span>
       <Modal
         open={open}
         onClose={handleClose}

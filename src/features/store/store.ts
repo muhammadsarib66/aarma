@@ -8,7 +8,10 @@ import ProfileInfoSlicer from "../slicer/ProfileInfoSlicer";
 import ProfileUploadSlicer from "../slicer/ProfileUploadSlicer";
 import ProfileUploadCoverSlicer from "../slicer/ProfileUploadCoverSlicer";
 import GetMyProfileSlicer from "../slicer/GetMyProfileSlicer";
-import ProfileVerifySlicer from "../slicer/ProfileVerifySlicer"
+import ProfileVerifySlicer from "../slicer/ProfileVerifySlicer";
+import AddPortfolioSlicer from "../slicer/AddPortfolioSlicer"
+import GetPorfolioSlicer from "../slicer/GetPorfolioSlicer";
+import DeletePortfolio from "../slicer/DeletePortfolio";
 export const store = configureStore({
   reducer: {
     Slicer,
@@ -20,6 +23,9 @@ export const store = configureStore({
     ProfileUploadSlicer,
     ProfileUploadCoverSlicer,
     GetMyProfileSlicer,
-    ProfileVerifySlicer
+    ProfileVerifySlicer,
+    AddPortfolioSlicer,
+    GetPorfolioSlicer,
+    DeletePortfolio
   },
 });

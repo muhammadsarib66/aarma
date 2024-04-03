@@ -2,10 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "./Slicer";
 import { toast } from "react-toastify";
+import { GetMyProfile } from "./GetMyProfileSlicer";
 
 export const ProfileUploadCoverApi: any = createAsyncThunk(
   "aarma/ProfileUploadCover",
-  async (upCover: any) => {
+  async (upCover: any, {dispatch}) => {
     console.log(upCover);
     const token = localStorage.getItem("token");
 
@@ -18,7 +19,7 @@ export const ProfileUploadCoverApi: any = createAsyncThunk(
       .then((resp) => {
         toast.success(resp?.data?.message);
         console.log(resp.data);
-
+        dispatch(GetMyProfile())
         return resp.data;
       })
       .catch((err) => {

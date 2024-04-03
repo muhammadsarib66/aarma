@@ -13,6 +13,8 @@ import Bookings from "./screens/Booking/Bookings";
 import { useEffect } from "react";
 import { LoginAccApi } from "./features/slicer/LoginSlicer";
 import { getAllCatApi } from "./features/slicer/CategorySlicer";
+import { GetMyProfile } from "./features/slicer/GetMyProfileSlicer";
+import MyProfile from "./screens/Myprofile/MyProfile";
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,6 +44,7 @@ function App() {
         console.error("Error parsing saved credentials:", error.message);
       }
       dispatch(getAllCatApi())
+      if(isAuthenticated) return dispatch(GetMyProfile())
     }
   }, []);
 
@@ -66,6 +69,7 @@ function App() {
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/Analytics" element={<Analatics />} />
                 <Route path="/Bookings" element={<Bookings />} />
+                <Route path="/myprofile" element={<MyProfile />} />
               </>
             )}
           </>

@@ -15,13 +15,14 @@ const style = {
 
   bgcolor: "background.paper",
   border: "none",
-  borderRadius: "10px",
   boxShadow: 24,
   p: 4,
 };
 
 export default function ProfileVeriModal() {
   const dispatch = useDispatch();
+  const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
+
   const { isLoading } = useSelector((state: any) => state.ProfileVerifySlicer);
   const [open, setOpen] = useState(false);
   const [selectedIdCardImg, setSelectedIdCardImg] = useState("");
@@ -66,10 +67,11 @@ export default function ProfileVeriModal() {
   };
   return (
     <div>
-      <i
-        onClick={handleOpen}
-        className="text-blue-600 cursor-pointer text-2xl fa-solid fa-pencil"
-      ></i>
+      <span className="flex gap-3">
+      <i className={`fa-solid ${ ProfileData?.verif_document && ProfileData?.id_card && ProfileData?.email  && ProfileData?.firstName&& ProfileData?.lastName ?"text-green-500" : "text-gray-300"} text-2xl fa-circle-check`}></i>
+      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${open?"fa-chevron-up" :"fa-chevron-down"}`}></i>
+      
+        </span>
       <Modal
         open={open}
         onClose={handleClose}
@@ -78,7 +80,7 @@ export default function ProfileVeriModal() {
       >
         <>
           {isLoading && <Loader />}
-          <Box sx={style}>
+          <Box className="w-[300px]  md:w-[500px]" sx={style}>
             <h1 className="text-xl font-bold text-onPrimary">
               Attach Documents
             </h1>

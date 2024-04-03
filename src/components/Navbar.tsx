@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useNavigate } from "react-router-dom";
 import PrmaryBtn from "./PrmaryBtn";
 import { useState } from "react";
@@ -5,8 +6,10 @@ import { useSelector } from "react-redux";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
-import LogoImg from "../assets/images/AboutusImg2.png";
+import { baseUrl } from "../features/slicer/Slicer";
 const Navbar = () => {
+  const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
+
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("/home");
   const { UserData } = useSelector((state: any) => state.LoginSlicer);
@@ -41,11 +44,7 @@ const Navbar = () => {
       title: "Contact Us",
       link: "/contactus",
     },
-    // {
-    //   title: "My Business",
-    //   link: "/dashboard",
-    //   icon: "fa-solid fa-store",
-    // },
+    
   ];
   const NavTabs2 = [
     {
@@ -60,11 +59,7 @@ const Navbar = () => {
       title: "Analytics",
       link: "/Analytics",
     },
-    // {
-    //   title: "My Business",
-    //   link: "/dashboard",
-    //   icon: "fa-solid fa-store",
-    // },
+    
   ];
   const handleOpenNav = () => {
     setIsOpen(!isOpen);
@@ -129,8 +124,9 @@ const Navbar = () => {
               />
             </Link>
           ) : (
-            <div>
-              <Avatar alt="Remy Sharp" src={LogoImg} onClick={handleClick} />
+            <div className="flex items-center gap-4 font-semibold text-white">
+              <p> {ProfileData?.fullname}</p>
+              <Avatar className="cursor-pointer bg-white" alt="User" src={baseUrl+ProfileData?.profile} onClick={handleClick} />
 
               <Menu
                 id="basic-menu"
@@ -142,6 +138,11 @@ const Navbar = () => {
                 }}
               >
                 <MenuItem onClick={handleClose2}>Logout</MenuItem>
+                <MenuItem >
+                <Link to='/myprofile'>
+                My Profile
+                </Link>
+                </MenuItem>
               </Menu>
             </div>
           )}
@@ -177,7 +178,26 @@ const Navbar = () => {
           } flex  px-4 flex-col  items-start justify-center  md:hidden  bg-onSecondary  left-0    min-h-52 w-[100%]  absolute `}
         >
           <ul className="space-y-2">
-            {NavTabs.map((item, index) => {
+            {!isAuthenticated? NavTabs.map((item, index) => {
+              return (
+                <li
+                  key={index}
+                  onClick={() => {
+                    setIsOpen(!isOpen);
+                    setActiveTab(item.link);
+                  }}
+                  className={` ${
+                    activeTab == item.link ? "text-primary " : ""
+                  }nav-links`}
+                >
+                  <Link to={item.link}>
+                    {item.title}
+                    {/* {item.icon && <i className={`pl-2 ${item.icon}`}></i>} */}
+                  </Link>
+                </li>
+              );
+            }):
+            NavTabs2.map((item, index) => {
               return (
                 <li
                   key={index}
@@ -197,14 +217,38 @@ const Navbar = () => {
               );
             })}
           </ul>
-          <div className="   pt-4   ">
+          <div>
+          {!isAuthenticated ? (
             <Link to="/login">
               <PrmaryBtn
-                style="text-sm  bg-primary text-secondary p-2 rounded-md uppercase"
-                btnText="Login "
+                btnText="Login"
+                style="bg-secondary text-primary py-1 px-4 rounded-full"
               />
             </Link>
-          </div>
+          ) : (
+            <div className="flex items-center gap-4 font-semibold text-white">
+              <p> {ProfileData?.fullname}</p>
+              <Avatar className="cursor-pointer bg-white" alt="User" src={baseUrl+ProfileData?.profile} onClick={handleClick} />
+
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem onClick={handleClose2}>Logout</MenuItem>
+                <MenuItem >
+                <Link to='/myprofile'>
+                My Profile
+                </Link>
+                </MenuItem>
+              </Menu>
+            </div>
+          )}
+        </div>
         </div>
       </section>
     </>
