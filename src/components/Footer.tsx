@@ -3,7 +3,7 @@ import Google from "../assets/images/playStoreLogo.png";
 
 const Footer = () => {
   return (
-    <footer className="text-secondary bg-secMain gap-4  grid grid-cols-1 md:grid-cols-4 px-12 md:px-32 pt-20 pb-32">
+    <footer className="text-onPrimary bg-secondary shadow-lg shadow-black gap-4  grid grid-cols-1 md:grid-cols-4 px-12 md:px-32 pt-20 pb-32">
       <div className="col-span-1">
         <h2 className="font-Inter text-2xl font-bold ">AARMA BUSINESS</h2>
       </div>

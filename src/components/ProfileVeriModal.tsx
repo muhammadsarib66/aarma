@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { ProfileVerificationApi } from "../features/slicer/ProfileVerifySlicer";
+import { Tooltip } from "@material-tailwind/react";
 
 const style = {
   position: "absolute",
@@ -19,7 +20,7 @@ const style = {
   p: 4,
 };
 
-export default function ProfileVeriModal() {
+export default function ProfileVeriModal({icon}:any) {
   const dispatch = useDispatch();
   const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
 
@@ -67,12 +68,19 @@ export default function ProfileVeriModal() {
   };
   return (
     <div>
+      {icon ?    (<Tooltip content="Re-submit Doc">
+
+<i  onClick={handleOpen} className="cursor-pointer pl-2 text-green-500 fa-solid fa-file-pen"></i>
+</Tooltip>):
+(
       <span className="flex gap-3">
       <i className={`fa-solid ${ ProfileData?.verif_document && ProfileData?.id_card && ProfileData?.email  && ProfileData?.firstName&& ProfileData?.lastName ?"text-green-500" : "text-gray-300"} text-2xl fa-circle-check`}></i>
       <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${open?"fa-chevron-up" :"fa-chevron-down"}`}></i>
       
         </span>
-      <Modal
+ )
+}
+ <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"

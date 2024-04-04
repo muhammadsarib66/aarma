@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { ProfileUploadCoverApi } from "../features/slicer/ProfileUploadCoverSlicer";
+import { Tooltip } from "@material-tailwind/react";
 
 const style = {
   position: "absolute" ,
@@ -20,7 +21,7 @@ const style = {
   p: 4,
 };
 
-export default function UploadCoverModal() {
+export default function UploadCoverModal({coverImg}:any) {
     const dispatch = useDispatch()
     const {isLoading} = useSelector((state:any)=> state.ProfileUploadCoverSlicer)
     const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
@@ -54,11 +55,24 @@ export default function UploadCoverModal() {
   };
   return (
     <div>
+      {coverImg ? (
+        <Tooltip  placement="bottom" content="Upload Cover Picture">
+
+      <span onClick={handleOpen} className="cursor-pointer absolute top-44  md:top-56 right-6 md:right-14 w-12 h-12 flex items-center justify-center rounded-full bg-opacity-50 bg-black">
+                <i className="fa-solid fa-camera text-2xl text-white"></i>
+              </span>
+              </Tooltip>
+
+              )
+
+      :(
       <span className="flex gap-3">
       <i className={`fa-solid ${ ProfileData?.coverPhoto && ProfileData?.email  && ProfileData?.firstName&& ProfileData?.lastName ?"text-green-500" : "text-gray-300"} text-2xl fa-circle-check`}></i>
       <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${open?"fa-chevron-up" :"fa-chevron-down"}`}></i>
       
         </span>
+              )}
+
       <Modal
         open={open}
         onClose={handleClose}

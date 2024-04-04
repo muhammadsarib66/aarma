@@ -14,6 +14,7 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState("/home");
   const { UserData } = useSelector((state: any) => state.LoginSlicer);
   const isAuthenticated = UserData?.email;
+  const token = localStorage.getItem("token");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,15 +68,15 @@ const Navbar = () => {
   const navigate = useNavigate();
   return (
     <>
-      <section className="hidden  fixed md:flex justify-between items-center bg-primary px-4 md:px-20 h-16 md:h-20 w-full z-20 ">
+      <section className="hidden  fixed md:flex justify-between items-center bg-secondary shadow-lg text-onPrimary px-4 md:px-20 h-16 md:h-20 w-full z-20 ">
         <h1
           onClick={() => navigate("/")}
-          className="cursor-pointer font-Inter font-bold uppercase text-xl md:text-2xl  text-secondary"
+          className="cursor-pointer font-Inter font-bold uppercase text-xl md:text-2xl  "
         >
           aarma business
         </h1>
         <div className="flex gap-8  text-primary bg-onSecondary  px-4  lg:px-16  py-2 rounded-full">
-          {!isAuthenticated ? (
+          {!token ? (
             <>
               {NavTabs?.map((tab, ind) => (
                 <p key={ind} onClick={() => setActiveTab(tab.link)}>
@@ -116,15 +117,15 @@ const Navbar = () => {
           )}
         </div>
         <div>
-          {!isAuthenticated ? (
+          {!token ? (
             <Link to="/login">
               <PrmaryBtn
                 btnText="Login"
-                style="bg-secondary text-primary py-1 px-4 rounded-full"
+                style="bg-onSecondary active:bg-secMain active:text-secondary text-primary py-1 px-4 rounded-full"
               />
             </Link>
           ) : (
-            <div className="flex items-center gap-4 font-semibold text-white">
+            <div className="flex items-center gap-4 font-semibold ">
               <p> {ProfileData?.fullname}</p>
               <Avatar className="cursor-pointer bg-white" alt="User" src={baseUrl+ProfileData?.profile} onClick={handleClick} />
 
@@ -178,7 +179,7 @@ const Navbar = () => {
           } flex  px-4 flex-col  items-start justify-center  md:hidden  bg-onSecondary  left-0    min-h-52 w-[100%]  absolute `}
         >
           <ul className="space-y-2">
-            {!isAuthenticated? NavTabs.map((item, index) => {
+            {!token? NavTabs.map((item, index) => {
               return (
                 <li
                   key={index}
@@ -218,7 +219,7 @@ const Navbar = () => {
             })}
           </ul>
           <div>
-          {!isAuthenticated ? (
+          {!token ? (
             <Link to="/login">
               <PrmaryBtn
                 btnText="Login"
@@ -240,8 +241,8 @@ const Navbar = () => {
                 }}
               >
                 <MenuItem onClick={handleClose2}>Logout</MenuItem>
-                <MenuItem >
-                <Link to='/myprofile'>
+                <MenuItem onClick={()=>setAnchorEl(null)} >
+                <Link  to='/myprofile'>
                 My Profile
                 </Link>
                 </MenuItem>

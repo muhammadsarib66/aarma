@@ -31,7 +31,7 @@ const Dashboard = () => {
     dispatch(GetPortfolioAPi())
   }, [dispatch]);
   return (
-    <>
+    <div className="">
       <div className="py-32 grid grid-cols-1  md:grid-cols-4 gap-4 px-2 ">
         <div className="border rounded-md">
           <div className="border-2 m-6 rounded-xl p-2">
@@ -75,7 +75,7 @@ const Dashboard = () => {
                 {" "}
                 Profile Picture Upload{" "}
               </h2>
-              <UploadProfileModel />
+              <UploadProfileModel profileImg={false} />
             </div>
           </div>
           {/* //// for Cover Photo */}
@@ -112,7 +112,7 @@ const Dashboard = () => {
       </div>
       <ToastContainer />
       <Footer />
-    </>
+    </div>
   );
 };
 

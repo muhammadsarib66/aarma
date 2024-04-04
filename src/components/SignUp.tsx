@@ -65,7 +65,7 @@ const SignUp = () => {
   };
 
   return (
-    <section className="relative -top-52 md:-top-44  py-10 px-7 bg-secondary  rounded-3xl max-w-[400px] min-h-fit ">
+    <section className="relative -top-52 md:-top-52  py-10 px-7 bg-onSecondary  rounded-3xl max-w-[400px] min-h-fit ">
       <div>
         <h2 className=" text-onPrimary font-semibold text-xl">
           Let’s start! It should only take a few minutes.

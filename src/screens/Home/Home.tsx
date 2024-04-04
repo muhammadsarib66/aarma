@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <>
       <Hero />
-      <div className="relative px-8 md:px-40  bg-gradient-to-r from-[#FF8989] to-[#f4dada] ">
+      <div className="relative px-8 md:px-40  bg-secondary ">
         <SignUp />
         <About />
       </div>

@@ -6,27 +6,52 @@ import { toast } from "react-toastify";
 export const LoginAccApi: any = createAsyncThunk(
   "aarma/loginacc",
   async (loginCredential: any, { dispatch }) => {
-    // console.log(loginCredential);
-    return await axios
-      .post(`${baseUrl}users/eventmanager-login`, loginCredential)
-      .then((resp) => {
-        toast.success("login Succesfull");
-        // console.log(resp.data);
-        if (resp.data) {
-          localStorage.setItem(
-            "ArmaCredienials",
-            JSON.stringify(loginCredential)
-          );
-        }
-        return resp.data;
-      })
-      .catch((err) => {
-        toast.error(err.data.message);
-        console.log(err.data);
-        return err.message;
-      });
+    try {
+      const response = await axios.post(`${baseUrl}users/eventmanager-login`, loginCredential);
+      
+      if (response.status === 200) {
+        toast.success("Login Successful");
+        
+        // if (response.data) {
+        //   localStorage.setItem("ArmaCredienials", JSON.stringify(loginCredential));
+        // }
+        
+        return response.data;
+      } else {
+        toast.error("User not found");
+        return Promise.reject("User not found");
+      }
+    } catch (error) {
+      toast.error("An error occurred while logging in");
+      return Promise.reject(error);
+    }
   }
 );
+
+// export const LoginAccApi: any = createAsyncThunk(
+//   "aarma/loginacc",
+//   async (loginCredential: any, { dispatch }) => {
+//     // console.log(loginCredential);
+//     return await axios
+//       .post(`${baseUrl}users/eventmanager-login`, loginCredential)
+//       .then((resp) => {
+//         toast.success("login Succesfull");
+//         // console.log(resp.data);
+//         if (resp.data) {
+//           localStorage.setItem(
+//             "ArmaCredienials",
+//             JSON.stringify(loginCredential)
+//           );
+//         }
+//         return resp.data;
+//       })
+//       .catch((err) => {
+//         toast.error(err.data.message);
+//         console.log(err.data);
+//         return err.message;
+//       });
+//   }
+// );
 
 const initialState = {
   isLoading: false,

@@ -16,17 +16,13 @@ export const GetMyProfile: any = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-
-      toast.success(response.data.message);
-      console.log(response);
-
       return response.data.data;
-    } catch (error: any) {
+    } catch (error : any) {
       // Handle the error
       if (error.response) {
         // Request was made and server responded with status code that falls out of the range of 2xx
-        toast.error(error.response.data.message);
-        console.log(error.response.data);
+        toast.error("error while fetching userProfile");
+        // console.log(error.response.data);
       } else if (error.request) {
         // The request was made but no response was received
         toast.error("No response received from the server");

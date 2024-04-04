@@ -20,7 +20,7 @@ const Login: React.FC = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
-      .min(6, "Password not match")
+      .min(6, "Password at least 6 digit")
       .required("Password is required"),
   });
   const handleSubmit = async (values: FormValues, { resetForm }: any) => {

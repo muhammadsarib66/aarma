@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import InputField from "./InputField";
 import { AddPortfolioApi } from "../features/slicer/AddPortfolioSlicer";
 import PrmaryBtn from "./PrmaryBtn";
+import { Tooltip } from "@material-tailwind/react";
 
 const style = {
   position: "absolute",
@@ -22,7 +23,7 @@ const style = {
   p: 4,
 };
 
-export default function AddPortfolioModal() {
+export default function AddPortfolioModal({icon} : any) {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state: any) => state.AddPortfolioSlicer);
   const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
@@ -85,7 +86,15 @@ export default function AddPortfolioModal() {
   };
   return (
     <div>
-      <span className="flex gap-3">
+      {icon ?(
+        <Tooltip content="Add Portfolio">
+
+      <span onClick={handleOpen} className="border-green-500 border-2 rounded-full  w-8 h-8 flex cursor-pointer items-center justify-center ">
+          <i className=" text-green-500 text-xl fa-solid fa-plus"></i>
+        </span>
+        </Tooltip>
+        
+        ):(<span className="flex gap-3">
         <i
           className={`fa-solid ${
             ProfileData?.portfolio?.length > 0 &&
@@ -102,7 +111,7 @@ export default function AddPortfolioModal() {
             open ? "fa-chevron-up" : "fa-chevron-down"
           }`}
         ></i>
-      </span>
+      </span>)}
       <Modal
         open={open}
         onClose={handleClose}

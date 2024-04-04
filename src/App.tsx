@@ -24,6 +24,7 @@ function App() {
   // console.log(ProfileData);
   // console.log(token);
   const isAuthenticated = UserData?.email;
+  const token = localStorage.getItem("token");
   // console.log(isAuthenticated);
 
   const savedCredentials = localStorage.getItem("ArmaCredienials");
@@ -32,19 +33,20 @@ function App() {
     // Check if there are saved credentials in local storage
 
     // console.log(savedCredentials);
-    if (savedCredentials) {
+    if (token) {
       // console.log(savedCredentials);
       try {
-        const parsedCredentials = JSON.parse(savedCredentials);
+        // const parsedCredentials = JSON.parse(savedCredentials);
         // Automatically log in with saved credentials
-        dispatch(LoginAccApi(parsedCredentials));
+        // dispatch(LoginAccApi(parsedCredentials));
         // Navigate to "/Operations2"
+        dispatch(GetMyProfile())
+        dispatch(getAllCatApi())
         navigate("/Dashboard");
       } catch (error: any) {
         console.error("Error parsing saved credentials:", error.message);
       }
-      dispatch(getAllCatApi())
-      if(isAuthenticated) return dispatch(GetMyProfile())
+      // if(isAuthenticated) return dispatch(GetMyProfile())
     }
   }, []);
 
@@ -55,7 +57,7 @@ function App() {
         <ScrollToTop />
         <Routes>
           <>
-            {!isAuthenticated && (
+            {!token && (
               <>
                 <Route path="/*" element={<Home />} />
                 <Route path="/contactus" element={<ContactUs />} />
@@ -63,7 +65,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
               </>
             )}
-            {isAuthenticated && (
+            {token && (
               <>
                 <Route path="/*" element={<Dashboard />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
