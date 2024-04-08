@@ -35,15 +35,16 @@ export const ProfileUploadProfileApi: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
+  profilemodal : false,  
   //   UserData: "",
 };
 const ProfileUploadSlicer = createSlice({
   name: "uploadProfile",
   initialState,
   reducers: {
-    // setReqAccData : (state,action)=>{
-    //     state.ReqAccData = action.payload
-    // }
+    setProfileModal  : (state,action)=>{
+        state.profilemodal = action.payload
+    }
   },
 
   extraReducers: (builder) => {
@@ -62,5 +63,5 @@ const ProfileUploadSlicer = createSlice({
   },
 });
 
-// export const {setReqAccData} = LoginSlicer.actions;
+export const {setProfileModal} = ProfileUploadSlicer.actions;
 export default ProfileUploadSlicer.reducer;

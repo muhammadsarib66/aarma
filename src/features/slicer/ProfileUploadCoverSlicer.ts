@@ -33,15 +33,16 @@ export const ProfileUploadCoverApi: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
+  coverModal :false
   //   UserData: "",
 };
 const ProfileUploadCoverSlicer = createSlice({
   name: "ProfileUploadCover",
   initialState,
   reducers: {
-    // setReqAccData : (state,action)=>{
-    //     state.ReqAccData = action.payload
-    // }
+    setCoverModal : (state,action)=>{
+        state.coverModal = action.payload
+    }
   },
 
   extraReducers: (builder) => {
@@ -60,5 +61,5 @@ const ProfileUploadCoverSlicer = createSlice({
   },
 });
 
-// export const {setReqAccData} = LoginSlicer.actions;
+export const {setCoverModal} = ProfileUploadCoverSlicer.actions;
 export default ProfileUploadCoverSlicer.reducer;

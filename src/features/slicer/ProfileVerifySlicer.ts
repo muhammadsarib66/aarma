@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "./Slicer";
@@ -34,15 +35,16 @@ export const ProfileVerificationApi: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
+  docModal: false,
   //   UserData: "",
 };
 const ProfileVerifySlicer = createSlice({
   name: "ProfileVerificationApi",
   initialState,
   reducers: {
-    // setReqAccData : (state,action)=>{
-    //     state.ReqAccData = action.payload
-    // }
+    setVerifyModal  : (state,action)=>{
+        state.docModal = action.payload
+    }
   },
 
   extraReducers: (builder) => {
@@ -61,5 +63,5 @@ const ProfileVerifySlicer = createSlice({
   },
 });
 
-// export const {setReqAccData} = LoginSlicer.actions;
+export const {setVerifyModal} = ProfileVerifySlicer.actions;
 export default ProfileVerifySlicer.reducer;

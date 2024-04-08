@@ -12,8 +12,9 @@ const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("/home");
-  const { UserData } = useSelector((state: any) => state.LoginSlicer);
-  const isAuthenticated = UserData?.email;
+  // const { UserData } = useSelector((state: any) => state.LoginSlicer);
+  // const isAuthenticated = UserData?.email;
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -57,15 +58,15 @@ const Navbar = () => {
       link: "/Bookings",
     },
     {
-      title: "Analytics",
-      link: "/Analytics",
+      title: "dashboard2",
+      link: "/dashboard2",
     },
     
   ];
   const handleOpenNav = () => {
     setIsOpen(!isOpen);
   };
-  const navigate = useNavigate();
+  
   return (
     <>
       <section className="hidden  fixed md:flex justify-between items-center bg-secondary shadow-lg text-onPrimary px-4 md:px-20 h-16 md:h-20 w-full z-20 ">

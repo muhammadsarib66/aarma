@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import loginImg from "../../assets/Forms/Form1.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LoginAccApi } from "../../features/slicer/LoginSlicer";
 import Loader from "../../components/Loader";
@@ -13,7 +14,6 @@ interface FormValues {
 }
 const Login: React.FC = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { isLoading } = useSelector((state: any) => state.LoginSlicer);
   const [isVisible, setIsVisible] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -29,8 +29,7 @@ const Login: React.FC = () => {
       // Perform form submission logic here
       console.log(values);
       dispatch(LoginAccApi(values));
-      // navigate("Dashboard");
-      // window.location.reload();
+      
       // Set submitting to false after successful submission
       resetForm();
       setSubmitting(false);
@@ -41,9 +40,10 @@ const Login: React.FC = () => {
     }
   };
   const savedCredentials = localStorage.getItem("ArmaCredienials");
-
+  const data = JSON.parse(savedCredentials || "{}");
+  console.log(data)
   useEffect(() => {
-    // Check if there are saved credentials in local storage
+    // Check if there are saved credentials in local storage  
 
     // console.log(savedCredentials);
     if (savedCredentials) {
@@ -52,8 +52,6 @@ const Login: React.FC = () => {
         const parsedCredentials = JSON.parse(savedCredentials);
         // Automatically log in with saved credentials
         dispatch(LoginAccApi(parsedCredentials));
-        // Navigate to "/Operations2"
-        navigate("/Dashboard");
       } catch (error: any) {
         console.error("Error parsing saved credentials:", error.message);
       }
@@ -91,6 +89,7 @@ const Login: React.FC = () => {
                 placeholder="Enter Your Email *"
                 value={formik.values.email}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               {formik.touched.email && formik.errors.email && (
                 <div className="error text-red-600">{formik.errors.email}</div>
@@ -106,6 +105,8 @@ const Login: React.FC = () => {
                   id="password"
                   placeholder="Enter Your Password *"
                   name="password"
+                  onBlur={formik.handleBlur}
+
                   value={formik.values.password}
                   onChange={formik.handleChange}
                 />

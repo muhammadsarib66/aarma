@@ -12,7 +12,7 @@ const Home = () => {
     <>
       <Hero />
       <div className="relative px-8 md:px-40  bg-secondary ">
-        <SignUp />
+        <SignUp  />
         <About />
       </div>
       <SubDetail />

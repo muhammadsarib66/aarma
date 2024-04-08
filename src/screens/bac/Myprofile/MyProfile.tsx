@@ -3,38 +3,41 @@ import { useSelector } from "react-redux";
 import { baseUrl } from "../../features/slicer/Slicer";
 import PorfolioAcordion from "../../components/PorfolioAcordion";
 import Loader from "../../components/Loader";
+import Footer from "../../components/Footer";
 import UploadProfileModel from "../../components/UploadProfileModel";
+import { ToastContainer } from "react-toastify";
 import UploadCoverModal from "../../components/UploadCoverModal";
+import { Tooltip } from "@material-tailwind/react";
 import ProfileVeriModal from "../../components/ProfileVeriModal";
 
 const MyProfile = () => {
   const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
   const { isLoading } = useSelector((state: any) => state.DeletePortfolio);
-  // console.log(ProfileData);
+  console.log(ProfileData);
   const cover2 = baseUrl + ProfileData?.coverPhoto;
   return (
-    <div className="bg-onSecondary rounded-lg">
-      <div className=" relative  rounded-lg   h-60 md:h-72  ">
+    <div className="bg-onSecondary">
+      <div className=" relative top-16  md:top-20  h-60 md:h-72  ">
         <img
           src={cover2}
           alt="coverPicture"
-          className="object-cover rounded-lg h-60 md:h-72  w-full "
+          className="object-cover h-60 md:h-72  w-full "
         />
-        <span className=" bg-white relative  inline-block rounded-full w-24 h-24 md:w-40 md:h-40 top-[-60px]  md:top-[-110px] left-8 md:left-20">
+        <span className=" bg-white relative  inline-block rounded-full w-32 h-32 md:w-52 md:h-52 top-[-60px]  md:top-[-110px] left-8 md:left-20">
           <img
             src={baseUrl + ProfileData?.profile}
             alt="profile"
-            className="object-cover rounded-full w-24 h-24 md:w-40 md:h-40"
+            className="object-cover w-32 h-32 md:w-52 md:h-52"
           />
           <UploadProfileModel profileImg={true} />
         </span>
         <UploadCoverModal coverImg={true} />
       </div>
-      <div className="pt-14 px-8 ">
+      <div className="pt-36 md:pt-48 px-8 ">
         <h1 className="text-2xl font-bold  text-onPrimary py-4">
           Welcome <span className="text-primary">{ProfileData?.fullname} </span>{" "}
         </h1>
-        <section className=" grid  gap-4  grid-cols-1 md:grid-cols-1">
+        <section className=" grid  gap-4  grid-cols-1 md:grid-cols-2">
           {isLoading && <Loader />}
 
           <div className="col-span-1  p-4 rounded-lg flex flex-col gap-3 bg-secondary max-h-80 overflow-y-scroll">
@@ -98,23 +101,17 @@ const MyProfile = () => {
            Documents
              <ProfileVeriModal icon={true} />
         </h1> 
-                {ProfileData?.id_card ? ( <div className="grid grid-cols-1 md:grid-cols-1  place-content-center place-items-center gap-4">
-                <img className="w-full h-72 border p-1 bg-secondary rounded-lg object-cover" src={baseUrl+ProfileData?.id_card} />
-                <img className="w-full h-72 border p-1 bg-secondary rounded-lg object-cover" src={baseUrl+ProfileData?.verif_document} />
+                <div className="grid grid-cols-1 md:grid-cols-2 place-content-center place-items-center gap-4">
+                <img className="w-full h-80 border p-1 bg-secondary rounded-lg object-cover" src={baseUrl+ProfileData?.id_card} />
+                <img className="w-full h-80 border p-1 bg-secondary rounded-lg object-cover" src={baseUrl+ProfileData?.verif_document} />
                   
-                </div>): (
-                  <div className="flex justify-center items-center h-72 bg-secondary rounded-lg">
-                    <p className="text-2xl text-onPrimary">No Document Uploaded</p>
-                  </div>
-                ) }
-
-                
+                </div>
         </div>
         <PorfolioAcordion />
       </div>
 
-      {/* <ToastContainer /> */}
-     
+      <ToastContainer />
+      <Footer />
     </div>
   );
 };

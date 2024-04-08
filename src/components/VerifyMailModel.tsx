@@ -1,16 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsModelClose } from "../features/slicer/Slicer";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createAccountApi } from "../features/slicer/RequestAccountSlicer";
-import { toast } from "react-toastify";
 import Loader from "./Loader";
 import { VerifyOtpApi } from "../features/slicer/VerifyOtpSlicer";
+import { useNavigate } from "react-router-dom";
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -19,8 +20,8 @@ const style = {
   p: 4,
 };
 
-const VerifyMailModel = ({ formData }: any) => {
-  const { isModalOpen, SignUpData } = useSelector((state: any) => state.Slicer);
+const VerifyMailModel = () => {
+  const { isModalOpen } = useSelector((state: any) => state.Slicer);
   const { ReqAccData, isLoader } = useSelector(
     (state: any) => state.RequestAccountSlicer
   );
@@ -28,14 +29,16 @@ const VerifyMailModel = ({ formData }: any) => {
   const [otp, setOTP] = useState(["", "", "", "", "", ""]);
   const [verifyData, setVerifyData] = useState(ReqAccData);
   // console.log(ReqAccData)
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
   const handleClose = () => dispatch(setIsModelClose());
 
-  const handleOTPChange = (index, e) => {
-    const input = e.target.value;
+  const handleOTPChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const input: string = e.target.value;
     // Ensure input is a number
-    if (!isNaN(input) && input !== "") {
-      const newOTP = [...otp];
+    if (!isNaN(Number(input)) && input !== "") {
+      const newOTP: string[] = [...otp];
       newOTP[index] = input;
       setOTP(newOTP);
       // Auto focus to next OTP input field or previous if deleting
@@ -43,7 +46,7 @@ const VerifyMailModel = ({ formData }: any) => {
         document.getElementById(`otp${index + 1}`)?.focus();
       } else {
         // Concatenate the OTP digits into a single string
-        const otpString = newOTP.join("");
+        const otpString: string = newOTP.join("");
         // Use otpString for further processing
         console.log("OTP: ", otpString);
         setVerifyData({
@@ -55,21 +58,29 @@ const VerifyMailModel = ({ formData }: any) => {
   };
   const handleConfirmOTP = () => {
     const dataString = localStorage.getItem("formData");
-    const data = JSON.parse(dataString);
+    const data = JSON.parse(dataString as string);
+    
     const Obj = {
       ...data,
       ...verifyData,
     };
-    console.log(Obj);
     dispatch(VerifyOtpApi(Obj));
+   
+    
     setOTP(["", "", "", "", "", ""]);
     // handleClose();
+    
   };
   const ResendEmail = () => {
     dispatch(createAccountApi(ReqAccData));
-    console.log(ReqAccData);
+    // console.log(ReqAccData);
   };
 
+  useEffect(()=>{
+    if(token){
+      navigate("/Dashboard")
+    }
+  },[token])
   return (
     <div>
       <Modal
@@ -97,7 +108,7 @@ const VerifyMailModel = ({ formData }: any) => {
                     key={index}
                     id={`otp${index}`}
                     type="text"
-                    maxLength="1"
+                    maxLength={1}
                     className="w-8 h-10 focus:ring-1 ring-blue-700 text-center md:w-12 md:h-16 bg-onSecondary rounded-lg"
                     value={digit}
                     onChange={(e) => handleOTPChange(index, e)}

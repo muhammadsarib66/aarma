@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -5,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
-import { ProfileUploadCoverApi } from "../features/slicer/ProfileUploadCoverSlicer";
+import { ProfileUploadCoverApi, setCoverModal } from "../features/slicer/ProfileUploadCoverSlicer";
 import { Tooltip } from "@material-tailwind/react";
 
 const style = {
@@ -13,10 +14,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
   border: "none",
-  borderRadius: "10px",
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
 };
@@ -25,12 +24,13 @@ export default function UploadCoverModal({coverImg}:any) {
     const dispatch = useDispatch()
     const {isLoading} = useSelector((state:any)=> state.ProfileUploadCoverSlicer)
     const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
-  
-    const [open, setOpen] = useState(false);
+    const {coverModal} = useSelector((state:any)=> state.ProfileUploadCoverSlicer);
+    
+    
   const [selectedCoverImg, setSelectedCoverImg] = useState('');
   const fileInputRefCover = useRef<HTMLInputElement>(null);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => dispatch(setCoverModal(true));
+  const handleClose = () =>  dispatch(setCoverModal(false));
   // Profile Images
   const handleCover = () => {
     if (fileInputRefCover.current) {
@@ -44,14 +44,14 @@ export default function UploadCoverModal({coverImg}:any) {
   const handleAddCover = () => {
     const formData = new FormData();
     formData.append('cover', selectedCoverImg);
-    console.log(selectedCoverImg);
+    // console.log(selectedCoverImg);
     if(!selectedCoverImg){
         toast.error('Please select a file')
     }
 
     dispatch(ProfileUploadCoverApi(formData))
     setSelectedCoverImg("");
-    // handleClose();
+    handleClose();
   };
   return (
     <div>
@@ -68,21 +68,29 @@ export default function UploadCoverModal({coverImg}:any) {
       :(
       <span className="flex gap-3">
       <i className={`fa-solid ${ ProfileData?.coverPhoto && ProfileData?.email  && ProfileData?.firstName&& ProfileData?.lastName ?"text-green-500" : "text-gray-300"} text-2xl fa-circle-check`}></i>
-      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${open?"fa-chevron-up" :"fa-chevron-down"}`}></i>
+      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${coverModal?"fa-chevron-up" :"fa-chevron-down"}`}></i>
       
         </span>
               )}
 
       <Modal
-        open={open}
+        open={coverModal}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       ><>
         {isLoading && <Loader />}
-        <Box sx={style}>
-          <div className="  flex  pb-4 justify-center flex-col items-center">
-          <div onClick={handleCover} className="mt-10 cursor-pointer  flex flex-col justify-around items-center bg-onSecondary h-40 rounded-md">
+        <Box className=" w-[500px] flex flex-col gap-4" sx={style}>
+        <span>
+            <i className="fa-solid fa-times text-2xl absolute top-0 right-0 p-2  cursor-pointer " onClick={handleClose}></i>
+          </span>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-xl font-semibold"> Adding a new Cover picture</h1>
+            <p className="text-sm"> Click the box to add your Cover image to upload </p>
+          </div>
+
+
+          <div  onClick={handleCover}  className="  flex cursor-pointer bg-onSecondary justify-center mt-3  flex-col items-center">
                   <input
               type="file"
               accept="image/*"
@@ -92,20 +100,21 @@ export default function UploadCoverModal({coverImg}:any) {
             />
             {selectedCoverImg ? <img
               src={URL.createObjectURL(new Blob([selectedCoverImg]))}
-              className=" max-h-36 w-full  object-cover object-fit rounded-md"
+              className=" h-44 w-full object-cover object-center"
             />
-            :<span className="w-60 flex flex-col items-center gap-4 ">
-              <p className="text-2xl font-semibold  opacity-10">
-            ADD Cover Photo
-              </p>
-            </span>}
-                  </div>
+            : (<span className="w-60 flex flex-col items-center gap-4 ">
+            <i className="p-4 fa-solid fa-user text-[8rem] text-secondary"></i>
+          </span>)}
+                  
           </div>
-          <span className="flex justify-center">
+          <span className="flex justify-end gap-2">
+            <Button onClick={handleClose}>
+              Cancel
+              </Button> 
             <Button variant="contained" onClick={handleAddCover}>
-              upload Cover picture
+              Save
             </Button>
-          </span>
+          </span>     
         </Box>
       </>
 

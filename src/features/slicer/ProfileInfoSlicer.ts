@@ -35,13 +35,16 @@ export const ProfileInfoApi: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
+  profileInfoModal:false
   //   UserData: "",
 };
 const ProfileInfoSlicer = createSlice({
   name: "profileInfo",
   initialState,
   reducers: {
-  
+    setProfileInfoModal : (state , action)=>{
+      state.profileInfoModal = action.payload
+    }
   },
 
   extraReducers: (builder) => {
@@ -60,5 +63,5 @@ const ProfileInfoSlicer = createSlice({
   },
 });
 
-// export const {setReqAccData} = LoginSlicer.actions;
+export const {setProfileInfoModal} = ProfileInfoSlicer.actions;
 export default ProfileInfoSlicer.reducer;

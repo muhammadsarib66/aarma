@@ -1,68 +1,85 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import InputField from "./InputField";
-import PrmaryBtn from "./PrmaryBtn";
 import VerfyMailModel from "./VerifyMailModel";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsModalOpen } from "../features/slicer/Slicer";
 import { toast } from "react-toastify";
-import {
-  createAccountApi,
-  setReqAccData,
-} from "../features/slicer/RequestAccountSlicer";
+import { createAccountApi } from "../features/slicer/RequestAccountSlicer";
 import Loader from "./Loader";
 import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+interface FormValues {
+  firstName: string;
+  lastName: string;
+  fullname: string;
+  phoneNumber: string;
+  email: string;
+  password: string;
+  // confirmPassword: string;
+}
 
 const SignUp = () => {
   const { isLoading } = useSelector((state: any) => state.RequestAccountSlicer);
+  const [submitting, setSubmitting] = useState(false);
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    password: "",
-    fullname: "",
+
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .min(3, "firstName must be minimum 3")
+      .max(20, "firstName must not be more than 2 characters")
+      .required("First Name is required"),
+    lastName: Yup.string()
+      .min(3, "lastName must be minimum 2")
+      .max(20, "lastName must not be more than 20 characters")
+      .required("Last Name is required"),
+    fullname: Yup.string()
+      .min(3, "fullName must be minimum 6")
+      .max(20, "fullName must not be more than 20 characters")
+      .required("Full Name is required"),
+    phoneNumber: Yup.string()
+      .min(11, "phone Number must be minimum 11")
+      .max(15, "phone Number must not be more than 15 characters")
+      .required("Phone Number is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .max(14, "Password must not exceed 14 characters")
+      .required("Password is required"),
   });
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-  // const handleBusinessTypeSelect = (item: string) => {
-  //   setFormData({
-  //     ...formData,
-  //     businessType: item,
-  //   });
-  //   console.log(item);
-  // };
-
-  // const handleCitySelect = (item: any) => {
-  //   console.log(item);
-  //   setFormData({
-  //     ...formData,
-  //     city: item,
-  //   });
-  // };
-
-  const HandeSubmit = (e: any) => {
-    e.preventDefault();
-    if (
-      formData.firstName &&
-      formData.lastName &&
-      formData.email &&
-      formData.phoneNumber &&
-      formData.password
-    ) {
-      localStorage.setItem("formData", JSON.stringify(formData));
-      dispatch(createAccountApi(formData)); // Fix: Pass formData as an argument to createAccountApi
-      setTimeout(() => {
-        if (!isLoading) dispatch(setIsModalOpen());
-      }, 3000);
-    } else {
-      toast.error("Please Fill All feilds");
+  const handleSubmit = async (
+    values: FormValues,
+    { resetForm }: { resetForm: () => void }
+  ) => {
+    try {
+      setSubmitting(true);
+      // Perform form submission logic here
+      console.log(values);
+      localStorage.setItem("formData", JSON.stringify(values));
+      dispatch(createAccountApi(values) as  any ); // Add type assertion to dispatch function call
+      resetForm(); // Fix: Pass formData as an argument to createAccountApi
+      // Set submitting to false after successful submission
+      setSubmitting(false);
+    } catch (error) {
+      toast.error("An error occurred. Please try again.");
+      // Handle form submission error
+      console.error(error);
+      setSubmitting(false);
     }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      fullname: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: handleSubmit,
+  });
 
   return (
     <section className="relative -top-52 md:-top-52  py-10 px-7 bg-onSecondary  rounded-3xl max-w-[400px] min-h-fit ">
@@ -71,67 +88,122 @@ const SignUp = () => {
           Let’s start! It should only take a few minutes.
         </h2>
       </div>
-      <form onSubmit={HandeSubmit}>
-        <div className="my-4 flex flex-col ">
-          <InputField
-            onChange={(e: any) => handleInput(e)}
-            value={formData.firstName}
-            type="text"
-            Name="firstName"
+      <form onSubmit={formik.handleSubmit} className="my-4 flex flex-col">
+        <div>
+          {/* <label htmlFor="firstName">firstName</label> */}
+          <input
             placeholder="Business Owner First Name *"
-          />
-          <InputField
-            Name="lastName"
-            onChange={(e: any) => handleInput(e)}
-            value={formData.lastName}
+            className="placeholder-red bg-secondary h-12 w-full px-2 my-2 rounded-md"
             type="text"
+            id="firstName"
+            name="firstName"
+            value={formik.values.firstName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.firstName && formik.errors.firstName && (
+            <div className="error text-red-500 text-sm">{formik.errors.firstName}</div>
+          )}
+        </div>
+        <div>
+          {/* <label htmlFor="lastName">lastName</label> */}
+          <input
             placeholder="Business Owner Last Name *"
-          />
-          <InputField
-            Name="fullname"
-            onChange={(e: any) => handleInput(e)}
-            value={formData.fullname}
+            className="placeholder-red bg-secondary h-12 w-full px-2 my-2 rounded-md"
             type="text"
+            id="lastName"
+            name="lastName"
+            value={formik.values.lastName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.lastName && formik.errors.lastName && (
+            <div className="error text-red-500 text-sm">{formik.errors.lastName}</div>
+          )}
+        </div>
+        <div>
+          {/* <label htmlFor="fullName">fullName</label> */}
+          <input
             placeholder="Business Owner Full Name *"
-          />
-          <InputField
-            Name="email"
-            onChange={(e: any) => handleInput(e)}
-            value={formData.email}
-            type="email"
-            placeholder="Enter Your Business Email *"
-          />
-
-          <InputField
-            Name="phoneNumber"
-            onChange={(e: any) => handleInput(e)}
-            value={formData.phoneNumber}
-            type="number"
-            placeholder="Mobile Phone  *"
-          />
-          <InputField
-            Name="password"
-            onChange={(e: any) => handleInput(e)}
-            value={formData.password}
+            className="placeholder-red bg-secondary h-12 w-full px-2 my-2 rounded-md"
             type="text"
-            placeholder="Enter Your Password *"
+            id="fullname"
+            name="fullname"
+            value={formik.values.fullname}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.fullname && formik.errors.fullname && (
+            <div className="error text-red-500 text-sm">{formik.errors.fullname}</div>
+          )}
+        </div>
 
-          <PrmaryBtn
-            btnText="Get Started"
-            type="submit"
-            style="h-12 flex rounded-lg justify-center items-center bg-[#F33434]   text-secondary"
+        <div>
+          {/* <label htmlFor="email">Email</label> */}
+          <input
+            placeholder="Enter Your Business Email *"
+            className="placeholder-red bg-secondary h-12 w-full px-2 my-2 rounded-md"
+            type="email"
+            id="email"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.email && formik.errors.email && (
+            <div className="error text-red-500 text-sm">{formik.errors.email}</div>
+          )}
+        </div>
+        <div>
+          {/* <label htmlFor="email">Email</label> */}
+          <input
+            placeholder="Enter Your Phone Number *"
+            className="placeholder-red bg-secondary h-12 w-full px-2 my-2 rounded-md"
+            type="text"
+            id="phoneNumber"
+            name="phoneNumber"
+            value={formik.values.phoneNumber}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+            <div className="error text-red-500 text-sm">
+              {formik.errors.phoneNumber}
+            </div>
+          )}
+        </div>
+
+        <div>
+          {/* <label htmlFor="password">Password</label> */}
+          <input
+            className="placeholder-red bg-secondary h-12 w-full px-2 my-2 rounded-md"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your Password *"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.password && formik.errors.password && (
+            <div className="error text-red-500 text-sm" >{formik.errors.password}</div>
+          )}
+        </div>
+        <div>
+          <button
+            className={`h-12 w-full flex rounded-lg justify-center items-center bg-[#F33434]    text-secondary`}
+            type="submit"
+            disabled={submitting}
+          >
+            Submit
+          </button>
         </div>
       </form>
       <div className="">
         <p className="text-onPrimary text-sm">
           I already have an account{" "}
           <span className="underline font-semibold text-primary cursor-pointer">
-            <Link to={"/login"}>
-
-            Login
-            </Link>
+            <Link to={"/login"}>Login</Link>
           </span>
         </p>
       </div>

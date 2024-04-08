@@ -1,22 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { baseUrl } from "../features/slicer/Slicer";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { GetMyProfile } from "../features/slicer/GetMyProfileSlicer";
 import { GetPortfolioAPi } from "../features/slicer/GetPorfolioSlicer";
-import { DeletePortfolioAPi } from "../features/slicer/DeletePortfolio";
-import { Box, Modal } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, Divider, Modal } from "@mui/material";
+import { SetStateAction, useEffect, useState } from "react";
 import { Carousel, IconButton } from "@material-tailwind/react";
 import AddPortfolioModal from "./AddPortfolioModal";
-
+import { getAllCatApi } from "../features/slicer/CategorySlicer";
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import { DeletePortfolioAPi } from "../features/slicer/DeletePortfolio";
 const style = {
   position: "absolute",
   top: "50%",
@@ -33,24 +26,43 @@ const style = {
 
 export default function PorfolioAcordion() {
   const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [deleteItem, setDeleteItem] = useState('' as any)
   const [porfolioItem, setPorfolioItem] = useState('');
- 
+  
   const handleClose = () => setOpen(false);
-  const handleOpen = (item) =>{
+  const handleOpen = (item: SetStateAction<string>) =>{
     setOpen(true);
     setPorfolioItem(item)
 
+  }
+  const handleClose1 = () =>{
+    setOpen1(false);
+  
   }
   const dispatch = useDispatch();
   const { PortfolioData } = useSelector(
     (state: any) => state.GetPorfolioSlicer
   );
-  console.log(PortfolioData);
-
-  const handleDeletePortfolio = (id) => {
-    console.log("delete", id);
-    dispatch(DeletePortfolioAPi(id));
+  
+  const handleDeletePortfolio = (id: any) => {
+    setDeleteItem(id)
+    setOpen1(true);
+    
   };
+  const handleDeleteItem = () =>{
+    dispatch(DeletePortfolioAPi(deleteItem));
+    setOpen1(false);
+    
+    // setDeleteModal(true)
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) dispatch(getAllCatApi() as any); // Add 'as any' to fix the type error
+    dispatch(GetMyProfile());
+    dispatch(GetPortfolioAPi());
+  }, [dispatch]);
 
   return (
     <div className="px-3 my-10 py-4 ">
@@ -61,9 +73,9 @@ export default function PorfolioAcordion() {
         </h1>
         <AddPortfolioModal icon={true}/>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 md:gap-4  place-items-center md:place-items-start ">
-      {PortfolioData?.map((item: any) => (
-  <div className="group object-center flex flex-col gap-2" key={item.id}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 md:gap-4  place-items-center md:place-items-start ">
+      {PortfolioData &&   PortfolioData?.map((item: any , ind : any) => (
+  <div  className="group object-center flex flex-col gap-2" key={ind}>
     {item?.photos && item?.photos.length > 0 && (
       <div  onClick={()=>handleOpen(item)}  className="relative group">
         <img
@@ -84,14 +96,18 @@ export default function PorfolioAcordion() {
         </div>
       </div>
     )}
-    <p className="group-hover:underline capitalize text-green-600 font-semibold">
+    <p  className="group-hover:underline capitalize text-green-600 font-semibold">
       {item?.title}
     </p>
   </div>
-))}
-
-      </div>
-
+)) }
+     </div>
+     {
+      PortfolioData && PortfolioData.length === 0 &&
+    <div className="flex justify-center items-center h-72 bg-secondary rounded-lg">
+    <p className="text-2xl text-onPrimary">No Portfolio Added</p>
+    </div>
+  }
       <Modal
         open={open}
         // onClose={handleClose}
@@ -201,59 +217,45 @@ export default function PorfolioAcordion() {
           </Box>
         </>
       </Modal>
-      {/* <div className="grid grid-cols-1 md:grid-cols-2  gap-8 mb-20">
-        {PortfolioData?.map((item: any) => {
-          return (
-            <div className="">
-              <Accordion defaultExpanded key={item?._id}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel3-content"
-                  id="panel3-header"
-                >
-                  <h1 className="font-bold uppercase text-onPrimary text-xl">
-                   title:  {item?.title}
-                  </h1>
-                </AccordionSummary>
-                <AccordionDetails className="flex flex-col gap-4 h-56 overflow-y-scroll">
-                  <div>
-                    <span className="font-bold">No Of Guest : </span>
-                    {item?.total_guests}
-                  </div>
-                  <div>
+      <Modal
+        open={open1}
+        onClose={handleClose1}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} className=" outline-none border-blue-500 rounded-lg  ">
+          <div className="flex   gap-8">
 
-                  <span className="font-bold">Description : </span>
-                  {item?.description}
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut eos sit sapiente. Magni in, vero temporibus eligendi illo laborum nostrum inventore! Aperiam facilis id molestiae totam reprehenderit expedita architecto veniam quam vel.
-                  
-                  </div>
+          <h3  className="text-xl pb-4 font-semibold text-onPrimary" >
+           Do You want to Delete this Portfolio 
+          </h3>
+          <span>
 
-                  <div>
-                    <h1 className="font-bold text-xl mt-2">Portfolio Photos</h1>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    {item?.photos?.map((photo: any, ind: any) => {
-                      return (
-                        <img
-                          src={baseUrl + photo}
-                          key={ind}
-                          alt="portfolio"
-                          className=" active:scale-[5] z-10 duration-300  w-40 h-40 object-cover object-center rounded-md"
-                        />
-                      );
-                    })}
-                  </div>
-                </AccordionDetails>
-                <AccordionActions>
-                  <Button onClick={() => handleDeletePortfolio(item?._id)}>
-                    Delete{" "}
-                  </Button>
-                </AccordionActions>
-              </Accordion>
-            </div>
-          );
-        })}
-      </div> */}
+          < WarningAmberIcon sx={{fontSize: '30px', color: 'red'}}/>
+          </span>
+          </div>
+          <Divider/>
+        
+
+    <div className="flex justify-end gap-4 py-2 ">
+
+          <Button
+          color="error"
+            // variant="text"
+            // color="red"
+            onClick={handleClose1}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+
+          <Button sx={{bgcolor: '#4CAF50'}}  variant="contained"  onClick={handleDeleteItem}>
+            <span>Yes</span>
+          </Button>
+          </div>
+
+        </Box>
+      </Modal>
     </div>
   );
 }

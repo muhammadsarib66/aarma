@@ -37,14 +37,18 @@ export const AddPortfolioApi: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
+  modalOpen : false , 
 };
 const AddPortfolioSlicer = createSlice({
   name: "addPortFolio",
   initialState,
   reducers: {
-    // setReqAccData : (state,action)=>{
-    //     state.ReqAccData = action.payload
-    // }
+    modalPortfolio : (state)=>{
+        state.modalOpen = true
+    },
+    modalPortfolioClose : (state)=>{
+      state.modalOpen = false
+  }
   },
 
   extraReducers: (builder) => {
@@ -62,5 +66,5 @@ const AddPortfolioSlicer = createSlice({
   },
 });
 
-// export const {setReqAccData} = LoginSlicer.actions;
+export const {modalPortfolio,modalPortfolioClose} = AddPortfolioSlicer.actions;
 export default AddPortfolioSlicer.reducer;

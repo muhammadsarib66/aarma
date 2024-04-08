@@ -16,6 +16,7 @@ export const GetMyProfile: any = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+      
       return response.data.data;
     } catch (error : any) {
       // Handle the error

@@ -8,14 +8,11 @@ export const LoginAccApi: any = createAsyncThunk(
   async (loginCredential: any, { dispatch }) => {
     try {
       const response = await axios.post(`${baseUrl}users/eventmanager-login`, loginCredential);
+      toast.success("Login Successful");        
       
       if (response.status === 200) {
-        toast.success("Login Successful");
-        
-        // if (response.data) {
-        //   localStorage.setItem("ArmaCredienials", JSON.stringify(loginCredential));
-        // }
-        
+        toast.success("Login Successful");       
+        console.log(response.data) 
         return response.data;
       } else {
         toast.error("User not found");
@@ -28,31 +25,6 @@ export const LoginAccApi: any = createAsyncThunk(
   }
 );
 
-// export const LoginAccApi: any = createAsyncThunk(
-//   "aarma/loginacc",
-//   async (loginCredential: any, { dispatch }) => {
-//     // console.log(loginCredential);
-//     return await axios
-//       .post(`${baseUrl}users/eventmanager-login`, loginCredential)
-//       .then((resp) => {
-//         toast.success("login Succesfull");
-//         // console.log(resp.data);
-//         if (resp.data) {
-//           localStorage.setItem(
-//             "ArmaCredienials",
-//             JSON.stringify(loginCredential)
-//           );
-//         }
-//         return resp.data;
-//       })
-//       .catch((err) => {
-//         toast.error(err.data.message);
-//         console.log(err.data);
-//         return err.message;
-//       });
-//   }
-// );
-
 const initialState = {
   isLoading: false,
   isError: false,
@@ -62,9 +34,7 @@ const LoginSlicer = createSlice({
   name: "login",
   initialState,
   reducers: {
-    // setReqAccData : (state,action)=>{
-    //     state.ReqAccData = action.payload
-    // }
+
   },
 
   extraReducers: (builder) => {
@@ -78,7 +48,6 @@ const LoginSlicer = createSlice({
       state.UserData = data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(data));
-      // console.log(localStorage.getItem("token"));
     });
     builder.addCase(LoginAccApi.rejected, (state) => {
       state.isLoading = false;

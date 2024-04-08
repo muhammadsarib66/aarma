@@ -1,21 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import * as React from "react";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import InputField from "../../components/InputField";
-import { ProfileInfoApi, setProfileInfoModal } from "../../features/slicer/ProfileInfoSlicer";
+import { ProfileInfoApi } from "../../features/slicer/ProfileInfoSlicer";
 import Loader from "../../components/Loader";
-import { toast } from "react-toastify";
 
 const style = {
-  position: "absolute" ,
+position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  border: "none",
+  width: 400,
   bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -25,43 +25,37 @@ export default function ProfileInfoModal() {
   const { categoryData } = useSelector((state: any) => state.CategorySlicer);
   const {isLoading} = useSelector((state:any)=> state.ProfileInfoSlicer);
   const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
-  const {profileInfoModal} = useSelector((state:any)=> state.ProfileInfoSlicer);
   console.log( ProfileData)
+  const [open, setOpen] = React.useState(false);
   const [selectedOptions, setSelectedOptions] = useState<any>([]);
   const [bio , setBio] = useState('')
   const [tagline , setTagline] = useState('')
   
-  const handleOpen = () => dispatch(setProfileInfoModal(true));
-  const handleClose = () => dispatch(setProfileInfoModal(false));
-  
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const handleChange = (option:any) => {
     // Check if the option is already selected
     const isSelected = selectedOptions.includes(option._id);
 
     if (isSelected) {
       // If selected, remove its ID from the selected options
-      setSelectedOptions((prevOptions:any) =>
-        prevOptions.filter((id:any) => id !== option._id)
+      setSelectedOptions((prevOptions) =>
+        prevOptions.filter((id) => id !== option._id)
       );
     } else {
       // If not selected, add its ID to the selected options
-      setSelectedOptions((prevOptions:any) => [...prevOptions, option._id]);
+      setSelectedOptions((prevOptions) => [...prevOptions, option._id]);
     }
   };
-  const handlBioChange = (e: any) => {
+  const handlBioChange = (e) => {
     setBio(e.target.value)
   };
-  const handleTagChange = (e: any) => {
+  const handleTagChange = (e) => {
     setTagline(e.target.value)
   };
   //   console.log(selectedOptions)
   const addProfileInfo = () => {
-    if(!bio || !tagline || selectedOptions.length === 0){
-      toast.error('Please fill all the fields')
-    }
-    else{
-
-    
     console.log(selectedOptions);
     const Obj = {
          bio,
@@ -70,12 +64,10 @@ export default function ProfileInfoModal() {
         };
         console.log(Obj)      
         dispatch(ProfileInfoApi(Obj))
-        
+        // toast.success('Profile Info Added')
     setBio('')
     setTagline('')
     setSelectedOptions([])
-    handleClose();
-  }
     }
   
 
@@ -83,7 +75,7 @@ export default function ProfileInfoModal() {
     <div>
       <span className="flex gap-3">
       <i className={`fa-solid ${ProfileData?.categories?.length>0 && ProfileData?.tagline && ProfileData?.bio && ProfileData?.email  && ProfileData?.firstName&& ProfileData?.lastName ?"text-green-500" : "text-gray-300"} text-2xl fa-circle-check`}></i>
-      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${profileInfoModal?"fa-chevron-up" :"fa-chevron-down"}`}></i>
+      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${open?"fa-chevron-up" :"fa-chevron-down"}`}></i>
       {/* <i
         
         
@@ -92,26 +84,23 @@ export default function ProfileInfoModal() {
         </span>
 
       <Modal
-        open={profileInfoModal}
+        open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <>
         {isLoading && <Loader/>}
-        <Box className=" w-[300px]  md:w-[500px] flex flex-col gap-4" sx={style}>
-        <span>
-            <i className="fa-solid fa-times text-2xl absolute top-0 right-0 p-2  cursor-pointer " onClick={handleClose}></i>
-          </span>
+        <Box sx={style}>
           <h1 className="text-2xl font-bold text-onPrimary pb-2">
             Complete Your Bio
           </h1>
           <div>
-            <label className="   text-onPrimary font-semibold"> Add Bio</label>
+            <label className="text-onPrimary font-semibold"> Add Bio</label>
             <textarea
             value={bio}
               onChange={handlBioChange}
-              className="mt-2 bg-onSecondary w-full rounded-lg p-3"
+              className="bg-onSecondary w-full rounded-lg p-3"
               placeholder="Add Your Bio"
             />
           </div>
@@ -131,11 +120,10 @@ export default function ProfileInfoModal() {
             <h2 className="text-xl font-semibold text-onPrimary pb-2 ">
               Select Categories
             </h2>
-            {categoryData &&  categoryData?.map((option:any) => (
-              <div className=" flex items-center gap-3 py-1 " key={option._id}>
+            {categoryData &&  categoryData?.map((option) => (
+              <div className=" flex gap-3 py-1 " key={option._id}>
                 <input
                   type="checkbox"
-                  className="w-5 h-5"
                   id={option._id}
                   checked={selectedOptions.includes(option._id )}
                   onChange={() => handleChange(option)}
@@ -144,15 +132,11 @@ export default function ProfileInfoModal() {
               </div>
             ))}
           </div>
-          <span className="flex justify-end gap-2">
-            <Button onClick={handleClose}>
-              Cancel
-              </Button> 
+          <div className="flex   justify-center ">
             <Button variant="contained" onClick={addProfileInfo}>
-              Save
+              Add Profile Info
             </Button>
-          </span>     
-         
+          </div>
         </Box>
         </>
 

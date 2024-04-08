@@ -28,7 +28,7 @@ const InputField = ({
       ) : (
         <input
           type={type}
-          className={` ${style} myIn placeholder-red bg-secondary h-12 w-full px-2 my-2 rounded-md placeholder-red`}
+          className={` ${style} myIn placeholder-red bg-onSecondary h-12 w-full px-2 my-2 rounded-md placeholder-red`}
           placeholder={placeholder}
           onChange={onChange}
           value={value}
