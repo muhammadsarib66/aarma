@@ -28,7 +28,6 @@ export function SplashScreen() {
   const dispatch = useDispatch();
     // console.log(ProfileData?.portfolio)
   const [open, setOpen] = React.useState(true);
- 
   
   const handleOpen1 = () => {
     if (!ProfileData?.bio) {
@@ -58,7 +57,6 @@ export function SplashScreen() {
     const handleClose = () => {
       setOpen(false);
     }
-
   return (
     <>
     <Modal
