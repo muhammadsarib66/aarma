@@ -3,9 +3,15 @@ import axios from "axios";
 import { baseUrl, setIsModalOpen } from "./Slicer";
 import { toast } from "react-toastify";
 
+interface UserData {
+  email: string;
+  password: string;
+  // Add other properties if needed
+}
+
 export const createAccountApi = createAsyncThunk(
   "aarma/createAccount",
-  async (userData, { dispatch }) => {
+  async (userData :UserData, { dispatch }) => {
     console.log(userData);
     try {
       const response = await axios.post(

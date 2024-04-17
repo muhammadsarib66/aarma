@@ -24,11 +24,11 @@ const style = {
 };
 
 
-export default function PorfolioAcordion() {
+export default function PorfolioAcordion  () {
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [deleteItem, setDeleteItem] = useState('' as any)
-  const [porfolioItem, setPorfolioItem] = useState('');
+  const [porfolioItem, setPorfolioItem] = useState<any>('');
   
   const handleClose = () => setOpen(false);
   const handleOpen = (item: SetStateAction<string>) =>{
@@ -127,59 +127,58 @@ export default function PorfolioAcordion() {
             {/* <div className="h-96"> */}
 
             <Carousel 
-            autoplay={true}
-            
-            className="rounded-xl border  min-h-[400px]"
-            prevArrow={({ handlePrev }) => (
-              <IconButton
-                variant="text"
-                color="white"
-                size="lg"
-                onClick={handlePrev}
-                className="!absolute top-2/4 left-4 -translate-y-2/4"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="h-8 w-8  text-green-500 "
+              autoplay={true}
 
+              className="rounded-xl border  min-h-[400px]"
+              prevArrow={({ handlePrev }) => (
+                <IconButton
+                  variant="text"
+                  color="white"
+                  size="lg"
+                  onClick={handlePrev}
+                  className="!absolute top-2/4 left-4 -translate-y-2/4"
+                  placeholder=""
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                  />
-                </svg>
-              </IconButton>
-            )}
-            nextArrow={({ handleNext }) => (
-              <IconButton
-                variant="text"
-                color="white"
-                size="lg"
-                onClick={handleNext}
-                className="!absolute top-2/4 !right-4 -translate-y-2/4"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="red"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="h-8 w-8  text-green-500 "
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="h-8 w-8  text-green-500 "
+
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                  </svg>
+                </IconButton>
+              )}
+              nextArrow={({ handleNext }) => (
+                <IconButton
+                  variant="text"
+                  color="white"
+                  size="lg"
+                  onClick={handleNext}
+                  className="!absolute top-2/4 !right-4 -translate-y-2/4"
+                  placeholder=""
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                  />
-                </svg>
-              </IconButton>
-            )}
-            >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="red"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="h-8 w-8  text-green-500 "
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </IconButton>
+              )}  placeholder=''            >
               {
                 porfolioItem?.photos?.map((photo: any, ind: any) => {
                   return (

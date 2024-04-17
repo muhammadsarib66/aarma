@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "./Slicer";
@@ -5,7 +6,7 @@ import { toast } from "react-toastify";
 
 export const LoginAccApi: any = createAsyncThunk(
   "aarma/loginacc",
-  async (loginCredential: any, { dispatch }) => {
+  async (loginCredential: any, ) => {
     try {
       const response = await axios.post(`${baseUrl}users/eventmanager-login`, loginCredential);
       toast.success("Login Successful");        

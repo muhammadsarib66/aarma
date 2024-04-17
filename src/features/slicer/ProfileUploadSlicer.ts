@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "./Slicer";
@@ -51,7 +52,7 @@ const ProfileUploadSlicer = createSlice({
     builder.addCase(ProfileUploadProfileApi.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(ProfileUploadProfileApi.fulfilled, (state, action) => {
+    builder.addCase(ProfileUploadProfileApi.fulfilled, (state) => {
       state.isLoading = false;
 
       // console.log(localStorage.getItem("token"));

@@ -34,14 +34,14 @@ export default function AddPortfolioModal({icon} : any) {
     description: "",
     total_guests: "",
   });
-  const [selectedPortfolioImages, setSelectedPortfolioImages] = useState([]);
+  const [selectedPortfolioImages, setSelectedPortfolioImages] = useState<any>([]);
   const fileInputRefPortfolioImg = useRef<HTMLInputElement>(null);
   const handleOpen = () => dispatch(modalPortfolio());
   const handleClose = () => dispatch(modalPortfolioClose());
 
   const handleFileChangePortfolio = (event : any) => {
-    const files = Array.from(event.target.files) as File[];
-    setSelectedPortfolioImages((prevImages: File[]) => [...prevImages, ...files]);
+    const files:any = Array.from(event.target.files);
+    setSelectedPortfolioImages((prevImages:any) => [...prevImages, ...files]);
   };
 
   const handleCover = () => {
@@ -70,7 +70,7 @@ export default function AddPortfolioModal({icon} : any) {
       formData.append("title", portfolioData.title);
       formData.append("description", portfolioData.description);
       formData.append("total_guests", portfolioData.total_guests);
-      selectedPortfolioImages.forEach((image) => {
+      selectedPortfolioImages.forEach((image:any) => {
         formData.append(`portfolio`, image);
       });
       // formData.append("portfolio", selectedPortfolioImages);
@@ -175,7 +175,7 @@ export default function AddPortfolioModal({icon} : any) {
 
                 {selectedPortfolioImages.length > 0 && (
                   <div className=" bg-onPrimary p-2 rounded-lg w-fit  h-22 overflow-x-scroll overflow-y-hidden flex gap-4">
-                    {selectedPortfolioImages.map((image, index) => (
+                    {selectedPortfolioImages.map((image:any, index:any) => (
                       <img
                         key={index}
                         src={URL.createObjectURL(image)}

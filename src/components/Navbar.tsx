@@ -128,7 +128,10 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center gap-4 font-semibold ">
               <p> {ProfileData?.fullname}</p>
-              <Avatar className="cursor-pointer bg-white" alt="User" src={baseUrl+ProfileData?.profile} onClick={handleClick} />
+              <span onClick={handleClick}>
+
+              <Avatar className="cursor-pointer bg-white" alt="User" src={baseUrl+ProfileData?.profile}  />
+              </span>
 
               <Menu
                 id="basic-menu"
@@ -230,7 +233,7 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center gap-4 font-semibold text-white">
               <p> {ProfileData?.fullname}</p>
-              <Avatar className="cursor-pointer bg-white" alt="User" src={baseUrl+ProfileData?.profile} onClick={handleClick} />
+              <Avatar className="cursor-pointer bg-white" alt="User" src={baseUrl+ProfileData?.profile}  />
 
               <Menu
                 id="basic-menu"

@@ -64,7 +64,7 @@ const VerifyMailModel = () => {
       ...data,
       ...verifyData,
     };
-    dispatch(VerifyOtpApi(Obj));
+    dispatch(VerifyOtpApi(Obj) as  any );
    
     
     setOTP(["", "", "", "", "", ""]);
@@ -72,7 +72,7 @@ const VerifyMailModel = () => {
     
   };
   const ResendEmail = () => {
-    dispatch(createAccountApi(ReqAccData));
+    dispatch(createAccountApi(ReqAccData) as  any );
     // console.log(ReqAccData);
   };
 

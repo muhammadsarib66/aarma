@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
 import { baseUrl } from "./Slicer";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { LoginAccApi } from "./LoginSlicer";
 
-export const VerifyOtpApi = createAsyncThunk("aarma/Otp" , async (otpData ,{dispatch})=>{
+
+
+
+export const VerifyOtpApi = createAsyncThunk("aarma/Otp" , async (otpData :any ,{dispatch})=>{
     
     console.log(otpData)
     return await axios
@@ -12,7 +16,7 @@ export const VerifyOtpApi = createAsyncThunk("aarma/Otp" , async (otpData ,{disp
       .then((resp) => {
         
           const userCred = localStorage.getItem('authUser')
-          const  parseUsercred = JSON.parse(userCred)
+          const  parseUsercred = JSON.parse(userCred as any)
           console.log(parseUsercred)
           dispatch(LoginAccApi(parseUsercred))
           resp.status === 200 &&   toast.success("user Registered")
