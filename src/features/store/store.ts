@@ -12,6 +12,8 @@ import ProfileVerifySlicer from "../slicer/ProfileVerifySlicer";
 import AddPortfolioSlicer from "../slicer/AddPortfolioSlicer"
 import GetPorfolioSlicer from "../slicer/GetPorfolioSlicer";
 import DeletePortfolio from "../slicer/DeletePortfolio";
+import ChatSlicer from "../slicer/ChatSlicer";
+import GetBookingSlicer from "../slicer/GetBookingSlicer";
 export const store = configureStore({
   reducer: {
     Slicer,
@@ -26,6 +28,8 @@ export const store = configureStore({
     ProfileVerifySlicer,
     AddPortfolioSlicer,
     GetPorfolioSlicer,
-    DeletePortfolio
+    DeletePortfolio,
+    ChatSlicer,
+    GetBookingSlicer
   },
 });

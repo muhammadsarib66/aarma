@@ -41,12 +41,13 @@ function App() {
 
   return (
     <>
-      <>
-        {/* <Navbar /> */}
+    
+      {!token &&
+      (
+        <>
           <Navbar />
         <ScrollToTop />
         <Routes>
-          <>
             {!token && (
               <>
                 <Route path="/*" element={<Home />} />
@@ -55,26 +56,18 @@ function App() {
                 <Route path="/login" element={<Login />} />
               </>
             )}
-            {/* {token && (
-              <><Route path ="/dashboard2/*" element={<Dashboard2 />} />
-                <Route path="/*" element={<Dashboard />} />
-                <Route path="/Dashboard" element={<Dashboard />} />
-                <Route path="/Analytics" element={<Analatics />} />
-                <Route path="/Bookings" element={<Bookings />} />
-                <Route path="/myprofile" element={<MyProfile />} />
-              </>
-            )} */}
-          </>
         </Routes>
+        </>
+      )}
             {
               token && 
               <>
               <Dashboard2 />
-      <ToastContainer />
+              <ToastContainer />
               </>
             }
 
-      </>
+      
     </>
   );
 }

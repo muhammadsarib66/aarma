@@ -1,61 +1,153 @@
-function Bookings() {
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// import * as React from 'react';
+import { useState } from "react";
+import { Input } from "@material-tailwind/react";
+import SearchIcon from "@mui/icons-material/Search";
+import { useSelector } from "react-redux";
+import moment from "moment";
+
+export default function Bookings() {
+  const { BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
+  const [selectedStatus, setSelectedStatus] = useState("active");
+  const [searchQuery, setSearchQuery] = useState("");
+  const HeadingTabs = [
+    "Event Title",
+    "Client Name",
+    "client Email",
+    "Total Guests",
+    "Event Start ",
+    "Event End ",
+    // "Service Description",
+    "Status",
+    // "Action",
+  ];
+  const FilterTab = [
+    {
+      value: "active",
+      title: "Active",
+    },
+    {
+      value: "cancelled",
+      title: "Cancelled",
+    },
+    {
+      value: "completed",
+      title: "Completed",
+    },
+  ];
+  const handleStatusChange = (status: any) => {
+    setSelectedStatus(status);
+  };
+  let filteredBookings;
+  if (selectedStatus === "active") {
+    filteredBookings = BookingsData.active;
+  } else if (selectedStatus === "cancelled") {
+    filteredBookings = BookingsData.cancelled;
+  } else if (selectedStatus === "completed") {
+    filteredBookings = BookingsData.completed;
+  } else {
+    filteredBookings = [];
+  }
+
+  if (searchQuery) {
+    filteredBookings = filteredBookings.filter((booking: any) => {
+      const fullname = booking?.eventTitle || "";
+      return fullname.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  }
+
   return (
-    <div>
-      bookings Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolore
-      autem at labore, sequi officia illum sint quisquam iusto, a unde expedita!
-      Distinctio et nihil omnis consectetur enim architecto obcaecati dolor unde
-      expedita pariatur cumque, adipisci sequi eligendi voluptates beatae
-      inventore eos. Quia consectetur eligendi, veritatis itaque facere,
-      corrupti optio nobis non magnam nihil excepturi facilis sit exercitationem
-      tempora illo amet esse quas enim repudiandae ullam vel vero rerum
-      voluptates! Esse temporibus aliquid impedit libero animi fuga accusantium
-      voluptate corrupti cum cumque! Alias, quisquam commodi. Rerum doloribus
-      iure itaque distinctio adipisci iste obcaecati dolor, ad illo aut porro
-      consectetur voluptatibus ab architecto autem! Ipsum natus ut officia
-      molestias, obcaecati est in quos nesciunt, reprehenderit accusamus
-      doloribus alias rerum unde quod exercitationem repellendus reiciendis
-      eaque tempora, explicabo incidunt voluptas perspiciatis hic eligendi?
-      Optio, libero ipsum doloribus, rem excepturi laboriosam odit voluptatum
-      officiis, suscipit distinctio dignissimos explicabo magni quam incidunt
-      nemo ex. Maxime voluptate vero illum consequatur quo error explicabo eum
-      nisi dolorum facere saepe iure, ullam alias neque at veritatis corrupti.
-      Accusantium voluptatem consequuntur tempore dignissimos saepe animi
-      perferendis repellendus nulla eius corporis natus, rem optio maiores a
-      consectetur est minima dolorum nostrum distinctio eaque id delectus ipsum
-      quae! Nesciunt necessitatibus aliquam quia tenetur provident, est possimus
-      accusantium optio ratione ullam itaque doloribus dolores nam enim in
-      officiis, sunt magnam sequi. Molestiae veniam deleniti odit quos excepturi
-      vero. A itaque sit quidem velit sequi fugit maxime laboriosam provident
-      porro optio saepe, voluptate et dicta temporibus harum iure minima odio
-      architecto ab sed cupiditate suscipit blanditiis? Deserunt aperiam commodi
-      cumque voluptatibus debitis quo ex molestias voluptatem quidem eius
-      assumenda consequatur dolor rerum enim quam, esse provident! Tempore
-      libero beatae voluptatum laborum soluta ducimus voluptas voluptatem natus
-      nihil sapiente. Id ea rerum ut consectetur voluptatibus molestiae
-      aspernatur error quidem? Necessitatibus quae cupiditate nemo libero,
-      dolore omnis! Rem suscipit nemo, maxime nam repellendus dignissimos hic
-      dicta! Illo qui libero et, laborum doloribus sit placeat a dignissimos,
-      saepe laboriosam fuga reprehenderit itaque aut nobis. Unde neque ex libero
-      consectetur veniam aliquid ullam in dignissimos ut vero quam dolore
-      voluptatem, explicabo cupiditate dolor perspiciatis nostrum voluptatum
-      pariatur est! Alias fugit fuga voluptates corrupti, illo aperiam officiis
-      quod dicta earum non esse. Asperiores maiores ea illum minus? Quisquam
-      doloribus est voluptates deleniti laborum temporibus id libero
-      consequuntur repellat rem blanditiis laudantium totam eveniet modi sed
-      nihil, officia illum quos fugiat error suscipit harum amet iusto rerum.
-      Molestias ex molestiae doloremque porro quo delectus dolorem magni odit
-      mollitia soluta accusantium optio eaque, nisi, hic eos voluptate totam
-      explicabo ipsam aspernatur corporis neque quas quia. Nostrum mollitia
-      accusamus, architecto, odio facilis provident aut odit ex inventore ab
-      porro expedita modi earum sed tempora autem officiis nobis incidunt
-      praesentium ipsa. Dignissimos perspiciatis cupiditate, laborum maiores
-      sapiente, dolorum qui blanditiis nesciunt deleniti quisquam neque
-      temporibus totam odit ipsam! Esse nam ut nesciunt, error dolores fugiat
-      eligendi aliquid. Sapiente ratione quia blanditiis sint minima dolorum
-      autem iste magnam exercitationem ipsam nostrum rerum harum magni doloribus
-      perspiciatis quod nemo eaque, tempora est, a sit.
-    </div>
+    <section className="flex flex-col gap-6">
+      <div className="py-10 px-4 flex items-center justify-between">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-xl md:text-3xl font-bold">Bookings</h1>
+          <select
+            className="w-40 h-8  border-2 rounded-md  "
+            value={selectedStatus}
+            onChange={(e) => handleStatusChange(e.target.value)}
+          >
+            {FilterTab.map((item, index) => {
+              let arrayLength = 0;
+              if (BookingsData.hasOwnProperty(item.value)) {
+                arrayLength = BookingsData[item.value].length; // Get the length of the array based on the option value
+              }
+              return (
+                <option className=" flex" key={index} value={item.value}>
+                  <span> {item.title} </span>
+                  <span className=" ">({arrayLength})</span>
+                </option>
+              );
+            })}
+          </select>
+        </div>
+
+        <div className="w-full md:w-72">
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            label="Search"
+            icon={<SearchIcon className="h-5 w-5" />}
+            crossOrigin={undefined}
+          />
+        </div>
+      </div>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              {HeadingTabs?.map((item, index) => (
+                <th key={index} scope="col" className=" capitalize px-6 py-3">
+                  {item}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredBookings &&
+              filteredBookings?.map((item: any, index: any) => (
+                <tr
+                  key={index}
+                  className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                >
+                  <td className="px-6 py-4">{item?.eventTitle}</td>
+                  <td className="px-6 py-4">{item?.client?.fullname}</td>
+
+                  <td className="px-6 py-4">{item?.client?.email}</td>
+
+                  <td className="px-6 py-4">{item?.totalGuests}</td>
+                  <td className="px-6 py-4">
+                    {moment(item?.eventStartDate).format("MMM Do YY")}
+                  </td>
+                  <td className="px-6 py-4">
+                    {moment(item?.eventEndDate).format("MMM Do YY")}
+                  </td>
+                  {/* <td className="px-6 py-4">{item?.serviceDescription}</td> */}
+                  <td className={`  px-6 py-4`}>
+                    <span
+                      className={` ${
+                        item?.booking_statuscode === "ACTIVE" &&
+                        "bg-green-400 text-white"
+                      } p-1 rounded-md`}
+                    >
+                      {item?.booking_status}
+                    </span>
+                  </td>
+
+                  {/* <td className="px-6 py-4">
+                    <a
+                      href="#"
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      Edit
+                    </a>
+                  </td> */}
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }
-
-export default Bookings;

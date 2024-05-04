@@ -31,7 +31,7 @@ export const createAccountApi = createAsyncThunk(
         return Promise.reject("User not found");
       }
     } catch (error) {
-      toast.error("User already register with same Phone/Email");
+      toast.error(error.message);
       // toast.error("Ensure data is not in prev account");
       return Promise.reject(error);
     }

@@ -4,19 +4,22 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "./Slicer";
 
-export const GetPortfolioAPi: any = createAsyncThunk(
-  "aarma/GetPortfolio",
+export const GetBookingApi: any = createAsyncThunk(
+  "aarma/GetBooking",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
-      const response = await axios.get(`${baseUrl}portfolio/my-portfolios`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${baseUrl}bookings/event-manager-bookings`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       toast.success(response.data.message);
       console.log(response?.data?.data);
@@ -46,30 +49,31 @@ export const GetPortfolioAPi: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
-  PortfolioData: [],
+  BookingsData: [],
 };
 
-const GetPorfolioSlicer = createSlice({
-  name: "Getportfolio",
+const GetBookingSlicer = createSlice({
+  name: "GetBooking",
   initialState,
   reducers: {
     // Reducer logic here
   },
   extraReducers: (builder) => {
-    builder.addCase(GetPortfolioAPi.pending, (state) => {
+    builder.addCase(GetBookingApi.pending, (state) => {
       state.isLoading = true;
       state.isError = false;
     });
-    builder.addCase(GetPortfolioAPi.fulfilled, (state, action) => {
+    builder.addCase(GetBookingApi.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isError = false;
-      state.PortfolioData = action.payload;
+      state.BookingsData = action.payload;
+      console.log(action.payload)
     });
-    builder.addCase(GetPortfolioAPi.rejected, (state) => {
+    builder.addCase(GetBookingApi.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });
   },
 });
 
-export default GetPorfolioSlicer.reducer;
+export default GetBookingSlicer.reducer;
