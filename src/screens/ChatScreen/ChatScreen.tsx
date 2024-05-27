@@ -253,7 +253,6 @@ const ChatScreen = () => {
       ],
     },
   ];
-  // const [searchName, setSearchName] = useState<any>("");
   const [singleChat, setSingleChat] = useState<any>("");
   const [activeChat, setActiveChat] = useState<any>(false);
   const [usersConv, setusersConv] = useState<any>([]);
@@ -261,10 +260,7 @@ const ChatScreen = () => {
   const [chats, setChats] = useState<any>([]);
   const [inputStr, setInputStr] = useState("");
   const scrollableDivRef = useRef(null);
-  // console.log(chats)
-  // const filteredUsers = messagesData.filter((user) =>
-  //   user.name.toLowerCase().includes(searchName.toLowerCase())
-  // );
+  
   const handleSelectChat = (person:any) => {
     setSingleChat(person);
     setActiveChat((prevState: any) => {

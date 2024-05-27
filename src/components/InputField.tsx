@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import "./input.css";
 const InputField = ({
   placeholder,
@@ -6,7 +7,8 @@ const InputField = ({
   value,
   style,
   label,
-  Name
+  Name,
+  accept
 }: any) => {
   const isFileInput = type === "file";
 
@@ -18,6 +20,7 @@ const InputField = ({
             <i className="fa-solid py-4 text-xl text-onPrimary fa-arrow-up-from-bracket "></i>
             <input
               type={type}
+              accept={accept}
               className="absolute opacity-0 h-full w-full cursor-pointer"
               onChange={onChange}
               required

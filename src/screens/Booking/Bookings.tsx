@@ -1,14 +1,18 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import * as React from 'react';
 import { useState } from "react";
 import { Input } from "@material-tailwind/react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { BookingInfoApi } from "../../features/slicer/BookingInfoSlicer";
 
 export default function Bookings() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
   const [selectedStatus, setSelectedStatus] = useState("active");
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,12 +20,11 @@ export default function Bookings() {
     "Event Title",
     "Client Name",
     "client Email",
+
     "Total Guests",
     "Event Start ",
     "Event End ",
-    // "Service Description",
     "Status",
-    // "Action",
   ];
   const FilterTab = [
     {
@@ -57,6 +60,12 @@ export default function Bookings() {
       return fullname.toLowerCase().includes(searchQuery.toLowerCase());
     });
   }
+
+  const handleNavigateItem = (item: any) => {
+    console.log(item);
+    dispatch(BookingInfoApi(item?._id));
+    navigate(`/bookingsdetail`);
+  };
 
   return (
     <section className="flex flex-col gap-6">
@@ -94,8 +103,8 @@ export default function Bookings() {
         </div>
       </div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-800 dark:text-gray-400">
+          <thead className="text-md text-gray-800 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               {HeadingTabs?.map((item, index) => (
                 <th key={index} scope="col" className=" capitalize px-6 py-3">
@@ -106,45 +115,40 @@ export default function Bookings() {
           </thead>
           <tbody>
             {filteredBookings &&
-              filteredBookings?.map((item: any, index: any) => (
-                <tr
-                  key={index}
-                  className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-                >
-                  <td className="px-6 py-4">{item?.eventTitle}</td>
-                  <td className="px-6 py-4">{item?.client?.fullname}</td>
+              filteredBookings?.map((item: any, index: any) => {
+                return (
+                  <tr
+                    onClick={() => handleNavigateItem(item)}
+                    key={index}
+                    className="odd:bg-white cursor-pointer hover:bg-gray-200 odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                  >
+                    <td className="px-6 py-4">{item?.eventTitle}</td>
+                    <td className="px-6 py-4">{item?.client?.fullname}</td>
 
-                  <td className="px-6 py-4">{item?.client?.email}</td>
+                    <td className="px-6 py-4">{item?.client?.email}</td>
 
-                  <td className="px-6 py-4">{item?.totalGuests}</td>
-                  <td className="px-6 py-4">
-                    {moment(item?.eventStartDate).format("MMM Do YY")}
-                  </td>
-                  <td className="px-6 py-4">
-                    {moment(item?.eventEndDate).format("MMM Do YY")}
-                  </td>
-                  {/* <td className="px-6 py-4">{item?.serviceDescription}</td> */}
-                  <td className={`  px-6 py-4`}>
-                    <span
-                      className={` ${
-                        item?.booking_statuscode === "ACTIVE" &&
-                        "bg-green-400 text-white"
-                      } p-1 rounded-md`}
-                    >
-                      {item?.booking_status}
-                    </span>
-                  </td>
+                    <td className="px-6 py-4">{item?.totalGuests}</td>
+                    <td className="px-6 py-4">
+                      {moment(item?.eventStartDate).format("MMM Do YY")}
+                    </td>
+                    <td className="px-6 py-4">
+                      {moment(item?.eventEndDate).format("MMM Do YY")}
+                    </td>
+                    <td className={`  px-6 py-4`}>
+                      <span
+                        className={`${
+                          item?.booking_statuscode === "ACTIVE" && "bg-green-400" ||
+                          item?.booking_statuscode === "COMPLETED" && "bg-blue-400" ||
+                          item?.booking_statuscode === "REJECTED" && "bg-red-400" 
 
-                  {/* <td className="px-6 py-4">
-                    <a
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td> */}
-                </tr>
-              ))}
+                        } p-1 rounded-md  text-white`}
+                      >
+                        {item?.booking_status}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>

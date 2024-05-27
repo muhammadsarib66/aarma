@@ -14,6 +14,11 @@ import GetPorfolioSlicer from "../slicer/GetPorfolioSlicer";
 import DeletePortfolio from "../slicer/DeletePortfolio";
 import ChatSlicer from "../slicer/ChatSlicer";
 import GetBookingSlicer from "../slicer/GetBookingSlicer";
+import BookingInfoSlicer from "../slicer/BookingInfoSlicer"
+import DeletePlannerSlicer from "../slicer/DeletePlannerSlicer"
+import AddPlannerSlicer from "../slicer/AddPlannerSlicer";
+import UpdateActivitySlicer from "../slicer/UpdateActivitySlicer";
+import CompleteReqSlicer from "../slicer/CompleteReqSlicer"
 export const store = configureStore({
   reducer: {
     Slicer,
@@ -30,6 +35,11 @@ export const store = configureStore({
     GetPorfolioSlicer,
     DeletePortfolio,
     ChatSlicer,
-    GetBookingSlicer
+    GetBookingSlicer,
+    BookingInfoSlicer,
+    DeletePlannerSlicer,
+    AddPlannerSlicer,
+    UpdateActivitySlicer,
+    CompleteReqSlicer
   },
 });

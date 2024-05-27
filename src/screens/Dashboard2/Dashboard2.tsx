@@ -19,7 +19,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import MyProfile from "../Myprofile/MyProfile";
 import Dashboard from "../Dashboard/Dashboard";
 import DoghnutChart from "../../components/DoghnutChart";
@@ -38,6 +44,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import ChatScreen from "../ChatScreen/ChatScreen";
 import Bookings from "../Booking/Bookings";
 import { GetBookingApi } from "../../features/slicer/GetBookingSlicer";
+import BoookingDetail from "../Booking/BoookingDetail";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -115,7 +122,7 @@ export default function Dashboard2() {
 
   const navigate = useNavigate();
 
-  const location = useLocation()
+  const location = useLocation();
 
   const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
 
@@ -142,7 +149,6 @@ export default function Dashboard2() {
     dispatch(GetMyProfile());
     dispatch(GetPortfolioAPi());
     dispatch(GetBookingApi());
-
   }, [dispatch]);
 
   return (
@@ -182,8 +188,8 @@ export default function Dashboard2() {
             </div>
           </div>
         </AppBar>
-        <Drawer  variant="permanent" open={open}>
-          <DrawerHeader >
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === "rtl" ? (
                 <ChevronRightIcon />
@@ -293,62 +299,89 @@ export default function Dashboard2() {
           </div>
         </Drawer>
 
-        <div className={`${location.pathname === "/chats"? ' w-screen h-fit  overflow-hidden ': "   p-3 flex flex-col  flex-grow gap-3"}`}>
-          {location.pathname === "/chats" ? "" : (
-              <>
-        <DrawerHeader />
-              
-          <div className="grid grid-cols-1 md:grid-cols-12  pt-4 px-2 rounded-lg bg-onSecondary">
-            <div className="col-span-3 flex  p-4 gap-4 flex-col justify-center">
-              <h2 className="text-2xl font-bold">Dashbaord</h2>
-              <span className="  tracking-wider  ">
-                <i className="fa-solid fa-calendar-days pr-5"></i>
-                {new Date().toLocaleDateString()}
-              </span>
-            </div>
-           
-            <div className="grid  grid-cols-1  md:grid-cols-3 overflow-x-scroll gap-4  col-span-9 border ">
-              {[1, 2, 3].map((_,ind) => (
-                <div key={ind} className="rounded-lg py-3 bg-white flex justify-around items-center ">
-                  <div>
-                    <p>
-                      {" "}
-                      income{" "}
-                      <span className="pl-2">
-                        {" "}
-                        <i className="fa-solid fa-download"></i>
-                      </span>
-                    </p>
-                    <p> 36%</p>
-                    <p> total profit</p>
-                  </div>
-                  <div>
-                    <i className=" text-green-500 text-4xl fa-brands fa-slack"></i>
-                  </div>
+        <div
+          className={`${
+            location.pathname === "/chats"
+              ? " w-screen h-fit  overflow-hidden "
+              : "   p-3 flex flex-col  flex-grow gap-3"
+          }`}
+        >
+          {location.pathname === "/chats" || location.pathname && location.pathname.startsWith("/bookingsdetail") ? (
+            ""
+          ) : (
+            <>
+              <DrawerHeader />
+
+              <div className="grid grid-cols-1 md:grid-cols-12  pt-4 px-2 rounded-lg bg-onSecondary">
+                <div className="col-span-3 flex  p-4 gap-4 flex-col justify-center">
+                  <h2 className="text-2xl font-bold">Dashbaord</h2>
+                  <span className="  tracking-wider  ">
+                    <i className="fa-solid fa-calendar-days pr-5"></i>
+                    {new Date().toLocaleDateString()}
+                  </span>
                 </div>
-              ))}
-            </div>
-          </div>
-          </>)}
+
+                <div className="grid  grid-cols-1  md:grid-cols-3 overflow-x-scroll gap-4  col-span-9 border ">
+                  {[1, 2, 3].map((_, ind) => (
+                    <div
+                      key={ind}
+                      className="rounded-lg py-3 bg-white flex justify-around items-center "
+                    >
+                      <div>
+                        <p>
+                          {" "}
+                          income{" "}
+                          <span className="pl-2">
+                            {" "}
+                            <i className="fa-solid fa-download"></i>
+                          </span>
+                        </p>
+                        <p> 36%</p>
+                        <p> total profit</p>
+                      </div>
+                      <div>
+                        <i className=" text-green-500 text-4xl fa-brands fa-slack"></i>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-5   gap-4 place-content-between">
-            <div className={ ` ${location.pathname === "/chats" || location.pathname === "/bookings" ?"col-span-5" :" md:col-span-3 "}`}    >
+            <div
+              className={` ${
+                location.pathname === "/chats" ||
+                location.pathname === "/bookings" ||
+                location.pathname === "/bookingsdetail"
+                  ? "col-span-5"
+                  : " md:col-span-3 "
+              }`}
+            >
               <Routes>
                 <Route path="/*" element={<Dashboard />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/myprofile" element={<MyProfile />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/chats" element={<ChatScreen />} />
+                <Route
+                  path="/bookingsdetail"
+                  element={<BoookingDetail />}
+                />
               </Routes>
             </div>
-            {
-              location.pathname === "/chats" || location.pathname === "/bookings" ?"" :
-            
-            <div className=" flex flex-col gap-4 md:col-span-2  h-full ">
-              <DoghnutChart color={["grey", "#FF725E"]} />
+            {location.pathname === "/chats" ||
+            location.pathname === "/bookings" ||
+            (location.pathname &&
+              location.pathname.startsWith("/bookingsdetail")) ? (
+              ""
+            ) : (
+              <div className=" flex flex-col gap-4 md:col-span-2  h-full ">
+                <DoghnutChart color={["grey", "#FF725E"]} />
 
-              <DoghnutChart color={["#FF725E", "blue"]} />
-            </div>
-          }
+                <DoghnutChart color={["#FF725E", "blue"]} />
+              </div>
+            )}
           </div>
         </div>
       </Box>

@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // export const baseUrl = "http://139.84.209.189:3002/";
-// export const baseUrl = "http://192.168.100.117:3002/";
-export const baseUrl = "http://139.84.209.189:3002/";
+// export const baseUrl = "h  
+// export const baseUrl = "http://139.84.209.189:3002/";
+export const baseUrl = "http://192.168.100.13:3002/";
 export const token = "";
 export const config = {
   headers: {
@@ -59,3 +60,7 @@ export const {
   setSignUpForm,
 } = Slicer.actions;
 export default Slicer.reducer;
+
+
+
+

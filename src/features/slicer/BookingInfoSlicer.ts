@@ -4,31 +4,29 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "./Slicer";
 
-export const GetBookingApi: any = createAsyncThunk(
-  "aarma/GetBooking",
-  async (_, { rejectWithValue }) => {
+export const BookingInfoApi: any = createAsyncThunk(
+  "aarma/bookinInfo",
+  async (id, { rejectWithValue }) => {
+    console.log(id);
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
-      const response = await axios.get(
-        `${baseUrl}bookings/event-manager-bookings`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${baseUrl}bookings/booking/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      toast.success(response.data.message);
-      console.log(response?.data?.data);
-      return response.data.data;
+      console.log("myresponse", response?.data);
+      
+      return response.data;
     } catch (error: any) {
       // Handle the error
       if (error.response) {
         // Request was made and server responded with status code that falls out of the range of 2xx
-        toast.error(error.response.data.message);
+        toast.error("fetching booking info failed");
         console.log(error.response);
       } else if (error.request) {
         // The request was made but no response was received
@@ -49,36 +47,32 @@ export const GetBookingApi: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
-  BookingsData: [],
-  SingleBookData: {},
+  BookingInfo: {},
+  
 };
 
-const GetBookingSlicer = createSlice({
-  name: "GetBooking",
+const BookingInfoSlicer = createSlice({
+  name: "BookingInfo",
   initialState,
-  reducers: {
-    setSingleUserData: (state, action) => {
-      state.SingleBookData = action.payload;
-    },
-    // Reducer logic here
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(GetBookingApi.pending, (state) => {
+    builder.addCase(BookingInfoApi.pending, (state) => {
       state.isLoading = true;
       state.isError = false;
     });
-    builder.addCase(GetBookingApi.fulfilled, (state, action) => {
+    builder.addCase(BookingInfoApi.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isError = false;
-      state.BookingsData = action.payload;
-      console.log(action.payload);
+      state.BookingInfo = action.payload;
+      
+      console.log("check ",action.payload);
     });
-    builder.addCase(GetBookingApi.rejected, (state) => {
+    builder.addCase(BookingInfoApi.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });
   },
 });
 
-export const { setSingleUserData } = GetBookingSlicer.actions;
-export default GetBookingSlicer.reducer;
+// export const {  } = BookingInfoSlicer.actions;
+export default BookingInfoSlicer.reducer;

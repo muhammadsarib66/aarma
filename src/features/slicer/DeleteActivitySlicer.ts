@@ -3,43 +3,42 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "./Slicer";
+import { BookingInfoApi } from "./BookingInfoSlicer";
 
-export const GetBookingApi: any = createAsyncThunk(
-  "aarma/GetBooking",
-  async (_, { rejectWithValue }) => {
+
+export const DeleteActivityApi: any = createAsyncThunk(
+  "aarma/DeleteActivity",
+  async (Obj : any, { rejectWithValue ,dispatch  }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
-      const response = await axios.get(
-        `${baseUrl}bookings/event-manager-bookings`,
+      const response = await axios.post(
+        `${baseUrl}bookings/delete-activity`,
+        {  activityId: Obj?.id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
-      toast.success(response.data.message);
-      console.log(response?.data?.data);
+      toast.success("Activity point deleted successfully");
+      dispatch(BookingInfoApi(Obj?.BookingID));
+      console.log(response)
       return response.data.data;
     } catch (error: any) {
       // Handle the error
       if (error.response) {
         // Request was made and server responded with status code that falls out of the range of 2xx
-        toast.error(error.response.data.message);
-        console.log(error.response);
+        toast.error("Failed to delete Activity point");
       } else if (error.request) {
         // The request was made but no response was received
         toast.error("No response received from the server");
-        console.log(error.request);
       } else {
         // Something happened in setting up the request that triggered an error
         toast.error("An error occurred while processing your request");
-        console.log("Error", error.message);
       }
-
       // Use rejectWithValue to propagate the error to the rejected action
       return rejectWithValue(error.message);
     }
@@ -49,36 +48,27 @@ export const GetBookingApi: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
-  BookingsData: [],
-  SingleBookData: {},
 };
 
-const GetBookingSlicer = createSlice({
-  name: "GetBooking",
+const DeleteActivitySlicer = createSlice({
+  name: "DeleteActivity",
   initialState,
-  reducers: {
-    setSingleUserData: (state, action) => {
-      state.SingleBookData = action.payload;
-    },
-    // Reducer logic here
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(GetBookingApi.pending, (state) => {
+    builder.addCase(DeleteActivityApi.pending, (state) => {
       state.isLoading = true;
       state.isError = false;
     });
-    builder.addCase(GetBookingApi.fulfilled, (state, action) => {
+    builder.addCase(DeleteActivityApi.fulfilled, (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.BookingsData = action.payload;
-      console.log(action.payload);
     });
-    builder.addCase(GetBookingApi.rejected, (state) => {
+    builder.addCase(DeleteActivityApi.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });
   },
 });
 
-export const { setSingleUserData } = GetBookingSlicer.actions;
-export default GetBookingSlicer.reducer;
+// export const {  } = BookingInfoSlicer.actions;
+export default DeleteActivitySlicer.reducer;
