@@ -8,6 +8,10 @@ import InputField from "../../components/InputField";
 import { ProfileInfoApi, setProfileInfoModal } from "../../features/slicer/ProfileInfoSlicer";
 import Loader from "../../components/Loader";
 import { toast } from "react-toastify";
+import { setProfileModal } from "../../features/slicer/ProfileUploadSlicer";
+import { modalPortfolioClose } from "../../features/slicer/AddPortfolioSlicer";
+import { setVerifyModal } from "../../features/slicer/ProfileVerifySlicer";
+import { setCoverModal } from "../../features/slicer/ProfileUploadCoverSlicer";
 
 const style = {
   position: "absolute" ,
@@ -32,7 +36,13 @@ export default function ProfileInfoModal() {
   const [tagline , setTagline] = useState('')
   
   const handleOpen = () => dispatch(setProfileInfoModal(true));
-  const handleClose = () => dispatch(setProfileInfoModal(false));
+  const handleClose = () => {
+    dispatch(setCoverModal(false))
+    dispatch(setVerifyModal(false))
+    dispatch(modalPortfolioClose())
+   dispatch(setProfileInfoModal(false))
+   dispatch(setProfileModal(false))
+  };
   
   const handleChange = (option:any) => {
     // Check if the option is already selected

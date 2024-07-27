@@ -8,6 +8,7 @@ import Loader from "../../components/Loader";
 import { SplashScreen } from "../../components/SplashScreen";
 import { useSelector } from "react-redux";
 
+
 const Dashboard = () => {
   const { ProfileData ,isLoading} = useSelector((state: any) => state.GetMyProfileSlicer);
 
@@ -72,13 +73,14 @@ const Dashboard = () => {
         isLoading ? <Loader />
         :
         (
-          !ProfileData?.profile || !ProfileData?.coverPhoto || !ProfileData?.bio || 
-    (ProfileData && (!ProfileData.portfolio || ProfileData.portfolio.length === 0)) ? 
+          (ProfileData && (!ProfileData?.portfolio || ProfileData?.portfolio.length === 0)) ||
+          !ProfileData?.profile || !ProfileData?.coverPhoto || !ProfileData?.bio  ? 
     <SplashScreen /> :
     null
         )
       }
       </div>
+      {/* <ToastContainer /> */}
       {/* <Footer /> */}
     </>
   );

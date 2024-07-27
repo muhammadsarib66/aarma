@@ -8,6 +8,10 @@ import { ProfileUploadProfileApi, setProfileModal } from "../features/slicer/Pro
 import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { Tooltip } from "@material-tailwind/react";
+import { setCoverModal } from "../features/slicer/ProfileUploadCoverSlicer";
+import { setVerifyModal } from "../features/slicer/ProfileVerifySlicer";
+import { modalPortfolioClose } from "../features/slicer/AddPortfolioSlicer";
+import { setProfileInfoModal } from "../features/slicer/ProfileInfoSlicer";
 
 const style = {
   position: "absolute" ,
@@ -30,7 +34,13 @@ export default function UploadProfileModel({profileImg}: any) {
 
   const fileInputRefProfile = useRef<HTMLInputElement>(null);
   const handleOpen = () => dispatch(setProfileModal(true));
-  const handleClose = () => dispatch(setProfileModal(false));
+  const handleClose = () => {
+    dispatch(setCoverModal(false))
+    dispatch(setVerifyModal(false))
+    dispatch(modalPortfolioClose())
+   dispatch(setProfileInfoModal(false))
+   dispatch(setProfileModal(false))
+  };
   // Profile Images
   const handleProfile = () => {
     if (fileInputRefProfile.current) {
@@ -42,6 +52,7 @@ export default function UploadProfileModel({profileImg}: any) {
     setSelectedProfileImg(files[0]); // only want to select one file
   };
   const handleAddProfile = () => {
+    
     const formData = new FormData();
     formData.append('profile', selectedProfileImg);
     console.log(selectedProfileImg);

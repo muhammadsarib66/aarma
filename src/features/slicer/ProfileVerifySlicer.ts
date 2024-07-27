@@ -25,7 +25,7 @@ export const ProfileVerificationApi: any = createAsyncThunk(
         return resp.data;
       })
       .catch((err) => {
-        toast.error(err.data.message);
+        toast.error("Error while uploading Docs");
         console.log(err.data);
         return err.message;
       });

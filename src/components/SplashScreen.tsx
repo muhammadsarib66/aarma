@@ -18,7 +18,6 @@ import { useSelector ,useDispatch} from "react-redux";
 import { modalPortfolio } from "../features/slicer/AddPortfolioSlicer";
 import { Divider } from "@mui/material";
 import { setProfileModal } from "../features/slicer/ProfileUploadSlicer";
-import { toast } from "react-toastify";
 import { setProfileInfoModal } from "../features/slicer/ProfileInfoSlicer";
 import { setCoverModal } from "../features/slicer/ProfileUploadCoverSlicer";
 import { setVerifyModal } from "../features/slicer/ProfileVerifySlicer";
@@ -31,23 +30,23 @@ export function SplashScreen() {
   
   const handleOpen1 = () => {
     if (!ProfileData?.bio) {
-      toast.error('Please complete Profile info');
+      // toast.error('Please complete Profile info');
       dispatch(setProfileInfoModal(true));
     }
     if (!ProfileData?.profile) {
-      toast.error('no profile picture attached');
+      // toast.error('no profile picture attached');
       dispatch(setProfileModal(true));
     }
     if (!ProfileData?.coverPhoto) {
-      toast.error('no cover photo attached');
+      // toast.error('no cover photo attached');
       dispatch(setCoverModal(true))
     }
     if (!ProfileData?.id_card) {
-      toast.error('no documents attached');
+      // toast.error('no documents attached');
       dispatch(setVerifyModal(true))
     }
     if (!(ProfileData?.portfolio?.length && ProfileData?.portfolio.length > 0)) {
-      toast.error('no portfolio added');
+      // toast.error('no portfolio added');
 
       dispatch(modalPortfolio());
     }

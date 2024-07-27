@@ -17,7 +17,8 @@ export const GetMyProfile: any = createAsyncThunk(
         },
       });
       
-      return response.data.data;
+      // console.log(response?.data?.completenessPercentage, "===>")
+      return response.data;
     } catch (error : any) {
       // Handle the error
       if (error.response) {
@@ -44,6 +45,7 @@ const initialState = {
   isLoading: false,
   isError: false,
   ProfileData: [],
+  ProfileCompletnes : ""
 };
 
 const GetMyProfileSlicer = createSlice({
@@ -60,7 +62,9 @@ const GetMyProfileSlicer = createSlice({
     builder.addCase(GetMyProfile.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isError = false;
-      state.ProfileData = action.payload;
+      const { completenessPercentage  , data} = action.payload;
+      state.ProfileData = data;
+      state.ProfileCompletnes = completenessPercentage
     });
     builder.addCase(GetMyProfile.rejected, (state) => {
       state.isLoading = false;

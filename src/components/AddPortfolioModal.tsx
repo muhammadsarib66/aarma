@@ -9,6 +9,10 @@ import InputField from "./InputField";
 import { AddPortfolioApi, modalPortfolio, modalPortfolioClose } from "../features/slicer/AddPortfolioSlicer";
 import { Tooltip } from "@material-tailwind/react";
 import { Button } from "@mui/material";
+import { setProfileInfoModal } from "../features/slicer/ProfileInfoSlicer";
+import { setProfileModal } from "../features/slicer/ProfileUploadSlicer";
+import { setCoverModal } from "../features/slicer/ProfileUploadCoverSlicer";
+import { setVerifyModal } from "../features/slicer/ProfileVerifySlicer";
 
 const style = {
   position: "absolute",
@@ -37,7 +41,14 @@ export default function AddPortfolioModal({icon} : any) {
   const [selectedPortfolioImages, setSelectedPortfolioImages] = useState<any>([]);
   const fileInputRefPortfolioImg = useRef<HTMLInputElement>(null);
   const handleOpen = () => dispatch(modalPortfolio());
-  const handleClose = () => dispatch(modalPortfolioClose());
+  const handleClose = () => {
+    dispatch(modalPortfolioClose())
+    dispatch(setProfileInfoModal(false))
+    dispatch(setProfileModal(false))
+    dispatch(setCoverModal(false))
+    dispatch(setVerifyModal(false))
+    dispatch(modalPortfolioClose())
+  };
 
   const handleFileChangePortfolio = (event : any) => {
     const files:any = Array.from(event.target.files);

@@ -30,8 +30,8 @@ export const createAccountApi = createAsyncThunk(
         toast.error("User not found");
         return Promise.reject("User not found");
       }
-    } catch (error) {
-      toast.error(error.message);
+    } catch (error:any) {
+      toast.error(error.response.data.message);
       // toast.error("Ensure data is not in prev account");
       return Promise.reject(error);
     }

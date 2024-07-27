@@ -17,8 +17,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+// import InboxIcon from "@mui/icons-material/MoveToInbox";
+// import MailIcon from "@mui/icons-material/Mail";
 import {
   Link,
   Route,
@@ -28,7 +28,7 @@ import {
 } from "react-router-dom";
 import MyProfile from "../Myprofile/MyProfile";
 import Dashboard from "../Dashboard/Dashboard";
-import DoghnutChart from "../../components/DoghnutChart";
+// import DoghnutChart from "../../components/DoghnutChart";
 import Avatar from "@mui/material/Avatar";
 import { useSelector, useDispatch } from "react-redux";
 import { baseUrl } from "../../features/slicer/Slicer";
@@ -41,10 +41,12 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import BarChartIcon from "@mui/icons-material/BarChart";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ChatScreen from "../ChatScreen/ChatScreen";
 import Bookings from "../Booking/Bookings";
 import { GetBookingApi } from "../../features/slicer/GetBookingSlicer";
 import BoookingDetail from "../Booking/BoookingDetail";
+import Calender from "../Calender"
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -124,8 +126,8 @@ export default function Dashboard2() {
 
   const location = useLocation();
 
-  const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
-
+  const { ProfileData ,ProfileCompletnes} = useSelector((state: any) => state.GetMyProfileSlicer);
+console.log("=====>",ProfileCompletnes)
   const theme = useTheme();
 
   const handleDrawerOpen = () => {
@@ -135,11 +137,13 @@ export default function Dashboard2() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+ // Calculate the circumference of the circle
+ const circumference = 2 * Math.PI * 120;
   const NavTabs = [
-    { title: "Dashboard", link: "/dashboard2", icon: <DashboardIcon /> },
+    { title: "Dashboard", link: "/dashboard",  icon: <DashboardIcon /> },
     { title: "Profile", link: "/myprofile", icon: <PersonIcon /> },
     { title: "Bookings", link: "/bookings", icon: <CollectionsBookmarkIcon /> },
+    { title: "Calender", link: "/calender", icon: <CalendarMonthIcon /> },
     { title: "Chat", link: "/chats", icon: <ChatIcon /> },
     { title: "Analytics", link: "/analytics", icon: <BarChartIcon /> },
   ];
@@ -203,10 +207,37 @@ export default function Dashboard2() {
           <List>
             {NavTabs.map((item) => (
               <ListItem
-                key={item?.title}
-                disablePadding
-                sx={{ display: "block" }}
-              >
+              key={item?.title}
+              disablePadding
+              sx={{ display: "block" }}
+            >
+              {/* // {!ProfileData ? ( */}
+              {ProfileCompletnes < 100 && item.title !== "Dashboard" ? (
+                // Render a non-clickable ListItem if the condition is met
+                <ListItemButton
+                  disabled
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item?.title}
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              ) : (
+                // Render the Link normally if the condition is not met
                 <Link to={item.link}>
                   <ListItemButton
                     sx={{
@@ -223,7 +254,6 @@ export default function Dashboard2() {
                       }}
                     >
                       {item.icon}
-                      {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
                     </ListItemIcon>
                     <ListItemText
                       primary={item?.title}
@@ -231,11 +261,45 @@ export default function Dashboard2() {
                     />
                   </ListItemButton>
                 </Link>
-              </ListItem>
+              )}
+            </ListItem>
+              // <ListItem
+              //   key={item?.title}
+              //   disablePadding
+              //   sx={{ display: "block" }}
+                
+                
+              //   >
+              //   <Link to={item.link } >
+              //     <ListItemButton
+              //   disabled={ProfileData?.completenessPercentage < 100 && item.title !== "Dashboard"}
+              //       sx={{
+              //         minHeight: 48,
+              //         justifyContent: open ? "initial" : "center",
+              //         px: 2.5,
+              //       }}
+              //     >
+              //       <ListItemIcon
+              //         sx={{
+              //           minWidth: 0,
+              //           mr: open ? 3 : "auto",
+              //           justifyContent: "center",
+              //         }}
+              //       >
+              //         {item.icon}
+              //         {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+              //       </ListItemIcon>
+              //       <ListItemText
+              //         primary={item?.title}
+              //         sx={{ opacity: open ? 1 : 0 }}
+              //       />
+              //     </ListItemButton>
+              //   </Link>
+              // </ListItem>
             ))}
           </List>
           <Divider />
-          <List>
+          {/* <List>
             {["All mail", "Trash", "Spam"].map((text, index) => (
               <ListItem key={text} disablePadding sx={{ display: "block" }}>
                 <ListItemButton
@@ -258,7 +322,7 @@ export default function Dashboard2() {
                 </ListItemButton>
               </ListItem>
             ))}
-          </List>
+          </List> */}
           <Divider />
           <div className="h-full flex items-end ">
             <ListItem
@@ -266,7 +330,7 @@ export default function Dashboard2() {
                 localStorage.removeItem("ArmaCredienials");
                 localStorage.removeItem("token");
                 window.location.reload();
-                navigate("/");
+                navigate("/login");
               }}
               disablePadding
               sx={{ display: "block" }}
@@ -353,7 +417,8 @@ export default function Dashboard2() {
               className={` ${
                 location.pathname === "/chats" ||
                 location.pathname === "/bookings" ||
-                location.pathname === "/bookingsdetail"
+                location.pathname === "/bookingsdetail" ||
+                location.pathname === "/calender"
                   ? "col-span-5"
                   : " md:col-span-3 "
               }`}
@@ -362,6 +427,7 @@ export default function Dashboard2() {
                 <Route path="/*" element={<Dashboard />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/myprofile" element={<MyProfile />} />
+                <Route path="/calender" element={<Calender />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/chats" element={<ChatScreen />} />
                 <Route
@@ -372,14 +438,40 @@ export default function Dashboard2() {
             </div>
             {location.pathname === "/chats" ||
             location.pathname === "/bookings" ||
+            location.pathname === "/calender" ||
             (location.pathname &&
               location.pathname.startsWith("/bookingsdetail")) ? (
               ""
             ) : (
               <div className=" flex flex-col gap-4 md:col-span-2  h-full ">
-                <DoghnutChart color={["grey", "#FF725E"]} />
+                {/* <DoghnutChart color={["grey", "#FF725E"]} /> */}
 
-                <DoghnutChart color={["#FF725E", "blue"]} />
+                <div className="flex items-center justify-center relative">
+          <svg className="transform -rotate-90 w-72 h-72">
+            <circle
+              cx="145"
+              cy="145"
+              r="120"
+              stroke="currentColor"
+              strokeWidth="30"
+              fill="transparent"
+              className="text-gray-700"
+            />
+            <circle
+              cx="145"
+              cy="145"
+              r="120"
+              stroke="currentColor"
+              strokeWidth="30"
+              fill="transparent"
+              strokeDasharray={circumference}
+              strokeDashoffset={circumference - (Number(ProfileCompletnes) / 100) * circumference}
+              className="text-blue-500"
+            />
+          </svg>
+          <span className="absolute text-5xl">{`${ProfileCompletnes}%`}</span>
+        </div>
+                {/* <DoghnutChart color={["#FF725E", "blue"]} /> */}
               </div>
             )}
           </div>

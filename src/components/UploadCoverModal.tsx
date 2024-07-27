@@ -8,6 +8,10 @@ import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { ProfileUploadCoverApi, setCoverModal } from "../features/slicer/ProfileUploadCoverSlicer";
 import { Tooltip } from "@material-tailwind/react";
+import { setVerifyModal } from "../features/slicer/ProfileVerifySlicer";
+import { modalPortfolioClose } from "../features/slicer/AddPortfolioSlicer";
+import { setProfileInfoModal } from "../features/slicer/ProfileInfoSlicer";
+import { setProfileModal } from "../features/slicer/ProfileUploadSlicer";
 
 const style = {
   position: "absolute" ,
@@ -30,7 +34,15 @@ export default function UploadCoverModal({coverImg}:any) {
   const [selectedCoverImg, setSelectedCoverImg] = useState('');
   const fileInputRefCover = useRef<HTMLInputElement>(null);
   const handleOpen = () => dispatch(setCoverModal(true));
-  const handleClose = () =>  dispatch(setCoverModal(false));
+  const handleClose = () =>  {
+    dispatch(setCoverModal(false))
+    dispatch(setVerifyModal(false))
+    dispatch(modalPortfolioClose())
+   dispatch(setProfileInfoModal(false))
+   dispatch(setProfileModal(false))
+   dispatch(setCoverModal(false))
+   dispatch(modalPortfolioClose())
+  };
   // Profile Images
   const handleCover = () => {
     if (fileInputRefCover.current) {

@@ -13,6 +13,7 @@ import { getAllCatApi } from "./features/slicer/CategorySlicer";
 import { GetMyProfile } from "./features/slicer/GetMyProfileSlicer";
 import Dashboard2 from "./screens/Dashboard2/Dashboard2"
 import { ToastContainer } from "react-toastify";
+// import 'rsuite/dist/rsuite.min.css'; 
 function App() {
   const dispatch = useDispatch();
 
@@ -63,10 +64,10 @@ function App() {
               token && 
               <>
               <Dashboard2 />
-              <ToastContainer />
               </>
             }
 
+<ToastContainer />
       
     </>
   );

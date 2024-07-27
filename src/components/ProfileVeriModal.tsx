@@ -8,6 +8,10 @@ import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { ProfileVerificationApi, setVerifyModal } from "../features/slicer/ProfileVerifySlicer";
 import { Tooltip } from "@material-tailwind/react";
+import { modalPortfolioClose } from "../features/slicer/AddPortfolioSlicer";
+import { setProfileInfoModal } from "../features/slicer/ProfileInfoSlicer";
+import { setProfileModal } from "../features/slicer/ProfileUploadSlicer";
+import { setCoverModal } from "../features/slicer/ProfileUploadCoverSlicer";
 
 const style = {
   position: "absolute",
@@ -30,7 +34,14 @@ export default function ProfileVeriModal({icon}:any) {
   const fileInputRefId = useRef<HTMLInputElement>(null);
   const fileInputRefDoc = useRef<HTMLInputElement>(null);
   const handleOpen = () => dispatch(setVerifyModal(true));
-  const handleClose = () => dispatch(setVerifyModal(false));
+  const handleClose = () =>{
+     dispatch(setVerifyModal(false))
+     dispatch(modalPortfolioClose())
+    dispatch(setProfileInfoModal(false))
+    dispatch(setProfileModal(false))
+    dispatch(setCoverModal(false))
+    dispatch(modalPortfolioClose())
+    };
   // Profile Images
   const handleIDCard = () => {
     if (fileInputRefId.current) {
