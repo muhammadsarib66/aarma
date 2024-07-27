@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { Calendar, Badge, Whisper, Popover } from 'rsuite'; // Assuming you are using rsuite
 import { GetBookingApi } from '../../features/slicer/GetBookingSlicer';
 
 const index = () => {
-const { BookingsData } = useSelector((state: RootState) => state.GetBookingSlicer);
-const [data, setData] = useState(BookingsData);
+const { BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
+const data  = BookingsData;
 const activeBooking =    data?.active[0] || {};
 
 // Parse and format the start and end dates using Moment.js
@@ -14,12 +14,12 @@ const startDate = activeBooking?.eventStartDate ? moment(activeBooking?.eventSta
 const endDate = activeBooking?.eventEndDate ? moment(activeBooking?.eventEndDate).endOf('day') : moment().endOf('day');
 
   // Create a list of events based on the provided booking data
-  const generateTodoList = (date) => {
+  const generateTodoList = (date:any) => {
     if (!BookingsData || !BookingsData.active || !BookingsData.active.length) return [];
   
-    const todoList = [];
+    const todoList :any = [];
   
-    BookingsData.active.forEach(booking => {
+    BookingsData.active.forEach((booking:any)  => {
       const bookingStartDate = moment(booking.eventStartDate);
       const bookingEndDate = booking.eventEndDate ? moment(booking.eventEndDate) : null;
       
@@ -52,7 +52,7 @@ const isHighlighted = (date: Date) => {
           trigger="click"
           speaker={
             <Popover>
-              {list.map((item, index) => (
+              {list.map((item :any, index :any) => (
                 <p className='' key={index}>
                   <b>{item.time}</b> - {item.title}
                 </p>

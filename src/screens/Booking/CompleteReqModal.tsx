@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import { Button, Textarea } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import { CompleteReqApi } from "../../features/slicer/CompleteReqSlicer";
 
 const style = {
@@ -48,7 +48,7 @@ export default function CompleteReqModal() {
   return (
     <>
       <div>
-        <Button color="green" size="sm" onClick={handleOpen} className="h-12 ">
+        <Button placeholder=''   color="green" size="sm" onClick={handleOpen} className="h-12 ">
           Complete Request
         </Button>
 

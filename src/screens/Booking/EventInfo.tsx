@@ -132,9 +132,9 @@ const EventInfo = () => {
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14415.487767295399!2d68.36970025!3d25.40909681402817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1714992311770!5m2!1sen!2s"
           className="border-0 w-full h-full"
-          allowFullScreen=""
+          allowFullScreen={true}
           loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
+          referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
       </div>
     </div>
