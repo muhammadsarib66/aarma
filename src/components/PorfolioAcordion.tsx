@@ -65,7 +65,7 @@ export default function PorfolioAcordion  () {
   }, [dispatch]);
 
   return (
-    <div className="px-3 my-10 py-4 ">
+    <div className="px-3 my-10 py-4 bg-onSecondary">
       <div className="flex gap-4 items-center  pb-4 ">
         <h1 className="text-2xl capitalize font-semibold  text-onPrimary ">
           Portfolios{" "}

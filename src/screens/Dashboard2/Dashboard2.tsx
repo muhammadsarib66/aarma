@@ -41,12 +41,14 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ChatScreen from "../ChatScreen/ChatScreen";
 import Bookings from "../Booking/Bookings";
 import { GetBookingApi } from "../../features/slicer/GetBookingSlicer";
 import BoookingDetail from "../Booking/BoookingDetail";
-import Calender from "../Calender"
+import Calender2 from "../Calender2";
+import aarmaLogo from "../../assets/images/aarma.svg";
+
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -126,8 +128,10 @@ export default function Dashboard2() {
 
   const location = useLocation();
 
-  const { ProfileData ,ProfileCompletnes} = useSelector((state: any) => state.GetMyProfileSlicer);
-console.log("=====>",ProfileCompletnes)
+  const { ProfileData, ProfileCompletnes } = useSelector(
+    (state: any) => state.GetMyProfileSlicer
+  );
+  console.log("=====>", ProfileCompletnes);
   const theme = useTheme();
 
   const handleDrawerOpen = () => {
@@ -137,10 +141,9 @@ console.log("=====>",ProfileCompletnes)
   const handleDrawerClose = () => {
     setOpen(false);
   };
- // Calculate the circumference of the circle
- const circumference = 2 * Math.PI * 120;
+  // Calculate the circumference of the circle
   const NavTabs = [
-    { title: "Dashboard", link: "/dashboard",  icon: <DashboardIcon /> },
+    { title: "Dashboard", link: "/dashboard", icon: <DashboardIcon /> },
     { title: "Profile", link: "/myprofile", icon: <PersonIcon /> },
     { title: "Bookings", link: "/bookings", icon: <CollectionsBookmarkIcon /> },
     { title: "Calender", link: "/calender", icon: <CalendarMonthIcon /> },
@@ -160,7 +163,7 @@ console.log("=====>",ProfileCompletnes)
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar
-          sx={{ bgcolor: "white", color: "black" }}
+          sx={{ bgcolor: "#FF725E", color: "white" }}
           position="fixed"
           open={open}
         >
@@ -194,52 +197,39 @@ console.log("=====>",ProfileCompletnes)
         </AppBar>
         <Drawer variant="permanent" open={open}>
           <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )}
-            </IconButton>
+            <div className="flex w-full justify-between ">
+              <span className="text-lg font-semibold flex items-center gap-2">
+                <img className="w-8 h-8" src={aarmaLogo} alt="logo" />
+                AARMA
+              </span>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === "rtl" ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ChevronLeftIcon />
+                )}
+              </IconButton>
+            </div>
           </DrawerHeader>
           <Divider />
 
           <List>
             {NavTabs.map((item) => (
               <ListItem
-              key={item?.title}
-              disablePadding
-              sx={{ display: "block" }}
-            >
-              {/* // {!ProfileData ? ( */}
-              {ProfileCompletnes < 100 && item.title !== "Dashboard" ? (
-                // Render a non-clickable ListItem if the condition is met
-                <ListItemButton
-                  disabled
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item?.title}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              ) : (
-                // Render the Link normally if the condition is not met
-                <Link to={item.link}>
+                key={item?.title}
+                disablePadding
+                sx={{
+                  display: "block",
+                  background: `${
+                    location.pathname === item.link ? "#FF725E" : ""
+                  }`,
+                  color: `${location.pathname === item.link ? "white" : ""}`,
+                }}
+              >
+                {ProfileCompletnes < 100 && item.title !== "Dashboard" ? (
+                  // Render a non-clickable ListItem if the condition is met
                   <ListItemButton
+                    disabled
                     sx={{
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
@@ -260,69 +250,37 @@ console.log("=====>",ProfileCompletnes)
                       sx={{ opacity: open ? 1 : 0 }}
                     />
                   </ListItemButton>
-                </Link>
-              )}
-            </ListItem>
-              // <ListItem
-              //   key={item?.title}
-              //   disablePadding
-              //   sx={{ display: "block" }}
-                
-                
-              //   >
-              //   <Link to={item.link } >
-              //     <ListItemButton
-              //   disabled={ProfileData?.completenessPercentage < 100 && item.title !== "Dashboard"}
-              //       sx={{
-              //         minHeight: 48,
-              //         justifyContent: open ? "initial" : "center",
-              //         px: 2.5,
-              //       }}
-              //     >
-              //       <ListItemIcon
-              //         sx={{
-              //           minWidth: 0,
-              //           mr: open ? 3 : "auto",
-              //           justifyContent: "center",
-              //         }}
-              //       >
-              //         {item.icon}
-              //         {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
-              //       </ListItemIcon>
-              //       <ListItemText
-              //         primary={item?.title}
-              //         sx={{ opacity: open ? 1 : 0 }}
-              //       />
-              //     </ListItemButton>
-              //   </Link>
-              // </ListItem>
+                ) : (
+                  // Render the Link normally if the condition is not met
+                  <Link to={item.link}>
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item?.title}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </Link>
+                )}
+              </ListItem>
             ))}
           </List>
           <Divider />
-          {/* <List>
-            {["All mail", "Trash", "Spam"].map((text, index) => (
-              <ListItem key={text} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List> */}
+
           <Divider />
           <div className="h-full flex items-end ">
             <ListItem
@@ -354,7 +312,7 @@ console.log("=====>",ProfileCompletnes)
                   </ListItemIcon>
                 )}
                 <ListItemText
-                  className="text-center p-2 bg-onPrimary rounded-lg text-secondary"
+                  className="text-center p-2 bg-[#FF725E] rounded-lg text-secondary"
                   primary={"Logout"}
                   sx={{ opacity: open ? 1 : 0 }}
                 />
@@ -370,113 +328,26 @@ console.log("=====>",ProfileCompletnes)
               : "   p-3 flex flex-col  flex-grow gap-3"
           }`}
         >
-          {location.pathname === "/chats" || location.pathname && location.pathname.startsWith("/bookingsdetail") ? (
-            ""
-          ) : (
-            <>
-              <DrawerHeader />
-
-              <div className="grid grid-cols-1 md:grid-cols-12  pt-4 px-2 rounded-lg bg-onSecondary">
-                <div className="col-span-3 flex  p-4 gap-4 flex-col justify-center">
-                  <h2 className="text-2xl font-bold">Dashbaord</h2>
-                  <span className="  tracking-wider  ">
-                    <i className="fa-solid fa-calendar-days pr-5"></i>
-                    {new Date().toLocaleDateString()}
-                  </span>
-                </div>
-
-                <div className="grid  grid-cols-1  md:grid-cols-3 overflow-x-scroll gap-4  col-span-9 border ">
-                  {[1, 2, 3].map((_, ind) => (
-                    <div
-                      key={ind}
-                      className="rounded-lg py-3 bg-white flex justify-around items-center "
-                    >
-                      <div>
-                        <p>
-                          {" "}
-                          income{" "}
-                          <span className="pl-2">
-                            {" "}
-                            <i className="fa-solid fa-download"></i>
-                          </span>
-                        </p>
-                        <p> 36%</p>
-                        <p> total profit</p>
-                      </div>
-                      <div>
-                        <i className=" text-green-500 text-4xl fa-brands fa-slack"></i>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
-          <div className="grid grid-cols-1 md:grid-cols-5   gap-4 place-content-between">
-            <div
-              className={` ${
-                location.pathname === "/chats" ||
-                location.pathname === "/bookings" ||
-                location.pathname === "/bookingsdetail" ||
-                location.pathname === "/calender"
-                  ? "col-span-5"
-                  : " md:col-span-3 "
-              }`}
-            >
+          { location.pathname === "/chats" ? null : 
+    <DrawerHeader />
+          }
+          <div className="w-full ">
               <Routes>
                 <Route path="/*" element={<Dashboard />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/myprofile" element={<MyProfile />} />
-                <Route path="/calender" element={<Calender />} />
+                <Route path="/calender" element={<Calender2 />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/chats" element={<ChatScreen />} />
-                <Route
-                  path="/bookingsdetail"
-                  element={<BoookingDetail />}
-                />
-              </Routes>
-            </div>
-            {location.pathname === "/chats" ||
-            location.pathname === "/bookings" ||
-            location.pathname === "/calender" ||
-            (location.pathname &&
-              location.pathname.startsWith("/bookingsdetail")) ? (
-              ""
-            ) : (
-              <div className=" flex flex-col gap-4 md:col-span-2  h-full ">
-                {/* <DoghnutChart color={["grey", "#FF725E"]} /> */}
-
-                <div className="flex items-center justify-center relative">
-          <svg className="transform -rotate-90 w-72 h-72">
-            <circle
-              cx="145"
-              cy="145"
-              r="120"
-              stroke="currentColor"
-              strokeWidth="30"
-              fill="transparent"
-              className="text-gray-700"
-            />
-            <circle
-              cx="145"
-              cy="145"
-              r="120"
-              stroke="currentColor"
-              strokeWidth="30"
-              fill="transparent"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference - (Number(ProfileCompletnes) / 100) * circumference}
-              className="text-blue-500"
-            />
-          </svg>
-          <span className="absolute text-5xl">{`${ProfileCompletnes}%`}</span>
-        </div>
-                {/* <DoghnutChart color={["#FF725E", "blue"]} /> */}
-              </div>
-            )}
+                <Route path="/bookingsdetail" element={<BoookingDetail />} />
+              </Routes>         
           </div>
         </div>
+      {/* <ToastContainer /> */}
+        
       </Box>
     </>
   );
 }
+
+

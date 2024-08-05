@@ -7,7 +7,6 @@ import ChatImg from "../../assets/images/Chat.svg";
 import { io } from "socket.io-client";
 import moment from "moment";
 import TruncateMarkup from "react-truncate-markup";
-import { ToastContainer, toast } from "react-toastify";
 import CustomOffer from "../../components/CustomOffer";
 import {
   Card,
@@ -18,6 +17,7 @@ import {
 } from "@material-tailwind/react";
 import { Divider } from "@mui/material";
 import { baseUrl } from "../../features/slicer/Slicer";
+import { toast } from "react-toastify";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -321,7 +321,7 @@ const ChatScreen = () => {
   }, [chats]);
 
   return (
-    <section className="pt-16  max-h-[100vh]  ">
+    <section className="pt-16  w-full  max-h-[100vh]  ">
       <div className=" bg-gray-100 grid  p-4 grid-cols-12 gap-4">
         <div className="bg-white p-6 md:col-span-3 col-span-4 flex   flex-col gap-4  rounded-md">
           <div>
@@ -691,7 +691,6 @@ const ChatScreen = () => {
           )}
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };

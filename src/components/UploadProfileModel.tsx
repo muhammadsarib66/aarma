@@ -73,7 +73,7 @@ export default function UploadProfileModel({profileImg}: any) {
     (
       <Tooltip content="Add Profile" placement="bottom">
 
-      <span onClick={handleOpen} className="cursor-pointer absolute  top-12  md:top-28  left-16 md:left-28 w-12 h-12 flex items-center justify-center rounded-full bg-opacity-50 bg-black">
+      <span onClick={handleOpen} className="cursor-pointer absolute  top-12  md:top-36  left-16 md:left-40 w-12 h-12 flex items-center justify-center rounded-full bg-opacity-50 bg-black">
                 <i className="fa-solid fa-camera text-lg md:text-2xl text-white"></i>
               </span>
       </Tooltip>

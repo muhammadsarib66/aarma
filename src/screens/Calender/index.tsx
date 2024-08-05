@@ -95,12 +95,14 @@ const isHighlighted = (date: Date) => {
     GetBookingApi()
   },[])
   return (
+    <>
     <Calendar
       bordered
       renderCell={renderCell}
       minDate={startDate.toDate()}
       maxDate={endDate.toDate()}
-    />
+      />
+      </>
   );
 };
 

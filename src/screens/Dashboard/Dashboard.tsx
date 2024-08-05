@@ -7,19 +7,123 @@ import AddPortfolioModal from "../../components/AddPortfolioModal";
 import Loader from "../../components/Loader";
 import { SplashScreen } from "../../components/SplashScreen";
 import { useSelector } from "react-redux";
+import { Progress } from "@material-tailwind/react";
+import logo from "../../assets/images/Hero.png"
+import { baseUrl } from "../../features/slicer/Slicer";
+  
 
 
 const Dashboard = () => {
-  const { ProfileData ,isLoading} = useSelector((state: any) => state.GetMyProfileSlicer);
-
+  const { ProfileData ,ProfileCompletnes,isLoading, } = useSelector((state: any) => state.GetMyProfileSlicer);
+ 
   const { fullname } = JSON.parse(localStorage.getItem("user") || "{}") || {};
+  const circumference = 2 * Math.PI * 120;
 
   return (
-    <>
-      <div className=" rounded-md border p-4 bg-white">
+
+    <div className=" container flex flex-col  gap-4 w-full mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-12  pt-4 px-2 rounded-lg bg-onSecondary">
+                <div className="col-span-3 flex  p-4 gap-4 flex-col justify-center">
+                  <h2 className="text-2xl font-bold">Dashbaord</h2>
+                  <span className="  tracking-wider  ">
+                    <i className="fa-solid fa-calendar-days pr-5"></i>
+                    {new Date().toLocaleDateString()}
+                  </span>
+                </div>
+
+                <div className="grid  grid-cols-1  md:grid-cols-3 overflow-x-scroll gap-4  col-span-9 border ">
+                  {["Active", "Cancelled", "Completed"].map((item, ind) => (
+                    <div
+                      key={ind}
+                      className="rounded-lg py-3 bg-white flex justify-around items-center "
+                    >
+                      <div>
+                        <p>
+                          {item+ " "+"Bookings"}
+                          <span className="pl-2">
+                            {" "}
+                            <i className="fa-solid fa-download"></i>
+                          </span>
+                        </p>
+                        <p> {Math.ceil(Math.random() *2) }</p>
+                        <p> total profit</p>
+                      </div>
+                      <div>
+                        <i className=" text-green-500 text-4xl fa-brands fa-slack"></i>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+      <div className="flex flex-col  gap-8">
+      <p className="text-3xl font-semibold">
+
+Welcome <span className="text-primary capitalize">{fullname} </span> <br />
+</p>
+    <div className="bg-primary text-white p-4 rounded-xl">   
+    <p className="text-2xl font-Inter font-semibold mb-4 "> Profile Completion</p>
+          <Progress className="h-6" color="blue" value={ProfileCompletnes} label="Completed" placeholder={''} />
+
+    </div>
+      </div>
+      <div className="grid grid-cols-4">
+
+    
+      <div className=" bg-onSecondary justify-center items-center flex flex-col gap-4 col-span-1 h-full ">
+
+
+                <svg className="transform rotate-0 w-72 h-72">
+  <defs>
+    <pattern
+      id="image-fill"
+      patternUnits="userSpaceOnUse"
+      width="290"
+      height="290"
+    >
+      <image
+        href={baseUrl+ProfileData?.profile || logo}
+        x="0"
+        y="0"
+        width="100%"
+        height="100%"
+        preserveAspectRatio="xMidYMid slice"
+      />
+    </pattern>
+  </defs>
+  <circle
+    cx="145"
+    cy="145"
+    r="120"
+    stroke="#FF725E"
+    strokeWidth="25"
+    fill="url(#image-fill)"
+    className="text-blue-500"
+  />
+  <circle
+    cx="145"
+    cy="145"
+    r="120"
+    stroke="#FF725E"
+    strokeWidth="25"
+    fill="transparent"
+    strokeDasharray={circumference}
+    strokeDashoffset={
+      circumference - (Number(ProfileCompletnes) / 100) * circumference
+    }
+    className="text-blue-500"
+  />
+</svg>
+<div className="text-primary font-semibold">
+  <p>
+    {ProfileCompletnes === 100 ? `${ProfileCompletnes}%  Profile Completed` : "Complete Your Profile to get more opportunities"}
+  </p>
+</div>
+
+               
+              </div>
+              <div className="col-span-3 rounded-md shadow-md p-4 bg-white">
         <h1 className=" font-bold text-2xl py-4 text-onPrimary">
-          Welcome <span className="text-primary">{fullname} </span> <br />
-          please Complete Your Profile
+           Complete Your Profile
         </h1>
         <div className="flex flex-col  py-2 gap-4 ">
           <div className="border rounded-lg h-20 flex items-center bg-onSecondary justify-between px-2 md:px-8 ">
@@ -68,7 +172,10 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div>
+      </div>
+
+      <div className="">
+        
       {
         isLoading ? <Loader />
         :
@@ -80,9 +187,7 @@ const Dashboard = () => {
         )
       }
       </div>
-      {/* <ToastContainer /> */}
-      {/* <Footer /> */}
-    </>
+    </div>
   );
 };
 

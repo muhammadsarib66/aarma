@@ -8,37 +8,38 @@ import UploadCoverModal from "../../components/UploadCoverModal";
 import ProfileVeriModal from "../../components/ProfileVeriModal";
 
 const MyProfile = () => {
-  const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
+  const { ProfileData ,ProfileCompletnes } = useSelector((state: any) => state.GetMyProfileSlicer);
   const { isLoading } = useSelector((state: any) => state.DeletePortfolio);
   // console.log(ProfileData);
+  const circumference = 2 * Math.PI * 120;
   const cover2 = baseUrl + ProfileData?.coverPhoto;
   return (
-    <div className="bg-onSecondary rounded-lg">
-      <div className=" relative  rounded-lg   h-60 md:h-72  ">
+    <div className=" container mx-auto w-full">
+      <div className=" relative h-60 md:h-72  ">
         <img
           src={cover2}
           alt="coverPicture"
-          className="object-cover rounded-lg h-60 md:h-72  w-full "
+          className="object-cover  h-60 md:h-72  w-full "
         />
-        <span className=" bg-white relative  inline-block rounded-full w-24 h-24 md:w-40 md:h-40 top-[-60px]  md:top-[-110px] left-8 md:left-20">
+        <span className=" bg-white relative  inline-block rounded-full w-24 h-24  md:w-52 md:h-52 top-[-60px]  md:top-[-110px] left-8 md:left-20">
           <img
             src={baseUrl + ProfileData?.profile}
             alt="profile"
-            className="object-cover rounded-full w-24 h-24 md:w-40 md:h-40"
+            className="object-cover rounded-full border-4  border-white shadow-lg w-24 h-24 md:w-52 md:h-52"
           />
           <UploadProfileModel profileImg={true} />
+          
         </span>
         <UploadCoverModal coverImg={true} />
       </div>
-      <div className="pt-14 px-8 ">
+      <div className="pt-24 px-8 ">
         <h1 className="text-2xl font-bold  text-onPrimary py-4">
           Welcome <span className="text-primary">{ProfileData?.fullname} </span>{" "}
         </h1>
-        <section className=" grid  gap-4  grid-cols-1 md:grid-cols-1">
-          {isLoading && <Loader />}
-
-          <div className="col-span-1  p-4 rounded-lg flex flex-col gap-3 bg-secondary max-h-80 overflow-y-scroll">
-            <h2 className="font-bold text-onPrimary text-xl">Profile Detail</h2>
+        <section className=" ">
+          <div className="grid grid-cols-2 gap-4">
+          <div className="col-span-1  p-4 rounded-xl flex flex-col gap-3 bg-onSecondary max-h-80 overflow-y-scroll">
+            <h2 className="font-bold text-onPrimary text-lg uppercase">Profile Detail</h2>
             <span className="flex  items-center gap-2">
               <i className="fa-solid fa-envelope text-xl"></i>
               <p> {ProfileData?.email}</p>
@@ -60,23 +61,57 @@ const MyProfile = () => {
               <span className="flex gap-2 ">
                 {" "}
                 {ProfileData?.categories?.map((item: any, ind: any) => (
-                  <p key={ind} className="text-sm px-2 bg-primary rounded-lg  ">
+                  <p key={ind} className="text-sm px-2 bg-primary text-secondary rounded-lg  ">
                     {item?.label}
                   </p>
                 ))}
               </span>
             </span>
+            
           </div>
-          <div className="col-span-1   rounded-lg flex flex-col p-4 gap-2 justify-center items-center bg-secondary     ">
-            <h2 className="font-bold text-onPrimary text-xl">
-              Profile Completion
-            </h2>
-
-            <div className="relative">
-              <div className="rounded-full h-40 w-40 flex items-center justify-center bg-onSecondary">
-                <div className="z-10 text-primary text-4xl font-bold">20%</div>
-              </div>
-            </div>
+          <div className="col-span-1   rounded-xl flex flex-col p-4 gap-2 justify-center items-center bg-onSecondary     ">
+            <svg className="transform rotate-0 w-72 h-72">
+  <defs>
+    <pattern
+      id="image-fill"
+      patternUnits="userSpaceOnUse"
+      width="290"
+      height="290"
+    >
+      <image
+        href={baseUrl+ProfileData?.profile }
+        x="0"
+        y="0"
+        width="100%"
+        height="100%"
+        preserveAspectRatio="xMidYMid slice"
+      />
+    </pattern>
+  </defs>
+  <circle
+    cx="145"
+    cy="145"
+    r="120"
+    stroke="#FF725E"
+    strokeWidth="25"
+    fill="url(#image-fill)"
+    className="text-blue-500"
+  />
+  <circle
+    cx="145"
+    cy="145"
+    r="120"
+    stroke="#FF725E"
+    strokeWidth="25"
+    fill="transparent"
+    strokeDasharray={circumference}
+    strokeDashoffset={
+      circumference - (Number(ProfileCompletnes) / 100) * circumference
+    }
+    className="text-blue-500"
+  />
+</svg>
+           
             <p className="font-semibold">
               Profile Status:
               <span
@@ -91,30 +126,40 @@ const MyProfile = () => {
               </span>
             </p>
           </div>
-        </section>
-        <div className="px-3 my-10 py-4 flex flex-col gap-4   ">
-
-        <h1 className="flex text-2xl font-semibold  text-onPrimary ">
-           Documents
-             <ProfileVeriModal icon={true} />
-        </h1> 
-                {ProfileData?.id_card ? ( <div className="grid grid-cols-1 md:grid-cols-1  place-content-center place-items-center gap-4">
-                <img className="w-full h-72 border p-1 bg-secondary rounded-lg object-cover" src={baseUrl+ProfileData?.id_card} />
-                <img className="w-full h-72 border p-1 bg-secondary rounded-lg object-cover" src={baseUrl+ProfileData?.verif_document} />
-                  
-                </div>): (
-                  <div className="flex justify-center items-center h-72 bg-secondary rounded-lg">
-                    <p className="text-2xl text-onPrimary">No Document Uploaded</p>
-                  </div>
-                ) }
-
-                
+          </div>
+                <div className="grid grid-cols-2 gap-4">
+                <div className="px-3 my-10 py-4 flex bg-onSecondary flex-col gap-4   ">
+          <h1 className="flex text-2xl font-semibold  text-onPrimary ">
+            Documents
+            <ProfileVeriModal icon={true} />
+          </h1>
+          {ProfileData?.id_card ? (
+            <div className="grid grid-cols-1 md:grid-cols-1  place-content-center place-items-center gap-4">
+              <img
+                className="w-full h-72 border p-1 bg-secondary rounded-lg object-cover"
+                src={baseUrl + ProfileData?.id_card}
+              />
+              <img
+                className="w-full h-72 border p-1 bg-secondary rounded-lg object-cover"
+                src={baseUrl + ProfileData?.verif_document}
+              />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-72 bg-secondary rounded-lg">
+              <p className="text-2xl text-onPrimary">No Document Uploaded</p>
+            </div>
+          )}
         </div>
+        <div>
         <PorfolioAcordion />
+
+        </div>
+                </div>
+        </section>
+        
       </div>
 
-      {/* <ToastContainer /> */}
-     
+      {isLoading && <Loader />}
     </div>
   );
 };
