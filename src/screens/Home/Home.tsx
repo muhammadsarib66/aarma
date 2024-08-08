@@ -1,4 +1,3 @@
-import { ToastContainer } from "react-toastify";
 import Footer from "../../components/Footer";
 import SignUp from "../../components/SignUp";
 import SubDetail from "../../components/SubDetail";
@@ -19,7 +18,6 @@ const Home = () => {
       <Testimonial />
       <FAQ />
       <Footer />
-      <ToastContainer />
     </>
   );
 };

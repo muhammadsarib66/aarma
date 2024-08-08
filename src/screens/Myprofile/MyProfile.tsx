@@ -9,12 +9,12 @@ import ProfileVeriModal from "../../components/ProfileVeriModal";
 
 const MyProfile = () => {
   const { ProfileData ,ProfileCompletnes } = useSelector((state: any) => state.GetMyProfileSlicer);
-  const { isLoading } = useSelector((state: any) => state.DeletePortfolio);
+  const { isLoading } = useSelector((state: any) => state.GetMyProfileSlicer);
   // console.log(ProfileData);
   const circumference = 2 * Math.PI * 120;
   const cover2 = baseUrl + ProfileData?.coverPhoto;
   return (
-    <div className=" container mx-auto w-full">
+    <div className=" container mx-auto w-full bg-gray-300">
       <div className=" relative h-60 md:h-72  ">
         <img
           src={cover2}

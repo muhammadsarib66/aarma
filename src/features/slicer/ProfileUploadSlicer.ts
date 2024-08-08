@@ -19,8 +19,8 @@ export const ProfileUploadProfileApi: any = createAsyncThunk(
         },
       })
       .then((resp) => {
-        toast.success(resp?.data?.message);
         dispatch(GetMyProfile())
+        toast.success(resp?.data?.message);
         console.log(resp.data);
 
         return resp.data;

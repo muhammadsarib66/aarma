@@ -73,7 +73,7 @@ export default function PorfolioAcordion  () {
         </h1>
         <AddPortfolioModal icon={true}/>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 md:gap-4  place-items-center md:place-items-start ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 md:gap-4  place-items-center md:place-items-start ">
       {PortfolioData &&   PortfolioData?.map((item: any , ind : any) => (
   <div  className="group object-center flex flex-col gap-2" key={ind}>
     {item?.photos && item?.photos.length > 0 && (
@@ -96,7 +96,7 @@ export default function PorfolioAcordion  () {
         </div>
       </div>
     )}
-    <p  className="group-hover:underline capitalize text-green-600 font-semibold">
+    <p  className="group-hover:underline capitalize text-primary font-bold">
       {item?.title}
     </p>
   </div>
