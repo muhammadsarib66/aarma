@@ -328,7 +328,8 @@ export default function Dashboard2() {
         >
           { location.pathname === "/chats" ? null : 
     <DrawerHeader />
-          }
+        //  'dsadsadasdas'
+         }
           <div className="w-full ">
               <Routes>
                 <Route path="/*" element={<Dashboard />} />

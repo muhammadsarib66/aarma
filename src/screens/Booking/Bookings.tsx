@@ -1,26 +1,29 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
-import { Input } from "@material-tailwind/react";
-import SearchIcon from "@mui/icons-material/Search";
+import { useEffect, useState } from "react";
+import { Card, CardBody, Chip, Typography } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { BookingInfoApi } from "../../features/slicer/BookingInfoSlicer";
+import Header from "../../components/Header";
 
 export default function Bookings() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
-  const [selectedStatus, setSelectedStatus] = useState("active");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [statusTab, setStatusTab] = useState<any>("active");
+  const [search, setSearch] = useState<any>("");
+  const [filterData, setFilterData] = useState<any>([]);
+
+  console.log(BookingsData);
   const HeadingTabs = [
+    "Sr No",
     "Event Title",
     "Client Name",
     "client Email",
-
     "Total Guests",
     "Event Start ",
     "Event End ",
@@ -40,26 +43,6 @@ export default function Bookings() {
       title: "Completed",
     },
   ];
-  const handleStatusChange = (status: any) => {
-    setSelectedStatus(status);
-  };
-  let filteredBookings;
-  if (selectedStatus === "active") {
-    filteredBookings = BookingsData.active;
-  } else if (selectedStatus === "cancelled") {
-    filteredBookings = BookingsData.cancelled;
-  } else if (selectedStatus === "completed") {
-    filteredBookings = BookingsData.completed;
-  } else {
-    filteredBookings = [];
-  }
-
-  if (searchQuery) {
-    filteredBookings = filteredBookings.filter((booking: any) => {
-      const fullname = booking?.eventTitle || "";
-      return fullname.toLowerCase().includes(searchQuery.toLowerCase());
-    });
-  }
 
   const handleNavigateItem = (item: any) => {
     console.log(item);
@@ -67,91 +50,224 @@ export default function Bookings() {
     navigate(`/bookingsdetail`);
   };
 
-  return (
-    <section className="flex flex-col gap-6">
-      <div className="py-10 px-4 flex items-center justify-between">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-xl md:text-3xl font-bold">Bookings</h1>
-          <select
-            className="w-40 h-8  border-2 rounded-md  "
-            value={selectedStatus}
-            onChange={(e) => handleStatusChange(e.target.value)}
-          >
-            {FilterTab.map((item, index) => {
-              let arrayLength = 0;
-              if (BookingsData.hasOwnProperty(item.value)) {
-                arrayLength = BookingsData[item.value].length; // Get the length of the array based on the option value
-              }
-              return (
-                <option className=" flex" key={index} value={item.value}>
-                  <span> {item.title} </span>
-                  <span className=" ">({arrayLength})</span>
-                </option>
-              );
-            })}
-          </select>
-        </div>
+  useEffect(() => {
+    let relevantData = [];
+    // Determine which array to filter based on statusTab
+    if (statusTab === "active") {
+      relevantData = BookingsData?.active || [];
+    } else if (statusTab === "cancelled") {
+      relevantData = BookingsData?.cancelled || [];
+    } else if (statusTab === "completed") {
+      relevantData = BookingsData?.completed || [];
+    }
 
-        <div className="w-full md:w-72">
-          <Input
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            label="Search"
-            icon={<SearchIcon className="h-5 w-5" />}
-            crossOrigin={undefined}
-          />
-        </div>
-      </div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-800 dark:text-gray-400">
-          <thead className="text-md text-gray-800 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              {HeadingTabs?.map((item, index) => (
-                <th key={index} scope="col" className=" capitalize px-6 py-3">
-                  {item}
+    // If no specific statusTab is selected, combine all arrays
+    const filteredData = relevantData;
+
+    // Update the state with the filtered data
+    setFilterData(filteredData);
+  }, [statusTab, BookingsData]);
+
+  // Effect for filtering by search
+  useEffect(() => {
+    let relevantData = [];
+
+    // Determine which array to filter based on statusTab
+    if (statusTab === "active") {
+      relevantData = BookingsData?.active || [];
+    } else if (statusTab === "cancelled") {
+      relevantData = BookingsData?.cancelled || [];
+    } else if (statusTab === "completed") {
+      relevantData = BookingsData?.completed || [];
+    }
+
+    if (search.length > 0) {
+      // Filter by search term
+      const filteredData = relevantData.filter((data: any) => {
+        return data?.eventTitle.toLowerCase().includes(search.toLowerCase());
+      });
+      setFilterData(filteredData);
+    } else {
+      // If search is cleared, reset filtered data based on statusTab
+      const filteredData = relevantData;
+
+      // Sort the data by createdAt if needed
+      filteredData.sort(
+        (a: any, b: any) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setFilterData(filteredData);
+    }
+  }, [search, BookingsData, statusTab]);
+
+  return (
+    <Card
+      className=" w-full"
+      placeholder=""
+      onPointerEnterCapture={() => {}}
+      onPointerLeaveCapture={() => {}}
+    >
+      <Header
+        heading={"Booking List"}
+        headingDetail="See information about Bookings"
+        statusTabs={FilterTab}
+        setStatusTab={setStatusTab}
+        setSearch={setSearch}
+        StatusTabVal={statusTab}
+      />
+
+      <CardBody
+        placeholder=""
+        onPointerEnterCapture={() => {}}
+        onPointerLeaveCapture={() => {}}
+        className=" h-[70vh]  overflow-scroll px-0"
+      >
+        <table className="mt-4 w-full min-w-max table-auto text-center mx-auto  ">
+          <thead>
+            <tr className="text-center">
+              {HeadingTabs?.map((head) => (
+                <th
+                  key={head}
+                  className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                >
+                  <Typography
+                    placeholder=""
+                    onPointerEnterCapture={() => {}}
+                    onPointerLeaveCapture={() => {}}
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal leading-none opacity-70"
+                  >
+                    {head}
+                  </Typography>
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody>
-            {filteredBookings &&
-              filteredBookings?.map((item: any, index: any) => {
-                return (
+          <tbody className="">
+            {filterData?.map((item: any, index: any) => {
+              const isLast = index === filterData?.length - 1;
+              const classes = isLast
+                ? "p-4"
+                : "p-4 border-b border-blue-gray-50";
+
+              return (
+                <>
                   <tr
+                    className="text-center cursor-grab"
                     onClick={() => handleNavigateItem(item)}
-                    key={index}
-                    className="odd:bg-white cursor-pointer hover:bg-gray-200 odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                    key={item?._id}
                   >
-                    <td className="px-6 py-4">{item?.eventTitle}</td>
-                    <td className="px-6 py-4">{item?.client?.fullname}</td>
-
-                    <td className="px-6 py-4">{item?.client?.email}</td>
-
-                    <td className="px-6 py-4">{item?.totalGuests}</td>
-                    <td className="px-6 py-4">
-                      {moment(item?.eventStartDate).format("MMM Do YY")}
-                    </td>
-                    <td className="px-6 py-4">
-                      {moment(item?.eventEndDate).format("MMM Do YY")}
-                    </td>
-                    <td className={`  px-6 py-4`}>
-                      <span
-                        className={`${
-                          item?.booking_statuscode === "ACTIVE" && "bg-green-400" ||
-                          item?.booking_statuscode === "COMPLETED" && "bg-blue-400" ||
-                          item?.booking_statuscode === "REJECTED" && "bg-red-400" 
-
-                        } p-1 rounded-md  text-white`}
+                    <td className={classes}>
+                      <Typography
+                        placeholder=""
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
                       >
-                        {item?.booking_status}
-                      </span>
+                        {index + 1}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        placeholder=""
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {item?.eventTitle}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        placeholder=""
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {item?.client?.fullname}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        placeholder=""
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {item?.client?.email}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        placeholder=""
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {item?.totalGuests}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        placeholder=""
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {moment(item?.eventStartDate).format("MMM Do YY")}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        placeholder=""
+                        onPointerEnterCapture={() => {}}
+                        onPointerLeaveCapture={() => {}}
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {moment(item?.eventEndDate).format("MMM Do YY")}
+                      </Typography>
+                    </td>
+                    <td className={`${classes} flex justify-center`}>
+                      <Chip
+                        variant="ghost"
+                        size="sm"
+                        className="w-fit px-4 mx-auto"
+                        value={item?.booking_statuscode}
+                        color={
+                          item?.booking_statuscode === "ACTIVE"
+                            ? "green"
+                            : item?.booking_statuscode === "COMPLETED"
+                            ? "blue"
+                            : item?.booking_statuscode === "REJECTED"
+                            ? "red"
+                            : undefined
+                        }
+                      />
                     </td>
                   </tr>
-                );
-              })}
+                </>
+              );
+            })}
           </tbody>
         </table>
-      </div>
-    </section>
+      </CardBody>
+    </Card>
   );
+
 }

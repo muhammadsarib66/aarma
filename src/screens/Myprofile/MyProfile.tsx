@@ -37,7 +37,7 @@ const MyProfile = () => {
           Welcome <span className="text-primary">{ProfileData?.fullname} </span>{" "}
         </h1>
         <section className=" ">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
           <div className="col-span-1  p-4 rounded-xl flex flex-col gap-3 bg-onSecondary max-h-80 overflow-y-scroll">
             <h2 className="font-bold text-onPrimary text-lg uppercase">Profile Detail</h2>
             <span className="flex  items-center gap-2">
@@ -127,7 +127,7 @@ const MyProfile = () => {
             </p>
           </div>
           </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-2 gap-4">
                 <div className="px-3 my-10 py-4 flex bg-onSecondary flex-col gap-4   ">
           <h1 className="flex text-2xl font-semibold  text-onPrimary ">
             Documents

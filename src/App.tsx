@@ -11,26 +11,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAllCatApi } from "./features/slicer/CategorySlicer";
 import { GetMyProfile } from "./features/slicer/GetMyProfileSlicer";
-import Dashboard2 from "./screens/Dashboard2/Dashboard2"
+import Dashboard2 from "./screens/Dashboard2/Dashboard2";
 import { ToastContainer } from "react-toastify";
-// import 'rsuite/dist/rsuite.min.css'; 
+// import 'rsuite/dist/rsuite.min.css';
 function App() {
   const dispatch = useDispatch();
 
   const { UserData } = useSelector((state: any) => state.LoginSlicer);
-  console.log(UserData, "UserData")
+  console.log(UserData, "UserData");
   // const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
-  
+
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-
     if (token) {
       try {
         // Automatically log in with saved credentials
         // dispatch(LoginAccApi(parsedCredentials));
         // dispatch(LoginAccApi(UserData))
-        // Navigate to "/Operations2"
         dispatch<any>(getAllCatApi());
         dispatch(GetMyProfile());
         // navigate("/Dashboard");
@@ -42,13 +40,11 @@ function App() {
 
   return (
     <>
-    
-      {!token &&
-      (
+      {!token && (
         <>
           <Navbar />
-        <ScrollToTop />
-        <Routes>
+          <ScrollToTop />
+          <Routes>
             {!token && (
               <>
                 <Route path="/*" element={<Home />} />
@@ -57,18 +53,16 @@ function App() {
                 <Route path="/login" element={<Login />} />
               </>
             )}
-        </Routes>
+          </Routes>
         </>
       )}
-            {
-              token && 
-              <>
-              <Dashboard2 />
-              </>
-            }
+      {token && (
+        <>
+          <Dashboard2 />
+        </>
+      )}
 
-      
-<ToastContainer />
+      <ToastContainer />
     </>
   );
 }

@@ -66,7 +66,7 @@ Welcome <span className="text-primary capitalize">{fullname} </span> <br />
 
     </div>
       </div>
-      <div className="grid grid-cols-4">
+      <div className="grid md:grid-cols-4">
 
     
       <div className=" bg-onSecondary justify-center items-center flex flex-col gap-4 col-span-1 h-full ">
@@ -86,6 +86,9 @@ Welcome <span className="text-primary capitalize">{fullname} </span> <br />
         y="0"
         width="100%"
         height="100%"
+        style={{
+          objectFit: "cover",
+        }}
         preserveAspectRatio="xMidYMid slice"
       />
     </pattern>

@@ -14,6 +14,7 @@ import {
   CardFooter,
   Typography,
   Button,
+  Chip,
 } from "@material-tailwind/react";
 import { Divider } from "@mui/material";
 import { baseUrl } from "../../features/slicer/Slicer";
@@ -455,6 +456,19 @@ const ChatScreen = () => {
                                           className="mb-2" placeholder={undefined}                                >
                                         {item?.offer?.eventTitle}
                                       </Typography>
+                                      <Chip
+                        variant="ghost"
+                        size="sm"
+                        className="w-fit px-4 mx-auto"
+                        value={item?.offer?.offer_statuscode}
+                        color={
+                          item?.offer?.offer_statuscode === "ACCEPTED"
+                            ? "green"
+                            : item?.offer?.offer_statuscode === "PENDING"
+                            ? "blue"
+                            : 'red'
+                        }
+                      />
                                       <Typography
                                           color="blue-gray"
                                           className={`text-center rounded-md p-1 
