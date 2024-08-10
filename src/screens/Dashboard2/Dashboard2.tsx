@@ -26,7 +26,6 @@ import {
 } from "react-router-dom";
 import MyProfile from "../Myprofile/MyProfile";
 import Dashboard from "../Dashboard/Dashboard";
-// import DoghnutChart from "../../components/DoghnutChart";
 import Avatar from "@mui/material/Avatar";
 import { useSelector, useDispatch } from "react-redux";
 import { baseUrl } from "../../features/slicer/Slicer";
@@ -129,7 +128,6 @@ export default function Dashboard2() {
   const { ProfileData, ProfileCompletnes } = useSelector(
     (state: any) => state.GetMyProfileSlicer
   );
-  console.log("=====>", ProfileCompletnes);
   const theme = useTheme();
 
   const handleDrawerOpen = () => {

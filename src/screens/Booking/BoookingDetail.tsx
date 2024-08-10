@@ -17,8 +17,6 @@ const [activeTabTitle, setActiveTabTitle] = useState("event Info");
     { title: "event Info", link: "eventinfo" },
     { title: "Planner", link: "planner" },
     { title: "Activity", link: "activity" },
-    { title: "Group Chat", link: "groupchat" },
-    { title: "Chat", link: "chat" },
   ];
 
   const handleTabs = (link: any,title:any) => {
@@ -29,7 +27,7 @@ const [activeTabTitle, setActiveTabTitle] = useState("event Info");
     <>
       <section className="h-fit   mt-20  w-full p-4">
       <Tabs 
-      value={activeTabTitle ?? "event info"}
+      value={activeTabTitle === activeTab ? activeTabTitle : "outlined"}
       // value={activeTabTitle ?? "event info"}
       
       >
@@ -54,20 +52,6 @@ const [activeTabTitle, setActiveTabTitle] = useState("event Info");
           
         ))}
       </TabsHeader>
-
-      
-        {/* <div className=" flex gap-1  my-3">
-          {HeadTabs.map((item, index) => (
-            <Button
-              variant={item.link === activeTab ? "filled" : "outlined"}
-              className="w-full col-span-2 h-16"
-              
-              placeholder={undefined}
-            >
-              {item.title}
-            </Button>
-          ))}
-        </div> */}
         <div>
           {(activeTab === "eventinfo" && <EventInfo />) ||
             (activeTab === "planner" && <Planner />) ||

@@ -17,7 +17,7 @@ const EventInfo = () => {
   }, [BookingInfo]);
   return (
     <div className="grid grid-cols-2 mt-4 shadow-lg ">
-      <div className="  rounded-lg  text-onPrimary bg-onSecondary h-screen shadow-xl p-4">
+      <div className="  rounded-lg md:rounded-l-lg  text-onPrimary bg-onSecondary h-screen shadow-xl p-4">
         {userData && userData.eventTitle && (
           <>
             <div className="flex justify-between w-full mb-2 p-4">
@@ -78,7 +78,7 @@ const EventInfo = () => {
           </>
         )}
       </div>
-      <div className=" border-2 rounded-lg w-full h-screen">
+      <div className=" border-2 border-lg md:rounded-r-lg w-full h-screen">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14415.487767295399!2d68.36970025!3d25.40909681402817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1714992311770!5m2!1sen!2s"
           className="border-0 w-full h-full"

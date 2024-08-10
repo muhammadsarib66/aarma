@@ -20,7 +20,7 @@ const style = {
   p: 4,
 };
 
-const VerifyMailModel = () => {
+const VerifyMailModel = ({formData}:any) => {
   const { isModalOpen } = useSelector((state: any) => state.Slicer);
   const { ReqAccData, isLoader } = useSelector(
     (state: any) => state.RequestAccountSlicer
@@ -72,7 +72,8 @@ const VerifyMailModel = () => {
     
   };
   const ResendEmail = () => {
-    dispatch(createAccountApi(ReqAccData) as  any );
+    console.log(formData)
+    dispatch(createAccountApi(formData) as  any );
     // console.log(ReqAccData);
   };
 

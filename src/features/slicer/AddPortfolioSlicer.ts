@@ -9,7 +9,7 @@ import { GetPortfolioAPi } from "./GetPorfolioSlicer";
 export const AddPortfolioApi: any = createAsyncThunk(
   "aarma/AddPortfolioApi",
   async (portfolio: any, { dispatch }) => {
-    console.log(portfolio);
+    // console.log(portfolio);
     const token = localStorage.getItem("token");
 
     return await axios
@@ -22,7 +22,7 @@ export const AddPortfolioApi: any = createAsyncThunk(
         toast.success(resp?.data?.message);
         dispatch(GetMyProfile());
         dispatch(GetPortfolioAPi());
-        console.log(resp.data.data);
+        // console.log(resp.data.data);
 
         return resp.data;
       })

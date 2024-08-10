@@ -8,7 +8,6 @@ const Footer = () => {
         <h2 className="font-Inter text-2xl font-bold ">AARMA BUSINESS</h2>
       </div>
       <div className=" grid grid-cols-1 gap-4 md:grid-cols-3 col-span-2 ">
-        {/* <div className="  "> */}
 
         <div className="col-span-1">
           <h3 className="text-lg font-semibold">Company</h3>

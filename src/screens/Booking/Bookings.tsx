@@ -47,6 +47,7 @@ export default function Bookings() {
   const handleNavigateItem = (item: any) => {
     console.log(item);
     dispatch(BookingInfoApi(item?._id));
+    localStorage.setItem("BookingInfoId", JSON.stringify(item?.id));
     navigate(`/bookingsdetail`);
   };
 
@@ -84,20 +85,20 @@ export default function Bookings() {
     if (search.length > 0) {
       // Filter by search term
       const filteredData = relevantData.filter((data: any) => {
-        return data?.eventTitle.toLowerCase().includes(search.toLowerCase());
+        return data?.eventTitle?.toLowerCase()?.includes(search.toLowerCase());
       });
       setFilterData(filteredData);
     } else {
       // If search is cleared, reset filtered data based on statusTab
-      const filteredData = relevantData;
+      // const filteredData = relevantData;
 
-      // Sort the data by createdAt if needed
-      filteredData.sort(
-        (a: any, b: any) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+      // // Sort the data by createdAt if needed
+      // filteredData?.sort(
+      //   (a: any, b: any) =>
+      //     new Date(b?.createdAt).getTime() - new Date(a?.createdAt).getTime()
+      // );
 
-      setFilterData(filteredData);
+      // setFilterData(filteredData);
     }
   }, [search, BookingsData, statusTab]);
 

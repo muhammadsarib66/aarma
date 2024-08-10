@@ -22,6 +22,7 @@ interface FormValues {
 const SignUp = () => {
   const { isLoading } = useSelector((state: any) => state.RequestAccountSlicer);
   const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState<any>(null);
   const dispatch = useDispatch();
 
   const validationSchema = Yup.object().shape({
@@ -56,6 +57,7 @@ const SignUp = () => {
       // Perform form submission logic here
       console.log(values);
       localStorage.setItem("formData", JSON.stringify(values));
+      setFormData(values)
       dispatch(createAccountApi(values) as  any ); // Add type assertion to dispatch function call
       resetForm(); // Fix: Pass formData as an argument to createAccountApi
       // Set submitting to false after successful submission
@@ -208,7 +210,7 @@ const SignUp = () => {
         </p>
       </div>
       {isLoading && <Loader />}
-      <VerfyMailModel />
+      <VerfyMailModel formData={formData} />
     </section>
   );
 };

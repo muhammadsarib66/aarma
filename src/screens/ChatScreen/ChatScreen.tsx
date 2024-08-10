@@ -261,58 +261,73 @@ const ChatScreen = () => {
   const [chats, setChats] = useState<any>([]);
   const [inputStr, setInputStr] = useState("");
   const scrollableDivRef = useRef(null);
-  
-  const handleSelectChat = (person:any) => {
+
+  const handleSelectChat = (person: any) => {
+    console.log(person, "person");
     setSingleChat(person);
+  
     setActiveChat((prevState: any) => {
       return prevState === person._id ? null : person._id;
     });
-
+  
     socket.emit("joinRoom", person?._id);
-    // console.log(person?._id);
+  
+    // Listen for room messages
+    socket.off("roomMessages"); // Ensure to remove previous listeners
     socket.on("roomMessages", (data) => {
       setClientActiveChat(data);
       setChats(data?.messages);
-      // console.log(data);
+      console.log(data);
     });
   };
   const handleSendMessage = () => {
-    if (inputStr === "") {
+    if (inputStr.trim() === "") {
       toast.error("please type a message");
-    } else {
-      const sending = {
-        messageContent: inputStr,
-        sender: _id,
-        senderType: "EventManager",
-        eventManager: _id,
-        client: clientActiveChat?.room?.client?._id,
-        messageType: "text",
-      };
-      socket.emit("sendMessage", sending);
-      setInputStr("");
+      return;
     }
+  
+    const sending = {
+      messageContent: inputStr,
+      sender: _id,
+      senderType: "EventManager",
+      eventManager: _id,
+      client: clientActiveChat?.room?.client?._id,
+      messageType: "text",
+    };
+  
+    socket.emit("sendMessage", sending);
+    setInputStr(""); // Clear input field after sending
   };
-
-  const handleWithDrawOffer = (id:any) => {
-    // console.log("offer withdrawn", id);
+  const handleWithDrawOffer = (id: any) => {
     socket.emit("withdraw-offer", id);
   };
-
   useEffect(() => {
-    socket.on("message-recieved", (data) => {
-      console.log(data, "recieved");
-    });
-    socket.emit("fetch-myRooms", _id);
-    socket.on("myRooms", (data) => {
+    const handleMessageReceived = (data: any) => {
+      console.log(data, "received");
+    };
+  
+    const handleRoomsFetched = (data: any) => {
       setusersConv(data);
-    });
-    socket.on("message-detected", (data) => {
+    };
+  
+    const handleMessageDetected = (data: any) => {
       console.log(data, "detected");
       setChats((prev: any) => [...prev, data]);
-    });
-    socket.on("disconnect", () => {
-    });
-  }, []);
+    };
+  
+    socket.on("message-recieved", handleMessageReceived);
+    socket.emit("fetch-myRooms", _id);
+    socket.on("myRooms", handleRoomsFetched);
+    socket.on("message-detected", handleMessageDetected);
+  
+    // Clean up listeners on unmount
+    return () => {
+      socket.off("message-recieved", handleMessageReceived);
+      socket.off("myRooms", handleRoomsFetched);
+      socket.off("message-detected", handleMessageDetected);
+      socket.off("roomMessages");
+    };
+  }, [_id,chats]);
 
   useEffect(() => {
     const scrollableDiv = scrollableDivRef.current as HTMLElement | null; // Explicitly specify the type as HTMLElement or null
@@ -434,10 +449,10 @@ const ChatScreen = () => {
                           <div
                             key={item?._id}
                             className={`flex m-2 gap-2 items-center  ${
-                              item?.sender == _id ? "justify-end" : "justify-start"
+                              item?.sender?._id == _id ? "justify-end" : "justify-start"
                             }`}
                           >
-                            {item?.sender !== _id && (
+                            {item?.sender?._id !== _id && (
                               <Avatar
                                 src={clientActiveChat?.rooms?.img}
                                 sx={{ width: 35, height: 35 }}
@@ -469,26 +484,12 @@ const ChatScreen = () => {
                             : 'red'
                         }
                       />
-                                      <Typography
-                                          color="blue-gray"
-                                          className={`text-center rounded-md p-1 
-                                 ${(item?.offer?.offer_statuscode === "WITHDRAWN" &&
-                                              "bg-red-500") ||
-                                            (item?.offer?.offer_statuscode === "PENDING" &&
-                                              "bg-gray-500") ||
-                                            (item?.offer?.offer_statuscode === "ACCEPTED" &&
-                                              "bg-Green-500") ||
-                                            (item?.offer?.offer_statuscode === "REJECTED" &&
-                                              "bg-red-500")}
-                                  text-white text-xs font-semibold`} placeholder={undefined}                                >
-                                        {item?.offer?.offer_status}
-                                      </Typography>
+                                    
                                     </div>
-
                                     <Typography
                                         variant="h5"
                                         color="blue-gray"
-                                        className="mb-2" placeholder={undefined}                              >
+                                        className="mb-2" placeholder={""} >
                                       {item?.offer?.budget}$
                                     </Typography>
                                   </div>
@@ -561,7 +562,7 @@ const ChatScreen = () => {
                       ) : (
                         <div
                           className={`${
-                            item?.sender == _id
+                            item?.sender?._id == _id
                               ? "bg-green-300 text-right"
                               : "bg-white "
                           }  text-black  w-[40%] p-2 rounded-lg`}
@@ -569,14 +570,14 @@ const ChatScreen = () => {
                           <p className="text-left"> {item?.messageContent}</p>
                           <p
                             className={`text-xs text-black ${
-                              item?.sender == _id ? "text-right" : "text-right"
+                              item?.sender?._id == _id ? "text-right" : "text-right"
                             }`}
                           >
                             {moment(item?.createdAt).format("LT")}
                           </p>
                         </div>
                       )}
-                      {item?.sender === _id && (
+                      {item?.sender?._id === _id && (
                         <Avatar
                           src={clientActiveChat?.rooms?.img}
                           sx={{ width: 35, height: 35 }}

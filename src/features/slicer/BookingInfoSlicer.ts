@@ -7,7 +7,7 @@ import { baseUrl } from "./Slicer";
 export const BookingInfoApi: any = createAsyncThunk(
   "aarma/bookinInfo",
   async (id, { rejectWithValue }) => {
-    console.log(id);
+    // console.log(id);
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -19,7 +19,7 @@ export const BookingInfoApi: any = createAsyncThunk(
         },
       });
 
-      console.log("myresponse", response?.data);
+      // console.log("myresponse", response?.data);
       
       return response.data;
     } catch (error: any) {
@@ -65,7 +65,6 @@ const BookingInfoSlicer = createSlice({
       state.isError = false;
       state.BookingInfo = action.payload;
       
-      console.log("check ",action.payload);
     });
     builder.addCase(BookingInfoApi.rejected, (state) => {
       state.isLoading = false;

@@ -87,7 +87,7 @@ const Activity = () => {
             <tbody>
               {activity &&
                 activity.map((item: any, index: any) => (
-                  <tr key={item?._id} className="even:bg-blue-gray-50/50">
+                  <tr key={index} className="even:bg-blue-gray-50/50">
                     <td className="p-4">
                       <Typography
                         placeholder=""
@@ -202,51 +202,6 @@ const Activity = () => {
           </div>
         </div>
         }
-        {/* <div className="flex flex-col gap-3">
-          {activity &&
-            activity.map((item: any, index: any) => (
-              <div
-                key={item?._id}
-                className="rounded-md  flex justify-between p-4 border-2 border-gray-400 my-2"
-              >
-                <div className="flex gap-2 ">
-                  <p className="font-semibold pt-1"> {index + 1}.</p>
-                  <div className="flex flex-col justify-between">
-                    <h1 className="font-semibold text-xl">{item?.message}</h1>
-                   {item?.remarks_by_client &&
-                    <p>
-                      {" "}
-                      <span className="text-green-500 font-semibold">
-                        remarks by Client:{" "}
-                      </span>
-                      { item?.remarks_by_client}
-                    </p>
-                    }
-                  </div>
-                </div>
-                <div className="flex flex-col gap-4 items-end">
-                  <p className="">
-                    Cost: <span className="font-semibold">{item?.cost} </span>
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <Chip
-                      variant="ghost"
-                      color={item?.status_code === "PENDING" ? "red" : "green"}
-                      size="sm"
-                      value={item?.status}
-                    ></Chip>
-                    <a href={baseUrl + item?.file} target="_blank">
-                      <i className="cursor-pointer on fa-solid fa-file-pdf"></i>
-                    </a>
-                    <i
-                    onClick={()=>handleActivity(item?._id)}
-                    className="float-end cursor-pointer fa-regular fa-trash-alt text-red-500"
-                  ></i>
-                  </div>
-                </div>
-              </div>
-            ))}
-        </div> */}
       </div>
       <ActivityModal />
       <DeleteActivityModal
