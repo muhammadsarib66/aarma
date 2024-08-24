@@ -19,6 +19,7 @@ const style = {
 };
 
 const DeleteActivityModal = ({ id, open, closeModel }: any) => {
+
   const { BookingInfo } = useSelector((state: any) => state.BookingInfoSlicer);
   const dispatch = useDispatch();
   const handleDeleteActivity = () => {
@@ -27,6 +28,7 @@ const DeleteActivityModal = ({ id, open, closeModel }: any) => {
       BookingID: BookingInfo?.data?._id,
     };
     dispatch(DeleteActivityApi(Obj));
+
     handleClose();
   };
   const handleClose = () => closeModel();

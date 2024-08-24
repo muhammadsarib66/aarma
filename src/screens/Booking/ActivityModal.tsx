@@ -23,6 +23,7 @@ const style = {
 };
 
 export default function ActivityModal() {
+
   const { BookingInfo } = useSelector((state: any) => state.BookingInfoSlicer);
   const { isLoading } = useSelector((state: any) => state.UpdateActivitySlicer);
   const bookingId =  BookingInfo?.data?._id
@@ -56,6 +57,7 @@ export default function ActivityModal() {
       formData.append("cost", cost);
       formData.append("file", file);
       dispatch(updateActivityApi({formData, bookingId}));
+
       console.log(message, cost, plannerPoint, BookingInfo?.data?._id);
       // toast.success("Activity Added Successfully");
       handleClose();

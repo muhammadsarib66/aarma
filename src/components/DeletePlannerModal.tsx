@@ -26,12 +26,10 @@ const DeletePlannerModal = ({ id, open, closeModel }: any) => {
       id,
       BookingID: BookingInfo?.data?._id,
     };
-    console.log("sar", id);
+    console.log("dlt planner id", id);
     dispatch(DeletePlannerApi(Obj));
-
-            handleClose()
+    handleClose();
   };
-
   const handleClose = () => closeModel();
 
   return (

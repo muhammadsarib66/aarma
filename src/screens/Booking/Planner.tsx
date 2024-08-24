@@ -1,13 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import PlannerModal from "./PlannerModal";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import DeletePlannerModal from "../../components/DeletePlannerModal";
 import Loader from "../../components/Loader";
 import {  Card, Progress, Typography } from "@material-tailwind/react";
 import CompleteReqModal from "./CompleteReqModal";
+import { baseUrl } from "../../features/slicer/Slicer";
+import { io } from "socket.io-client";
+import { BookingInfoApi } from "../../features/slicer/BookingInfoSlicer";
+import { toast } from "react-toastify";
+import notisound from "../../audio/notificationsound.mp3";
+
 // import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 const TABLE_HEAD = [
   "Sr.No",
@@ -19,6 +25,8 @@ const TABLE_HEAD = [
 ];
 
 const Planner = () => {
+   const socket = useMemo(() => io(baseUrl), []);
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false);
   const [plannerId, setPlannerId] = useState(null);
 
@@ -31,6 +39,8 @@ const Planner = () => {
     setOpen(true);
     setPlannerId(id);
     console.log(id);
+
+
   };
 
   const closeDelPlaModal = () => {
@@ -41,7 +51,20 @@ const Planner = () => {
   useEffect(() => {
     setPlanner(BookingInfo?.data?.plannerPoints);
   }, [BookingInfo]);
-  console.log(BookingInfo?.bookingProgress);
+  useEffect(() => {
+    const handleUpdateActivity = (data: any) => {
+      const audio = new Audio(notisound);
+      dispatch(BookingInfoApi(data?.data?._id));
+      setPlanner(data?.data?.planner);
+      audio.play();
+      toast.success(data?.message);
+    };
+
+    socket.on("booking-updated-by-client", handleUpdateActivity);
+    return () => {
+      socket.off("booking-updated-by-client", handleUpdateActivity);
+    };
+  }, [Planner,BookingInfo]);
   return (
     <section className="mx-2 border-2 p-2">
       <div className=" h-[60vh] overflow-hidden my-4 px-5 mx-8">
@@ -94,8 +117,8 @@ const Planner = () => {
           onPointerEnterCapture={() => {}}
           onPointerLeaveCapture={() => {}}
           className="h-[50vh]  w-full overflow-scroll"
-        >
-          <table className="w-full min-w-max table-auto text-left">
+          >
+            <table className="w-full min-w-max table-auto text-left">
             <thead>
               <tr>
                 {TABLE_HEAD.map((head) => (

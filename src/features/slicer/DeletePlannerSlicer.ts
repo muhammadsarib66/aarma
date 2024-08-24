@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { baseUrl } from "./Slicer";
+import { baseUrl, socket } from "./Slicer";
 import { BookingInfoApi } from "./BookingInfoSlicer";
 
 
@@ -24,6 +24,8 @@ export const DeletePlannerApi: any = createAsyncThunk(
         }
       );
       toast.success("Planner point deleted successfully");
+      socket.emit("booking-update-by-manager",{bookingId:Obj?.BookingID, message:" plan Deleted." } )
+      
       dispatch(BookingInfoApi(Obj?.BookingID));
       return response.data.data;
     } catch (error: any) {

@@ -20,6 +20,7 @@ export const LoginAccApi: any = createAsyncThunk(
         return Promise.reject("User not found");
       }
     } catch (error) {
+      console.log(error)
       toast.error("An error occurred while logging in");
       return Promise.reject(error);
     }

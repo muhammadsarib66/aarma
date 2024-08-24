@@ -43,7 +43,7 @@ import ChatScreen from "../ChatScreen/ChatScreen";
 import Bookings from "../Booking/Bookings";
 import { GetBookingApi } from "../../features/slicer/GetBookingSlicer";
 import BoookingDetail from "../Booking/BoookingDetail";
-import Calender2 from "../Calender2";
+import Calender from "../Calender";
 import aarmaLogo from "../../assets/images/aarma.svg";
 
 const drawerWidth = 240;
@@ -333,7 +333,7 @@ export default function Dashboard2() {
                 <Route path="/*" element={<Dashboard />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/myprofile" element={<MyProfile />} />
-                <Route path="/calender" element={<Calender2 />} />
+                <Route path="/calender" element={<Calender />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/chats" element={<ChatScreen />} />
                 <Route path="/bookingsdetail" element={<BoookingDetail />} />

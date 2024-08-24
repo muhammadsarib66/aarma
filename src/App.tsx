@@ -23,7 +23,7 @@ function App() {
   const dispatch = useDispatch();
   const socket = useMemo(() => io(baseUrl), []);
   const user = localStorage.getItem("user");
-  const { _id } = user ? JSON.parse(user) : null;
+  const userData = user ? JSON.parse(user) : null;
   // const { UserData } = useSelector((state: any) => state.LoginSlicer);
   // const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
 
@@ -39,6 +39,8 @@ function App() {
       } catch (error: any) {
         toast.error("Error parsing saved credentials:", error.message);
       }
+
+      socket.emit("join", userData?._id);
     }
   }, []);
 
@@ -50,7 +52,7 @@ function App() {
     };
   
     const handleNewMessage = (data: any) => {
-      if(data?.sender?._id === _id) return;
+      if(data?.sender?._id === userData?._id) return;
       const profile = data?.sender?.profile
         ? baseUrl+data?.sender?.profile
         : "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";

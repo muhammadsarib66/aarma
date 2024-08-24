@@ -17,8 +17,9 @@ import {
   Chip,
 } from "@material-tailwind/react";
 import { Divider } from "@mui/material";
-import { baseUrl } from "../../features/slicer/Slicer";
 import { toast } from "react-toastify";
+import { baseUrl } from "../../features/slicer/Slicer";
+import notisound from "../../audio/notification.mp3"
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -314,11 +315,29 @@ const ChatScreen = () => {
       console.log(data, "detected");
       setChats((prev: any) => [...prev, data]);
     };
-  
+    const handleOfferUpdated = (data: any) => { // for bokking offer accpeted or Rejected
+      const audio = new Audio(notisound);
+      const all_chats = [...chats];
+      const message_index = chats.findIndex((item: { _id: any; }) => sitem?._id == data?.data?._id);
+      all_chats[message_index] = data?.data;
+      setChats(all_chats);
+      console.log(data, "offer updated");
+      if(data?.data?.offer?.offer_statuscode == 'REJECTED'){
+        audio.play();
+        toast.error(data?.message)
+      }
+      else if(data?.data?.offer?.offer_statuscode == 'ACCEPTED'){
+        audio.play();
+        toast.success(data?.message)
+     
+    }
+  }
+
     socket.on("message-recieved", handleMessageReceived);
     socket.emit("fetch-myRooms", _id);
     socket.on("myRooms", handleRoomsFetched);
     socket.on("message-detected", handleMessageDetected);
+    socket.on("offer-updated",handleOfferUpdated)
   
     // Clean up listeners on unmount
     return () => {
@@ -326,6 +345,7 @@ const ChatScreen = () => {
       socket.off("myRooms", handleRoomsFetched);
       socket.off("message-detected", handleMessageDetected);
       socket.off("roomMessages");
+      socket.off("offer-updated",handleOfferUpdated)
     };
   }, [_id,chats]);
 
@@ -475,7 +495,7 @@ const ChatScreen = () => {
                         variant="ghost"
                         size="sm"
                         className="w-fit px-4 mx-auto"
-                        value={item?.offer?.offer_statuscode}
+                        value={item?.offer?.offer_statuscode }
                         color={
                           item?.offer?.offer_statuscode === "ACCEPTED"
                             ? "green"
@@ -701,7 +721,7 @@ const ChatScreen = () => {
             </div>
           ) : (
             <div>
-              <h1 className="capitalize">click Chat to open User Detail</h1>
+              <h1 className="capitalize">click on the Chat to open User Detail </h1>
             </div>
           )}
         </div>

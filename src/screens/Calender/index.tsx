@@ -1,109 +1,69 @@
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
+import 'react-big-calendar/lib/css/react-big-calendar.css'; //
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import moment from 'moment';
-import { Calendar, Badge, Whisper, Popover } from 'rsuite'; // Assuming you are using rsuite
 import { GetBookingApi } from '../../features/slicer/GetBookingSlicer';
 
+const localizer = momentLocalizer(moment)
+
 const index = () => {
-const { BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
-const data  = BookingsData;
-const activeBooking =    data?.active[0] || {};
+    const dispatch = useDispatch();
+    const { BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
+    
+    useEffect(() => {
+      dispatch(GetBookingApi());
+    }, [dispatch]);
+  
+    const activeBooking = BookingsData?.active || [];
+  
+    const EventListing = (activeBooking || []).map((item: any, index:any) => ({
+      title: item?.eventTitle,
+      start: new Date(item?.eventStartDate),
+      end: new Date(item?.eventEndDate),
+      color : index % 2 === 0 ? 'green' : 'red'
+    }));
+  
 
-// Parse and format the start and end dates using Moment.js
-const startDate = activeBooking?.eventStartDate ? moment(activeBooking?.eventStartDate).startOf('day') : moment().startOf('day');
-const endDate = activeBooking?.eventEndDate ? moment(activeBooking?.eventEndDate).endOf('day') : moment().endOf('day');
-
-  // Create a list of events based on the provided booking data
-  const generateTodoList = (date:any) => {
-    if (!BookingsData || !BookingsData.active || !BookingsData.active.length) return [];
-  
-    const todoList :any = [];
-  
-    BookingsData.active.forEach((booking:any)  => {
-      const bookingStartDate = moment(booking.eventStartDate);
-      const bookingEndDate = booking.eventEndDate ? moment(booking.eventEndDate) : null;
-      
-      // Check if the date is within the range of the booking
-      if (bookingStartDate.isSame(date, 'day') || (bookingEndDate && bookingEndDate.isSame(date, 'day'))) {
-        todoList.push({
-          time: bookingStartDate.format('hh:mm a') + (bookingEndDate ? ' - ' + bookingEndDate.format('hh:mm a') : ''),
-          title: booking.title || "Event ",
-          bookingDetail: booking
-        });
-      }
-    });
-  
-    return todoList;
+    const eventStyleGetter = (event:any) => {
+      const backgroundColor = event.color;
+      return {
+        style: {
+          backgroundColor,
+          color: 'white',
+          borderRadius: '5px',
+          padding: '5px',
+        },
+      };
+    };
+    
+  const tooltipAccessor = (event:any) => {
+    return `${event.title}\nLocation: ${event.location}\nDescription: ${event.description}\nhelllo world`;
   };
 
-  // Function to determine if a date should be highlighted
-const isHighlighted = (date: Date) => {
-    return startDate && endDate && moment(date).isBetween(startDate, endDate, 'day', '[]');
-};
-
-  const renderCell = (date:any) => {
-    const list = generateTodoList(date);
-    const displayList = list.slice(0, 2);
-    const moreCount = list.length - displayList.length;
-    const moreItem = moreCount > 0 ? (
-      <li>
-        <Whisper
-          placement="top"
-          trigger="click"
-          speaker={
-            <Popover>
-              {list.map((item :any, index :any) => (
-                <p className='' key={index}>
-                  <b>{item.time}</b> - {item.title}
-                </p>
-              ))}
-            </Popover>
-          }
-        >
-          <a>{moreCount} more</a>
-        </Whisper>
-      </li>
-    ) : null;
-
-    const cellClass = isHighlighted(date) ? 'calendar-cell-highlight' : '';
-
-    if (list.length) {
-      return (
-        <div className={` calendar-cell ${cellClass}`}>
-          <ul className='bg-red-200 calendar-todo-list'>
-            {displayList.map((_:any, index:any) => (
-              <li  key={index} className='bg-blue-50 flex flex-col'>
-                <span>
-
-                <Badge /> <b>event</b>
-                </span>
-                   <span className='text-sm font-semibold text-red-800 capitalize'>
-                     {activeBooking?.eventTitle}
-                    </span>
-              </li>
-            ))}
-            {moreItem}
-          </ul>
-        </div>
-      );
-    }
-
-    return null;
-  };
-
-  useEffect(()=>{
-    GetBookingApi()
-  },[])
   return (
-    <>
+    <div className='container mx-auto'>
+      <h1 className=' mt-4 mb-8 text-3xl text-primary font-bold underline mx-auto w-fit'>
+         Events Detail 
+      </h1>
+    <div >
     <Calendar
-      bordered
-      renderCell={renderCell}
-      minDate={startDate.toDate()}
-      maxDate={endDate.toDate()}
-      />
-      </>
-  );
-};
+      localizer={localizer}
+      events={EventListing}
+      startAccessor="start"
+      endAccessor="end"
+      style={{ height: 700 }}
+      eventPropGetter={eventStyleGetter} // styling 
+      tooltipAccessor={tooltipAccessor}  // Added tooltip accessor here
 
-export default index;
+   />
+
+
+  </div>
+  </div>
+ 
+  )
+}
+
+export default index
+

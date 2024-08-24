@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { baseUrl } from "./Slicer";
+import { baseUrl, socket } from "./Slicer";
 import { toast } from "react-toastify";
 // import { useSelector } from "react-redux";
 import { BookingInfoApi } from "./BookingInfoSlicer";
@@ -24,6 +24,7 @@ export const updateActivityApi: any = createAsyncThunk(
         toast.success(resp?.data?.message);
         console.log(resp?.data)
         dispatch(BookingInfoApi(bookingId));
+        socket.emit("booking-update-by-manager",{bookingId:bookingId, message:" activity Updated." } )
 
         return resp.data;
       })
