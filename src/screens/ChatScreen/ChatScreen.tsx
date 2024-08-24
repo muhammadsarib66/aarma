@@ -318,7 +318,7 @@ const ChatScreen = () => {
     const handleOfferUpdated = (data: any) => { // for bokking offer accpeted or Rejected
       const audio = new Audio(notisound);
       const all_chats = [...chats];
-      const message_index = chats.findIndex((item: { _id: any; }) => sitem?._id == data?.data?._id);
+      const message_index = chats.findIndex((item: { _id: any; }) => item?._id == data?.data?._id);
       all_chats[message_index] = data?.data;
       setChats(all_chats);
       console.log(data, "offer updated");
