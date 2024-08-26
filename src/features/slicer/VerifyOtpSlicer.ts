@@ -5,30 +5,33 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { LoginAccApi } from "./LoginSlicer";
 
+export const VerifyOtpApi = createAsyncThunk("aarma/Otp", async (otpData: any, { dispatch }) => {
+  try {
+    const response = await axios.post(`${baseUrl}users/verify-otp`, otpData);
 
-
-
-export const VerifyOtpApi = createAsyncThunk("aarma/Otp" , async (otpData :any ,{dispatch})=>{
-    
-    console.log(otpData)
-    return await axios
-      .post(`${baseUrl}users/verify-otp`, otpData)
-      .then((resp) => {
-        
-          const userCred = localStorage.getItem('authUser')
-          const  parseUsercred = JSON.parse(userCred as any)
-          console.log(parseUsercred)
-          dispatch(LoginAccApi(parseUsercred))
-          resp.status === 200 &&   toast.success("user Registered")
-          console.log(resp.data)
-        return resp.data;
-      })
-      .catch((err) => {
-        toast.error(err.data.message)
-          console.log(err)
-        return err.message;
-      });
-})
+    if (response.status === 200 && response.data?.success) {
+      const userCred = localStorage.getItem('authUser');
+      if (userCred) {
+        const parsedUserCred = JSON.parse(userCred);
+        dispatch(LoginAccApi(parsedUserCred));
+      }
+      toast.success("User registered successfully");
+      return response.data;
+    } else {
+      // Handle unexpected status codes that are not explicitly covered
+      toast.error("An unexpected error occurred. Please try again.");
+      return Promise.reject(new Error("Unexpected response status."));
+    }
+  } catch (error: any) {
+    if (error.response?.status === 400) {
+      toast.error("Invalid OTP. Please try again.");
+    } else {
+      toast.error(error.response?.data?.message || "An error occurred. Please try again.");
+    }
+    console.error("Error:", error);
+    return Promise.reject(error);
+  }
+});
 const initialState = {
     isError : false , 
     isLoading : false ,

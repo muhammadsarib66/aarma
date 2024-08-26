@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import loginImg from "../../assets/Forms/Form1.png";
@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LoginAccApi } from "../../features/slicer/LoginSlicer";
 import Loader from "../../components/Loader";
-import { ToastContainer } from "react-toastify";
 interface FormValues {
   email: string;
   password: string;
@@ -26,11 +25,9 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: FormValues, { resetForm }: any) => {
     try {
       setSubmitting(true);
-      // Perform form submission logic here
-      console.log(values);
+      // console.log(values);
       dispatch(LoginAccApi(values));
       
-      // Set submitting to false after successful submission
       resetForm();
       setSubmitting(false);
     } catch (error) {
@@ -39,24 +36,7 @@ const Login: React.FC = () => {
       setSubmitting(false);
     }
   };
-  const savedCredentials = localStorage.getItem("ArmaCredienials");
-  const data = JSON.parse(savedCredentials || "{}");
-  console.log(data)
-  useEffect(() => {
-    // Check if there are saved credentials in local storage  
-
-    // console.log(savedCredentials);
-    if (savedCredentials) {
-      // console.log(savedCredentials);
-      try {
-        const parsedCredentials = JSON.parse(savedCredentials);
-        // Automatically log in with saved credentials
-        dispatch(LoginAccApi(parsedCredentials));
-      } catch (error: any) {
-        console.error("Error parsing saved credentials:", error.message);
-      }
-    }
-  }, [handleSubmit]);
+  
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -65,7 +45,6 @@ const Login: React.FC = () => {
     validationSchema,
     onSubmit: handleSubmit,
   });
-
   return (
     <section className="flex pt-14 md:pt-20 ">
       {isLoading && <Loader />}
@@ -140,7 +119,6 @@ const Login: React.FC = () => {
           </form>
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };

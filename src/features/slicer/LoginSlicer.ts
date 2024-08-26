@@ -7,13 +7,14 @@ import { toast } from "react-toastify";
 export const LoginAccApi: any = createAsyncThunk(
   "aarma/loginacc",
   async (loginCredential: any, ) => {
+    console.log(loginCredential, "===> ogin")
     try {
       const response = await axios.post(`${baseUrl}users/eventmanager-login`, loginCredential);
-      toast.success("Login Successful");        
       
       if (response.status === 200) {
         toast.success("Login Successful");       
         console.log(response.data) 
+        window.location.reload();
         return response.data;
       } else {
         toast.error("User not found");

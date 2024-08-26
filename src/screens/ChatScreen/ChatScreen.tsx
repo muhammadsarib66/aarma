@@ -20,6 +20,7 @@ import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
 import { baseUrl } from "../../features/slicer/Slicer";
 import notisound from "../../audio/notification.mp3"
+import Loader from "../../components/Loader";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -263,6 +264,7 @@ const ChatScreen = () => {
   const [inputStr, setInputStr] = useState("");
   const scrollableDivRef = useRef(null);
 
+  console.log("=>",chats)
   const handleSelectChat = (person: any) => {
     console.log(person, "person");
     setSingleChat(person);
@@ -298,6 +300,11 @@ const ChatScreen = () => {
   
     socket.emit("sendMessage", sending);
     setInputStr(""); // Clear input field after sending
+  };
+  const handleKeyDown = (event:any) => {
+    if (event.key === "Enter") {
+      handleSendMessage();
+    }
   };
   const handleWithDrawOffer = (id: any) => {
     socket.emit("withdraw-offer", id);
@@ -469,7 +476,7 @@ const ChatScreen = () => {
                           <div
                             key={item?._id}
                             className={`flex m-2 gap-2 items-center  ${
-                              item?.sender?._id == _id ? "justify-end" : "justify-start"
+                              item?.sender?._id == _id  || item?.sender == _id ?  "justify-end" : "justify-start"
                             }`}
                           >
                             {item?.sender?._id !== _id && (
@@ -583,14 +590,14 @@ const ChatScreen = () => {
                         <div
                           className={`${
                             item?.sender?._id == _id
-                              ? "bg-green-300 text-right"
+                              ? "bg-primary text-white text-right"
                               : "bg-white "
-                          }  text-black  w-[40%] p-2 rounded-lg`}
+                          }  text-black  text-sm w-[40%] p-2 rounded-lg`}
                         >
                           <p className="text-left"> {item?.messageContent}</p>
                           <p
                             className={`text-xs text-black ${
-                              item?.sender?._id == _id ? "text-right" : "text-right"
+                              item?.sender?._id == _id ? "text-right text-white" : "text-right"
                             }`}
                           >
                             {moment(item?.createdAt).format("LT")}
@@ -612,6 +619,8 @@ const ChatScreen = () => {
                   <input
                     value={inputStr}
                     onChange={(e) => setInputStr(e.target.value)}
+                onKeyDown={handleKeyDown}
+
                     type="text"
                     className=" w-full   "
                     placeholder="Type a message"
@@ -726,8 +735,13 @@ const ChatScreen = () => {
           )}
         </div>
       </div>
+      {
+        usersConv.length === 0 && (
+      <Loader />
+        )
+      }
     </section>
-  );
+    );
 };
 
 export default ChatScreen;

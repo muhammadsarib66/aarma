@@ -9,6 +9,7 @@ import { createAccountApi } from "../features/slicer/RequestAccountSlicer";
 import Loader from "./Loader";
 import { VerifyOtpApi } from "../features/slicer/VerifyOtpSlicer";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -20,12 +21,12 @@ const style = {
   p: 4,
 };
 
-const VerifyMailModel = ({formData}:any) => {
+const VerifyMailModel = ({ formData }: any) => {
   const { isModalOpen } = useSelector((state: any) => state.Slicer);
   const { ReqAccData, isLoader } = useSelector(
     (state: any) => state.RequestAccountSlicer
   );
- 
+
   const [otp, setOTP] = useState(["", "", "", "", "", ""]);
   const [verifyData, setVerifyData] = useState(ReqAccData);
   // console.log(ReqAccData)
@@ -34,7 +35,10 @@ const VerifyMailModel = ({formData}:any) => {
   const token = localStorage.getItem("token");
   const handleClose = () => dispatch(setIsModelClose());
 
-  const handleOTPChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOTPChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const input: string = e.target.value;
     // Ensure input is a number
     if (!isNaN(Number(input)) && input !== "") {
@@ -57,31 +61,31 @@ const VerifyMailModel = ({formData}:any) => {
     }
   };
   const handleConfirmOTP = () => {
-    const dataString = localStorage.getItem("formData");
-    const data = JSON.parse(dataString as string);
-    
-    const Obj = {
-      ...data,
-      ...verifyData,
-    };
-    dispatch(VerifyOtpApi(Obj) as  any );
-   
-    
-    setOTP(["", "", "", "", "", ""]);
-    // handleClose();
-    
+    if (otp.join("").length < 6) {
+      toast.error("Please Enter 6 digit OTP");
+    } else {
+      const dataString = localStorage.getItem("formData");
+      const data = JSON.parse(dataString as string);
+
+      const Obj = {
+        ...data,
+        ...verifyData,
+      };
+      dispatch(VerifyOtpApi(Obj) as any);
+
+      setOTP(["", "", "", "", "", ""]);
+    }
   };
   const ResendEmail = () => {
-    console.log(formData)
-    dispatch(createAccountApi(formData) as  any );
-    // console.log(ReqAccData);
+    // console.log(formData);
+    dispatch(createAccountApi(formData) as any);
   };
 
-  useEffect(()=>{
-    if(token){
-      navigate("/Dashboard")
+  useEffect(() => {
+    if (token) {
+      navigate("/Dashboard");
     }
-  },[token])
+  }, [token]);
   return (
     <div>
       <Modal
@@ -144,12 +148,7 @@ const VerifyMailModel = ({formData}:any) => {
                   {" "}
                   Resend{" "}
                 </span>{" "}
-                or{" "}
-                <span className="text-blue-800 cursor-pointer">
-                  {" "}
-                  Change{" "}
-                </span>{" "}
-                the e-mail
+                the OTP to email
               </p>
             </div>
           </Box>
