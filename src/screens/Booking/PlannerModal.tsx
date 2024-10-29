@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 // import { toast } from "react-toastify";
-import { Button, Tooltip } from "@material-tailwind/react";
-import InputField from "../../components/InputField";
+import { Button } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddPlannerApi } from "../../features/slicer/AddPlannerSlicer";
 import Loader from "../../components/Loader";
 import { ToastContainer, toast } from "react-toastify";
+import CInput from "../../components/CustomInput/CInput";
 
 const style = {
   position: "absolute",
@@ -18,6 +18,7 @@ const style = {
   border: "none",
   bgcolor: "background.paper",
   boxShadow: 24,
+  borderRadius: "10px",
   p: 4,
 };
 
@@ -61,15 +62,15 @@ export default function PlannerModal() {
 
   return (
     <>
-      <div>
-        <Tooltip placement="bottom" content="Add Planner">
-          <div
-            onClick={handleOpen}
-            className="cursor-pointer w-16 h-16 bg-black rounded-full text-white flex items-center justify-center text-2xl fixed bottom-12 right-12"
-          >
-            <i className="fa-solid fa-plus"></i>
-          </div>
-        </Tooltip>
+      <div className="font-Poppins">
+        <Button
+          placeholder={""}
+          onClick={handleOpen}
+          className="cursor-pointer w-fit px-8 py-2 h-9  bg-primary rounded-full text-white flex items-center gap-2 font-semibold  "
+        >
+          <i className="font-semibold fa-solid fa-plus"></i>
+          Create
+        </Button>
 
         <Modal
           open={isOpen}
@@ -88,33 +89,41 @@ export default function PlannerModal() {
                 ></i>
               </span>
             </div>
-            <InputField
+            <CInput
+              type={"text"}
+              minDate={false}
               value={planner.description}
-              Name="description"
+              name="description"
               onChange={handleChange}
-              label="Plan Title"
               placeholder="Enter Plan Description"
             />
-            <InputField
-              type="number"
+            <CInput
+              type={"number"}
+              minDate={false}
               value={planner.estCost}
-              Name="estCost"
+              name="estCost"
               onChange={handleChange}
-              label="Plan Budget"
               placeholder="Enter Budget"
             />
-            <InputField
-              value={planner.deadline}
-              Name="deadline"
-              onChange={handleChange}
+            <CInput
               type="date"
-              label="Plan Deadline"
+              minDate={true}
+              value={planner.deadline}
+              onChange={handleChange}
+              name="deadline"
               placeholder="Enter Deadline"
             />
-            <Button placeholder={"Add Planner"} onClick={handleAddPlanner}>
-              {" "}
+
+
+<span className="flex w-full gap-2">
+            <Button className="bg-[#EDEDED] text-gray-700 w-full "   placeholder={''} onClick={handleClose}>
+              Cancel
+              </Button> 
+            <Button className="bg-primary w-full"  placeholder={''} onClick={handleAddPlanner}>
               Add Planner
             </Button>
+          </span>
+            
           </Box>
         </Modal>
       </div>

@@ -2,7 +2,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { Card, CardBody, Chip, Typography } from "@material-tailwind/react";
+import { Card, CardBody, Chip } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -13,14 +13,13 @@ import Header from "../../components/Header";
 export default function Bookings() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
+  const {  BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
+  const { BookingInfo } = useSelector((state: any) => state.BookingInfoSlicer);
   const [statusTab, setStatusTab] = useState<any>("active");
   const [search, setSearch] = useState<any>("");
   const [filterData, setFilterData] = useState<any>([]);
-
-  console.log(BookingsData);
+  console.log(BookingInfo,"======='booking");
   const HeadingTabs = [
-    "Sr No",
     "Event Title",
     "Client Name",
     "client Email",
@@ -45,12 +44,11 @@ export default function Bookings() {
   ];
 
   const handleNavigateItem = (item: any) => {
-    console.log(item);
+    console.log(item?._id);
     dispatch(BookingInfoApi(item?._id));
-    localStorage.setItem("BookingInfoId", JSON.stringify(item?.id));
+    localStorage.setItem("BookingInfoId", JSON.stringify(item?._id));
     navigate(`/bookingsdetail`);
   };
-
   useEffect(() => {
     let relevantData = [];
     // Determine which array to filter based on statusTab
@@ -74,6 +72,7 @@ export default function Bookings() {
     let relevantData = [];
 
     // Determine which array to filter based on statusTab
+
     if (statusTab === "active") {
       relevantData = BookingsData?.active || [];
     } else if (statusTab === "cancelled") {
@@ -89,186 +88,118 @@ export default function Bookings() {
       });
       setFilterData(filteredData);
     } else {
-      // If search is cleared, reset filtered data based on statusTab
-      // const filteredData = relevantData;
-
-      // // Sort the data by createdAt if needed
-      // filteredData?.sort(
-      //   (a: any, b: any) =>
-      //     new Date(b?.createdAt).getTime() - new Date(a?.createdAt).getTime()
-      // );
-
-      // setFilterData(filteredData);
+      setFilterData(relevantData);
     }
   }, [search, BookingsData, statusTab]);
 
   return (
-    <Card
-      className=" w-full"
-      placeholder=""
-      onPointerEnterCapture={() => {}}
-      onPointerLeaveCapture={() => {}}
-    >
+    <section className=" container mx-auto  flex flex-col gap-8  ">
       <Header
-        heading={"Booking List"}
-        headingDetail="See information about Bookings"
+        heading={"Event Portal / Bookings"}
+        // headingDetail="See information about Bookings"
         statusTabs={FilterTab}
         setStatusTab={setStatusTab}
         setSearch={setSearch}
         StatusTabVal={statusTab}
       />
-
-      <CardBody
+      <Card
+        className=" w-full  bg-white px-8"
         placeholder=""
         onPointerEnterCapture={() => {}}
         onPointerLeaveCapture={() => {}}
-        className=" h-[70vh]  overflow-scroll px-0"
       >
-        <table className="mt-4 w-full min-w-max table-auto text-center mx-auto  ">
-          <thead>
-            <tr className="text-center">
-              {HeadingTabs?.map((head) => (
-                <th
-                  key={head}
-                  className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                >
-                  <Typography
-                    placeholder=""
-                    onPointerEnterCapture={() => {}}
-                    onPointerLeaveCapture={() => {}}
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-70"
+        <CardBody
+          placeholder=""
+          onPointerEnterCapture={() => {}}
+          onPointerLeaveCapture={() => {}}
+          className=" min-h-[30vh]    overflow-auto px-0"
+        >
+          <table className=" font-Poppins w-full table-auto text-center mx-auto  ">
+            <thead>
+              <tr className="text-left ">
+                {HeadingTabs?.map((head) => (
+                  <th
+                    key={head}
+                    className=" capitalize text-sm bg-[#F1F4F9] text-gray-800 p-4"
                   >
                     {head}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="">
-            {filterData?.map((item: any, index: any) => {
-              const isLast = index === filterData?.length - 1;
-              const classes = isLast
-                ? "p-4"
-                : "p-4 border-b border-blue-gray-50";
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="">
+              {filterData?.map((item: any, index: any) => {
+                const isLast = index === filterData?.length - 1;
+                const classes = isLast
+                  ? "p-4"
+                  : "p-4 border-b border-blue-gray-50";
 
-              return (
-                <>
-                  <tr
-                    className="text-center cursor-grab"
-                    onClick={() => handleNavigateItem(item)}
-                    key={item?._id}
-                  >
-                    <td className={classes}>
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {index + 1}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {item?.eventTitle}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {item?.client?.fullname}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {item?.client?.email}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {item?.totalGuests}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {moment(item?.eventStartDate).format("MMM Do YY")}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {moment(item?.eventEndDate).format("MMM Do YY")}
-                      </Typography>
-                    </td>
-                    <td className={`${classes} flex justify-center`}>
-                      <Chip
-                        variant="ghost"
-                        size="sm"
-                        className="w-fit px-4 mx-auto"
-                        value={item?.booking_statuscode}
-                        color={
-                          item?.booking_statuscode === "ACTIVE"
-                            ? "green"
-                            : item?.booking_statuscode === "COMPLETED"
-                            ? "blue"
-                            : item?.booking_statuscode === "REJECTED"
-                            ? "red"
-                            : undefined
-                        }
-                      />
-                    </td>
-                  </tr>
-                </>
-              );
-            })}
-          </tbody>
-        </table>
-      </CardBody>
-    </Card>
+                return (
+                  <>
+                    <tr
+                      className="text-left cursor-grab "
+                      onClick={() => handleNavigateItem(item)}
+                      key={item?._id}
+                    >
+                      <td className={classes}>
+                        <p className="font-semibold text-gray-700 text-sm">
+                          {item?.eventTitle}
+                        </p>
+                      </td>
+                      <td className={classes}>
+                      <p className="font-semibold text-gray-700 text-sm">
+                          {item?.client?.fullname}
+                        </p>
+                      </td>
+                      <td className={classes}>
+                         <p className="font-semibold text-gray-700 text-sm">
+                          
+                          {item?.client?.email}
+                        </p>
+                      </td>
+                      <td className={classes}>
+                         <p className="font-semibold text-gray-700 text-sm">
+                          
+                          {item?.totalGuests}
+                        </p>
+                      </td>
+                      <td className={classes}>
+                         <p className="font-semibold text-gray-700 text-sm">
+                          
+                          {moment(item?.eventStartDate).format("MMM Do YY")}
+                        </p>
+                      </td>
+                      <td className={classes}>
+                         <p className="font-semibold text-gray-700 text-sm">
+                          
+                          {moment(item?.eventEndDate).format("MMM Do YY")}
+                        </p>
+                      </td>
+                      <td className={`${classes} flex justify-center`}>
+                        <Chip
+                          variant="ghost"
+                          size="sm"
+                          className="w-fit px-4 mx-auto"
+                          value={item?.booking_statuscode}
+                          color={
+                            item?.booking_statuscode === "ACTIVE"
+                              ? "green"
+                              : item?.booking_statuscode === "COMPLETED"
+                              ? "blue"
+                              : item?.booking_statuscode === "REJECTED"
+                              ? "red"
+                              : undefined
+                          }
+                        />
+                      </td>
+                    </tr>
+                  </>
+                );
+              })}
+            </tbody>
+          </table>
+        </CardBody>
+      </Card>
+    </section>
   );
-
 }

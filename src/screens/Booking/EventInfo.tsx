@@ -5,16 +5,27 @@ import { Card, CardBody } from "@material-tailwind/react";
 import { Divider } from "@mui/material";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { BookingInfoApi } from "../../features/slicer/BookingInfoSlicer";
 
 const EventInfo = () => {
+  const getBookingID = localStorage.getItem("BookingInfoId");
+  const bokId = JSON.parse(getBookingID || "{}");
+  const dispatch =  useDispatch()
   const { BookingInfo } = useSelector((state: any) => state.BookingInfoSlicer);
-  console.log(BookingInfo.data);
+
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
     setUserData(BookingInfo?.data);
-  }, [BookingInfo]);
+  }, [BookingInfo, userData]);
+
+
+  useEffect(()=>{
+    dispatch(BookingInfoApi(bokId))
+
+  },[])
+
   return (
     <div className="grid grid-cols-2 mt-4 shadow-lg ">
       <div className="  rounded-lg md:rounded-l-lg  text-onPrimary bg-onSecondary h-screen shadow-xl p-4">

@@ -17,6 +17,7 @@ const style = {
   border: "none",
   bgcolor: "background.paper",
   boxShadow: 24,
+  borderRadius: "10px",
   p: 4,
 };
 
@@ -48,7 +49,9 @@ export default function CompleteReqModal() {
   return (
     <>
       <div>
-        <Button placeholder=''   color="green" size="sm" onClick={handleOpen} className="h-12 ">
+        <Button placeholder={''} onClick={handleOpen} 
+            className=" cursor-pointer w-fit h-9 px-8 py-2  bg-primary rounded-full text-white flex items-center gap-2 font-semibold  "
+>        
           Complete Request
         </Button>
 
@@ -60,16 +63,16 @@ export default function CompleteReqModal() {
         >
           <Box className=" w-[500px] flex flex-col gap-4" sx={style}>
             <div className="flex justify-between">
-              <h1 className="text-2xl font-semibold">
+              <h1 className="text-2xl text-gray-800 font-semibold">
                 Sending Completion Request{" "}
               </h1>
-              <span>
+              {/* <span>
                 {" "}
                 <i
                   className="text-2xl fa-solid fa-times cursor-pointer"
                   onClick={handleClose}
                 ></i>
-              </span>
+              </span> */}
             </div>
             <p> Enter Message</p>
             <Textarea
@@ -78,13 +81,15 @@ export default function CompleteReqModal() {
               label="Activity Message"
               className=""
             />
-            <Button
-              placeholder={"Send Complete Req"}
-              onClick={handleSendComReq}
-            >
-              {" "}
-              Send Complete Req
+            <span className="flex w-full gap-2">
+            <Button className="bg-[#EDEDED] text-gray-700 w-full "   placeholder={''} onClick={handleClose}>
+              Cancel
+              </Button> 
+            <Button className="bg-primary w-full"  placeholder={''} onClick={handleSendComReq}>
+              Complete
             </Button>
+          </span>
+           
           </Box>
         </Modal>
       </div>

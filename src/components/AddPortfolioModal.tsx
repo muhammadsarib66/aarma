@@ -7,8 +7,8 @@ import Loader from "./Loader";
 import { toast } from "react-toastify";
 import InputField from "./InputField";
 import { AddPortfolioApi, modalPortfolio, modalPortfolioClose } from "../features/slicer/AddPortfolioSlicer";
-import { Tooltip } from "@material-tailwind/react";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@material-tailwind/react";
+
 import { setProfileInfoModal } from "../features/slicer/ProfileInfoSlicer";
 import { setProfileModal } from "../features/slicer/ProfileUploadSlicer";
 import { setCoverModal } from "../features/slicer/ProfileUploadCoverSlicer";
@@ -22,7 +22,7 @@ const style = {
 //   width: 400,
   bgcolor: "background.paper",
   border: "none",
-  // borderRadius: "10px",
+  borderRadius: "10px",
   boxShadow: 24,
   p: 4,
 };
@@ -31,7 +31,7 @@ const style = {
 export default function AddPortfolioModal({icon} : any) {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state: any) => state.AddPortfolioSlicer);
-  const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
+  // const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
   const {modalOpen} = useSelector((state: any) => state.AddPortfolioSlicer)
   const [portfolioData, setPorfolioData] = useState({
     title: "",
@@ -100,27 +100,16 @@ export default function AddPortfolioModal({icon} : any) {
       {icon ?(
         <Tooltip content="Add Portfolio">
 
-      <span onClick={handleOpen} className="border-green-500 border-2 rounded-full  w-8 h-8 flex cursor-pointer items-center justify-center ">
-          <i className=" text-green-500 text-xl fa-solid fa-plus"></i>
+      <span onClick={handleOpen} className="border-gray-800 border-2 rounded-full  w-6 h-6 flex cursor-pointer items-center justify-center ">
+          <i className=" text-gray-800 text-lg fa-solid fa-plus"></i>
         </span>
         </Tooltip>
         
         ):(<span className="flex gap-3">
-        <i
-          className={`fa-solid ${
-            ProfileData?.portfolio?.length > 0 &&
-            ProfileData?.email &&
-            ProfileData?.firstName &&
-            ProfileData?.lastName
-              ? "text-green-500"
-              : "text-gray-300"
-          } text-2xl fa-circle-check`}
-        ></i>
+        
         <i
           onClick={handleOpen}
-          className={` cursor-pointer text-2xl fa-solid ${
-            modalOpen ? "fa-chevron-up" : "fa-chevron-down"
-          }`}
+          className={` cursor-pointer text-2xl fa-solid fa-chevron-right`}
         ></i>
       </span>)}
       <Modal
@@ -132,11 +121,12 @@ export default function AddPortfolioModal({icon} : any) {
         <>
           {isLoading && <Loader />}
           <Box sx={style} className=" w-[300px]  md:w-[500px]">
-            <div className="  flex  pb-4 justify-center flex-col ">
-               <div className="flex justify-between">
+            <div className="  flex   pb-4 justify-center flex-col ">
+               <div className="flex mb-2 justify-between">
+               <h1 className="text-2xl capitalize text-gray-800 font-semibold">
 
-                <h2 className="text-xl font-semibold capitalize text-onPrimary "> add portfolio detail</h2>
-               <i onClick={handleClose} className="cursor-pointer  text-2xl fa-solid fa-xmark"></i>
+                   add portfolio detail</h1>
+               {/* <i onClick={handleClose} className="cursor-pointer  text-2xl fa-solid fa-xmark"></i> */}
                </div>
               <div>
                 <label>Title </label>
@@ -198,13 +188,15 @@ export default function AddPortfolioModal({icon} : any) {
                 )}
               </div>
             </div>
+            <span className="flex w-full gap-2">
+            <Button className="bg-[#EDEDED] text-gray-700 w-full "   placeholder={''} onClick={handleClose}>
+              Cancel
+              </Button> 
+            <Button className="bg-primary w-full"  placeholder={''} onClick={handleAddPortfolio}>
+              Save
+            </Button>
+          </span>
             
-            <span className="flex justify-end gap-2">
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button variant="contained" onClick={handleAddPortfolio}>
-                Save
-              </Button>
-            </span>
           </Box>
         </>
       </Modal>

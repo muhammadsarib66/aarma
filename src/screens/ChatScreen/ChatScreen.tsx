@@ -20,7 +20,6 @@ import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
 import { baseUrl } from "../../features/slicer/Slicer";
 import notisound from "../../audio/notification.mp3"
-import Loader from "../../components/Loader";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -263,12 +262,12 @@ const ChatScreen = () => {
   const [chats, setChats] = useState<any>([]);
   const [inputStr, setInputStr] = useState("");
   const scrollableDivRef = useRef(null);
-
-  console.log("=>",chats)
+// console.log(chats,'all chats')
+  // console.log("=>",chats)
   const handleSelectChat = (person: any) => {
-    console.log(person, "person");
+    // console.log(person, "person");
     setSingleChat(person);
-  
+  console.log(person,"person")
     setActiveChat((prevState: any) => {
       return prevState === person._id ? null : person._id;
     });
@@ -278,11 +277,13 @@ const ChatScreen = () => {
     // Listen for room messages
     socket.off("roomMessages"); // Ensure to remove previous listeners
     socket.on("roomMessages", (data) => {
+      console.log(data, "all mesage")
       setClientActiveChat(data);
       setChats(data?.messages);
-      console.log(data);
+      // console.log(data);
     });
   };
+  console.log(chats)
   const handleSendMessage = () => {
     if (inputStr.trim() === "") {
       toast.error("please type a message");
@@ -297,8 +298,10 @@ const ChatScreen = () => {
       client: clientActiveChat?.room?.client?._id,
       messageType: "text",
     };
-  
+    // setChats((prev: any) => [...prev, sending]); // will comit
+   
     socket.emit("sendMessage", sending);
+    console.log(sending, "sending");
     setInputStr(""); // Clear input field after sending
   };
   const handleKeyDown = (event:any) => {
@@ -319,7 +322,7 @@ const ChatScreen = () => {
     };
   
     const handleMessageDetected = (data: any) => {
-      console.log(data, "detected");
+      console.log(data, "detectedddd");
       setChats((prev: any) => [...prev, data]);
     };
     const handleOfferUpdated = (data: any) => { // for bokking offer accpeted or Rejected
@@ -422,7 +425,7 @@ const ChatScreen = () => {
                               </h1>
                               <p className="text-[8px] md:text-xs  font-semibold">
                                 {" "}
-                                {moment(person?.lastMessage?.createdAt)
+                                {moment(person?.lastMessage?.messaged_on)
                                   .startOf("hour")
                                   .fromNow()}
                               </p>
@@ -600,7 +603,7 @@ const ChatScreen = () => {
                               item?.sender?._id == _id ? "text-right text-white" : "text-right"
                             }`}
                           >
-                            {moment(item?.createdAt).format("LT")}
+                            {moment(item?.messaged_on).format('HH:mm')}
                           </p>
                         </div>
                       )}
@@ -653,7 +656,7 @@ const ChatScreen = () => {
           )}
         </div>
         <div className="bg-white hidden md:block md:col-span-3 shadow-md  rounded-md p-6">
-          {clientActiveChat ? (
+          {singleChat ? (
             <div>
               <div className="flex items-center gap-4">
                 <i
@@ -735,11 +738,7 @@ const ChatScreen = () => {
           )}
         </div>
       </div>
-      {
-        usersConv.length === 0 && (
-      <Loader />
-        )
-      }
+     
     </section>
     );
 };

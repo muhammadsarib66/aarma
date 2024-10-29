@@ -8,7 +8,8 @@ import {
   TabsHeader,
   Tab,
 } from "@material-tailwind/react";
- 
+import eventLogo from "../../assets/images/eventLogo.svg"; 
+
 
 const BoookingDetail = () => {
   const [activeTab, setActiveTab] = useState("eventinfo");
@@ -25,7 +26,18 @@ const [activeTabTitle, setActiveTabTitle] = useState("event Info");
   };
   return (
     <>
-      <section className="h-fit   mt-20  w-full p-4">
+      <section className="h-fit flex flex-col gap-7 w-full p-4">
+      <div className="flex items-center gap-3">
+          <div>
+            <img src={eventLogo} alt="eventLogo" />
+          </div>
+          <h2
+        className="text-primary capitalize font-semibold text-3xl"
+          >
+            Portal / {activeTabTitle}
+          </h2>
+       
+        </div>
       <Tabs 
       value={activeTabTitle === activeTab ? activeTabTitle : "outlined"}
       // value={activeTabTitle ?? "event info"}

@@ -17,7 +17,7 @@ export const GetMyProfile: any = createAsyncThunk(
         },
       });
       
-      // console.log(response?.data?.completenessPercentage, "===>")
+      console.log(response?.data, "===>")
       return response.data;
     } catch (error : any) {
       // Handle the error

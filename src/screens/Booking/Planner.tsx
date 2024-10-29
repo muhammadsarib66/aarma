@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import DeletePlannerModal from "../../components/DeletePlannerModal";
 import Loader from "../../components/Loader";
-import {  Card, Progress, Typography } from "@material-tailwind/react";
+import {  Card } from "@material-tailwind/react";
 import CompleteReqModal from "./CompleteReqModal";
 import { baseUrl } from "../../features/slicer/Slicer";
 import { io } from "socket.io-client";
 import { BookingInfoApi } from "../../features/slicer/BookingInfoSlicer";
 import { toast } from "react-toastify";
 import notisound from "../../audio/notificationsound.mp3";
+import ProgressBar2 from "../../components/ProgressBar2";
 
 // import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 const TABLE_HEAD = [
@@ -66,13 +67,14 @@ const Planner = () => {
     };
   }, [Planner,BookingInfo]);
   return (
-    <section className="mx-2 border-2 p-2">
-      <div className=" h-[60vh] overflow-hidden my-4 px-5 mx-8">
+    <section className="  ">
+      <div className=" h-[60vh] flex flex-col gap-4  overflow-hidden my-4 px-5 mx-8">
+        
         <div className="flex justify-between items-center w-full">
           <h1
             className={`${
-              BookingInfo?.bookingProgress == "100.00" ? "text-xl" : "text-2xl"
-            } capitalize font-bold p-4`}
+              BookingInfo?.bookingProgress == "100.00" ? "text-xl" : "text-3xl"
+            } capitalize text-gray-800 font-bold p-4`}
           >
             Planner for hosting event Title
           </h1>
@@ -80,9 +82,9 @@ const Planner = () => {
           <div>
             {BookingInfo?.bookingProgress == "100.00" ? (
               <div className="flex gap-2 px-2 items-center ">
-                <p className="text-green-800 text-2xl text-center font-bold">
+                <p className="text-primary text-2xl capitalize  text-center font-bold">
                   
-                  Seems you have completed All you activity{" "}
+                  Seems you have completed All your activity{" "}
                 </p>
               
               </div>
@@ -90,51 +92,36 @@ const Planner = () => {
               ""
             )}
           </div>
-          <div className="w-fit py-2 flex flex-col gap-4">
+          <div className="w-fit py-2  flex  gap-2">
+        <PlannerModal />
+          
             {BookingInfo?.data?.booking_statuscode !== "COMPLETED" &&
             <CompleteReqModal />
           }
-                  <div>
-
-            <h1 className="font-semibold  text-gray-800">
-              {Math.round(BookingInfo?.bookingProgress)}% completed
-            </h1>
-            <Progress
-            placeholder={''}
-              className="w-[300px]"
-              color="blue"
-              value={BookingInfo?.bookingProgress}
-              size="lg"
-            />
-                  </div>
-
           </div>
 
-          {/* <Progress  className='  w-[300px]' color='blue'   label={BookingInfo?.bookingProgress} value={BookingInfo?.bookingProgress}  /> */}
         </div>
+          <div className="w-full">
+
+          <ProgressBar2   bgColor="bg-primary" textColor="text-white" progress={Math.floor(BookingInfo?.bookingProgress)} />
+            <p className="w-full text-sm font-semibold text-gray-700 text-end pr-2">{BookingInfo?.bookingProgress ? Math.floor(BookingInfo?.bookingProgress)+"%" :'refresh to check'  } </p>
+          </div>
         <Card
           placeholder=""
           onPointerEnterCapture={() => {}}
           onPointerLeaveCapture={() => {}}
-          className="h-[50vh]  w-full overflow-scroll"
+          className="h-[50vh]  w-full overflow-auto border-2 p-4 shadow-lg"
           >
-            <table className="w-full min-w-max table-auto text-left">
+          <table className=" font-Poppins w-full table-auto text-center mx-auto  ">
+
             <thead>
               <tr>
                 {TABLE_HEAD.map((head) => (
-                  <th
-                    key={head}
-                    className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
-                  >
-                    <Typography
-                      placeholder=""
-                      onPointerEnterCapture={() => {}}
-                      onPointerLeaveCapture={() => {}}
-                      color="blue-gray"
-                      className="font-bold leading-none opacity-90"
-                    >
+                 <th
+                 key={head}
+                 className=" capitalize text-sm bg-[#F1F4F9] text-gray-800 p-4"
+               >
                       {head}
-                    </Typography>
                   </th>
                 ))}
               </tr>
@@ -144,46 +131,22 @@ const Planner = () => {
                 Planner?.map((item: any, index: any) => (
                   <tr key={item?._id} className="even:bg-blue-gray-50/50">
                     <td className="p-4">
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        color="blue-gray"
-                        className="font-normal"
-                      >
+                    <p className="font-semibold text-gray-700 text-sm">
                         {index + 1}
-                      </Typography>
+                      </p>
                     </td>
                     <td className="p-4">
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        color="blue-gray"
-                        className="font-normal"
-                      >
+                    <p className="font-semibold text-gray-700 text-sm">
                         {item?.description}
-                      </Typography>
+                      </p>
                     </td>
                     <td className="p-4">
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        color="blue-gray"
-                        className="font-normal"
-                      >
+                    <p className="font-semibold text-gray-700 text-sm">
                         {moment(item?.deadline).format("MMM Do YY")}
-                      </Typography>
+                      </p>
                     </td>
                     <td className="p-4">
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        color="blue-gray"
-                        className="font-normal"
-                      >
+                    <p className="font-semibold text-gray-700 text-sm">
                         <i
                           className={`fa-solid ${
                             item?.isFinished
@@ -191,18 +154,12 @@ const Planner = () => {
                               : "text-gray-300"
                           }  fa-circle-check`}
                         ></i>
-                      </Typography>
+                      </p>
                     </td>
                     <td className="p-4">
-                      <Typography
-                        placeholder=""
-                        onPointerEnterCapture={() => {}}
-                        onPointerLeaveCapture={() => {}}
-                        color="blue-gray"
-                        className="font-normal"
-                      >
+                    <p className="font-semibold text-gray-700 text-sm">
                         {item?.estCost}
-                      </Typography>
+                      </p>
                     </td>
                     <td className="p-4">
                       {(item?.isFinished == true && (
@@ -219,44 +176,7 @@ const Planner = () => {
             </tbody>
           </table>
         </Card>
-        {/* <div className="flex flex-col gap-3">
-          {Planner &&
-            Planner.map((item: any, index: any) => (
-              <div
-                key={item?._id}
-                className="rounded-md  flex justify-between p-4 border-2 border-gray-400 my-2"
-              >
-                <div className="flex gap-2 ">
-                  <p className="font-semibold pt-1"> {index + 1}.</p>
-                  <div>
-                    <h1 className="font-semibold text-xl">
-                      {item?.description}
-                    </h1>
-                    <p>
-                      {" "}
-                      Deadline:{" "}
-                      <span>{moment(item?.deadline).format("MMM Do YY")}</span>
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-4 items-end">
-                  <p className="">
-                    Budget:{" "}
-                    <span className="font-semibold">{item?.estCost} </span>
-                  </p>
-                  <div className="flex items-center gap-4">
-                  <i className={`fa-solid ${ item?.isFinished  ?"text-green-500" : "text-gray-300"}  fa-circle-check`}></i>
-                 
-                  <i
-                    onClick={()=>handleDelPlanner(item?._id)}
-                    className="float-end cursor-pointer fa-regular fa-trash-alt text-red-500"
-                  ></i>
-                  </div>
-                </div>
-              </div>
-            ))}
-        </div> */}
-        <PlannerModal />
+       
         <DeletePlannerModal
           id={plannerId}
           open={open}

@@ -13,6 +13,7 @@ const MyProfile = () => {
   // console.log(ProfileData);
   const circumference = 2 * Math.PI * 120;
   const cover2 = baseUrl + ProfileData?.coverPhoto;
+  // console.log(cover2, 'soooo')
   return (
     <div className=" container mx-auto w-full bg-gray-300">
       <div className=" relative h-60 md:h-72  ">
@@ -33,9 +34,7 @@ const MyProfile = () => {
         <UploadCoverModal coverImg={true} />
       </div>
       <div className="pt-24 px-8 ">
-        <h1 className="text-2xl font-bold  text-onPrimary py-4">
-          Welcome <span className="text-primary">{ProfileData?.fullname} </span>{" "}
-        </h1>
+      
         <section className=" ">
           <div className="grid md:grid-cols-2 gap-4">
           <div className="col-span-1  p-4 rounded-xl flex flex-col gap-3 bg-onSecondary max-h-80 overflow-y-scroll">
@@ -125,6 +124,10 @@ const MyProfile = () => {
                 {ProfileData?.profile_staus}
               </span>
             </p>
+            {ProfileData?.restrictionReason
+            &&
+            <p className="text-sm "> <span className="font-bold text-onPrimary">Reason</span> : {ProfileData?.restrictionReason  }</p>
+            }
           </div>
           </div>
                 <div className="grid md:grid-cols-2 gap-4">

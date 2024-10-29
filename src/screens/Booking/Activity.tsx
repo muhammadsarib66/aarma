@@ -4,12 +4,13 @@ import ActivityModal from "./ActivityModal";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
 import { baseUrl, socket } from "../../features/slicer/Slicer";
-import { Chip, Progress } from "@material-tailwind/react";
+import { Chip } from "@material-tailwind/react";
 import DeleteActivityModal from "./DeleteActivityModal";
 import { Card, Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import notisound from "../../audio/notificationsound.mp3";
 import { BookingInfoApi } from "../../features/slicer/BookingInfoSlicer";
+import ProgressBar2 from "../../components/ProgressBar2";
 const TABLE_HEAD = [
   "Sr.No",
   "Activity Title",
@@ -54,54 +55,58 @@ const Activity = () => {
     };
   }, [activity,BookingInfo]);
   return (
-    <section className="mx-2 border-2 p-2">
-      <div className=" h-[60vh] overflow-y-auto my-4 px-5 mx-8">
+    <section className="">
+      <div className=" h-[60vh] flex flex-col gap-4  overflow-hidden my-4 px-5 mx-8">
+
         <div className="flex justify-between items-center w-full">
           <h1
             className={`${
-              BookingInfo?.bookingProgress == "100.00" ? "text-xl" : "text-2xl"
-            } capitalize font-bold p-4`}
+              BookingInfo?.bookingProgress == "100.00" ? "text-2xl" : "text-3xl"
+            } capitalize text-gray-800 font-bold p-4`}
           >
-            Update Activity Section
+            Update Activities Section
           </h1>
+
           <div>
-            {BookingInfo.data && BookingInfo?.bookingProgress == "100.00" ? (
-              <p className="text-green-800 text-2xl text-center font-bold">
-                {" "}
-                Seems you have completed All you activity{" "}
-              </p>
+            {BookingInfo?.bookingProgress == "100.00" ? (
+              <div className="flex gap-2 px-2 items-center ">
+                <p className="text-primary text-xl capitalize  text-center font-bold">
+                  
+                  All Activity Completed Please Complete Booking Request
+                </p>
+              
+              </div>
             ) : (
               ""
             )}
           </div>
-          <div className="w-fit ">
-            <h1 className="font-semibold  text-gray-800">
-              {BookingInfo?.bookingProgress &&
-                Math.round(BookingInfo?.bookingProgress)}
-              % completed
-            </h1>
-            <Progress
-              placeholder={""}
-              className="w-[300px]"
-              color="blue"
-              value={BookingInfo?.bookingProgress}
-              size="lg"
-            />
+          <div>
+      <ActivityModal />
+
           </div>
+
         </div>
+        <div className="w-full">
+
+          <ProgressBar2   bgColor="bg-primary" textColor="text-white" progress={Math.floor(BookingInfo?.bookingProgress)} />
+            <p className="w-full text-sm font-semibold text-gray-700 text-end pr-2">{BookingInfo?.bookingProgress ? Math.floor(BookingInfo?.bookingProgress)+"%" :'refresh to check'  } </p>
+          </div>
         <Card
           placeholder=""
           onPointerEnterCapture={() => {}}
           onPointerLeaveCapture={() => {}}
-          className="h-[50vh]  w-full overflow-scroll"
+          className="h-[50vh]  w-full overflow-auto border-2 p-4 shadow-lg"
+
         >
-          <table className="w-full min-w-max table-auto text-left">
+          <table className=" font-Poppins w-full table-auto text-center mx-auto  ">
+
             <thead>
               <tr>
                 {TABLE_HEAD.map((head) => (
                   <th
                     key={head}
-                    className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                    className=" capitalize text-sm bg-[#F1F4F9] text-gray-800 p-4"
+                 
                   >
                     <Typography
                       placeholder=""
@@ -239,7 +244,6 @@ const Activity = () => {
           </div>
         )}
       </div>
-      <ActivityModal />
       <DeleteActivityModal
         id={ActivityId}
         open={open}

@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { ProfileVerificationApi, setVerifyModal } from "../features/slicer/ProfileVerifySlicer";
-import { Tooltip } from "@material-tailwind/react";
+import { Button, Tooltip } from "@material-tailwind/react";
 import { modalPortfolioClose } from "../features/slicer/AddPortfolioSlicer";
 import { setProfileInfoModal } from "../features/slicer/ProfileInfoSlicer";
 import { setProfileModal } from "../features/slicer/ProfileUploadSlicer";
@@ -21,12 +20,13 @@ const style = {
   border: "none",
   bgcolor: "background.paper",
   boxShadow: 24,
+  borderRadius: "10px",
   p: 4,
 };
 
 export default function ProfileVeriModal({icon}:any) {
   const dispatch = useDispatch();
-  const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
+  // const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
   const { isLoading ,docModal } = useSelector((state: any) => state.ProfileVerifySlicer);
 
   const [selectedIdCardImg, setSelectedIdCardImg] = useState("");
@@ -78,14 +78,14 @@ export default function ProfileVeriModal({icon}:any) {
   };
   return (
     <div>
-      {icon ?    (<Tooltip content="Re-submit Doc">
+      {icon ?    (
+        <Tooltip content="Re-submit Doc">
 
 <i  onClick={handleOpen} className="cursor-pointer pl-2 text-green-500 fa-solid fa-file-pen"></i>
 </Tooltip>):
 (
       <span className="flex gap-3">
-      <i className={`fa-solid ${ ProfileData?.verif_document && ProfileData?.id_card && ProfileData?.email  && ProfileData?.firstName&& ProfileData?.lastName ?"text-green-500" : "text-gray-300"} text-2xl fa-circle-check`}></i>
-      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${docModal?"fa-chevron-up" :"fa-chevron-down"}`}></i>
+      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid fa-chevron-right`}></i>
       
         </span>
  )
@@ -100,25 +100,26 @@ export default function ProfileVeriModal({icon}:any) {
           {isLoading && <Loader />}
           <Box className="w-[300px]  md:w-[500px] flex flex-col gap-4" sx={style}>
           <span>
-              <i
+              {/* <i
                 className="fa-solid fa-times text-2xl absolute top-0 right-0 p-2  cursor-pointer "
                 onClick={handleClose}
-              ></i>
+              ></i> */}
             </span>
             <div className="flex flex-col gap-2">
-              <h1 className="text-xl font-semibold">
+          <h1 className="text-2xl text-gray-800 font-semibold">
+
                 {" "}
                 Adding a Verification Documents
               </h1>
-              <p className="text-sm">
+              <p className="text-xs">
                 {" "}
                 Click the boxes to add your ID Card & Document image to upload{" "}
               </p>
             </div>
-            <div className="  flex  flex-col md:flex-row pb-4 justify-center  md:gap-3 items-center">
+            <div className="  flex  flex-col md:flex-row pb-4 justify-center w-full md:gap-3 items-center">
               <div
                 onClick={handleIDCard}
-                className="mt-3 md:mt-10 cursor-pointer h-40 w-40 flex flex-col justify-around items-center bg-onSecondary rounded-md"
+                className="mt-3 md:mt-10 cursor-pointer h-40 w-full flex flex-col justify-around items-center bg-onSecondary rounded-md"
               >
                 <input
                   type="file"
@@ -130,17 +131,17 @@ export default function ProfileVeriModal({icon}:any) {
                 {selectedIdCardImg ? (
                   <img
                     src={URL.createObjectURL(new Blob([selectedIdCardImg]))}
-                    className=" max-h-40 w-40   object-cover object-fit rounded-md"
+                    className=" h-40 max-h-40 w-full   object-cover object-fit rounded-md"
                   />
                 ) : (
-                  <span className="w-60 flex flex-col items-center gap-4 ">
+                  <span className="w-full flex flex-col items-center gap-4 ">
             <i className="p-4 fa-solid fa-user text-[5rem] text-secondary"></i>
           </span>
                 )}
               </div>
               <div
                 onClick={handleDocImg}
-                className=" mt-3 md:mt-10 cursor-pointer  h-40 w-40 flex flex-col justify-around items-center bg-onSecondary  rounded-md"
+                className=" mt-3 md:mt-10 cursor-pointer  h-40 w-full flex flex-col justify-around items-center bg-onSecondary  rounded-md"
               >
                 <input
                   type="file"
@@ -152,26 +153,24 @@ export default function ProfileVeriModal({icon}:any) {
                 {selectedDocImg ? (
                   <img
                     src={URL.createObjectURL(new Blob([selectedDocImg]))}
-                    className=" max-h-40 w-40  object-cover object-fit rounded-md"
+                    className=" h-40 max-h-40 w-full  object-cover object-fit rounded-md"
                   />
                 ) : (
-                  <span className="w-60 flex flex-col items-center gap-4 ">
+                  <span className="w-full flex flex-col items-center gap-4 ">
                 <i className="p-4 fa-solid fa-file text-[5rem] text-secondary"></i>
               </span>
                 )}
               </div>
             </div>
-            {/* <span className="flex justify-center">
-              <Button variant="contained" onClick={handleAddCover}>
-                upload Attached Documents
-              </Button>
-            </span> */}
-            <span className="flex justify-end gap-2">
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button variant="contained" onClick={handleAddDocs}>
-                Save
-              </Button>
-            </span>
+            
+            <span className="flex w-full gap-2">
+            <Button className="bg-[#EDEDED] text-gray-700 w-full "   placeholder={''} onClick={handleClose}>
+              Cancel
+              </Button> 
+            <Button className="bg-primary w-full"  placeholder={''} onClick={handleAddDocs}>
+              Save
+            </Button>
+          </span>
           </Box>
         </>
       </Modal>

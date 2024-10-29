@@ -182,6 +182,8 @@ export default function CustomOffer({ senderId, clientId }: any) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     name="eventStartDate"
+                    min={new Date().toISOString().split('T')[0]}
+
                     type="date"
                     placeholder="Enter Event Date"
                   />
@@ -206,6 +208,8 @@ export default function CustomOffer({ senderId, clientId }: any) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     name="eventEndDate"
+                    min={new Date().toISOString().split('T')[0]}
+
                     type="date"
                     placeholder="Enter Event End Date"
                   />
@@ -230,6 +234,8 @@ export default function CustomOffer({ senderId, clientId }: any) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     name="expiryDate"
+                    min={new Date().toISOString().split('T')[0]}
+
                     type="number"
                     placeholder="Enter Booking Date"
                   />

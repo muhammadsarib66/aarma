@@ -12,12 +12,13 @@ import { useEffect, useMemo } from "react";
 import { getAllCatApi } from "./features/slicer/CategorySlicer";
 import { GetMyProfile } from "./features/slicer/GetMyProfileSlicer";
 import Dashboard2 from "./screens/Dashboard2/Dashboard2";
-import { toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import notisound from "./audio/notificationsound.mp3";
 // import notification from './audio/notification.mp3'
 import { io } from "socket.io-client";
 import { baseUrl } from "./features/slicer/Slicer";
 import CustomToast from "./components/CustomToast";
+
 // import 'rsuite/dist/rsuite.min.css';
 function App() {
   const dispatch = useDispatch();
@@ -26,7 +27,6 @@ function App() {
   const userData = user ? JSON.parse(user) : null;
   // const { UserData } = useSelector((state: any) => state.LoginSlicer);
   // const { ProfileData } = useSelector((state: any) => state.GetMyProfileSlicer);
-
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -50,6 +50,7 @@ function App() {
     };
 
     const handleNewMessage = (data: any) => {
+      console.log(data,"user MEsage")
       if (data?.sender?._id === userData?._id) return;
       const profile = data?.sender?.profile
         ? baseUrl + data?.sender?.profile
@@ -76,6 +77,8 @@ function App() {
       socket.off("message-detected", handleNewMessage);
     };
   }, []);
+
+  
 
   return (
     <>

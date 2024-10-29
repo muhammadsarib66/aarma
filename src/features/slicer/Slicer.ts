@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
-export const baseUrl = "http://139.84.209.189:3002/";
-// export const baseUrl = "http://192.168.100.13:3002/";
+// export const baseUrl = "http://192.168.100.80:3002/";
+export const baseUrl = "https://aarmaapis.veriorinc.com/";
 // login : "m2iyf@rowdydow.com" pas: 123456 
 // login : "bwwdt@rowdydow.com" pas: 123123 
 export const token = "";

@@ -24,7 +24,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import MyProfile from "../Myprofile/MyProfile";
+// import MyProfile from "../Myprofile/MyProfile";
 import Dashboard from "../Dashboard/Dashboard";
 import Avatar from "@mui/material/Avatar";
 import { useSelector, useDispatch } from "react-redux";
@@ -37,7 +37,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
-import BarChartIcon from "@mui/icons-material/BarChart";
+// import BarChartIcon from "@mui/icons-material/BarChart";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ChatScreen from "../ChatScreen/ChatScreen";
 import Bookings from "../Booking/Bookings";
@@ -45,6 +45,7 @@ import { GetBookingApi } from "../../features/slicer/GetBookingSlicer";
 import BoookingDetail from "../Booking/BoookingDetail";
 import Calender from "../Calender";
 import aarmaLogo from "../../assets/images/aarma.svg";
+import MyProfile2 from "../Myprofile/MyProfile2";
 
 const drawerWidth = 240;
 
@@ -137,14 +138,13 @@ export default function Dashboard2() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  // Calculate the circumference of the circle
   const NavTabs = [
     { title: "Dashboard", link: "/dashboard", icon: <DashboardIcon /> },
     { title: "Profile", link: "/myprofile", icon: <PersonIcon /> },
     { title: "Bookings", link: "/bookings", icon: <CollectionsBookmarkIcon /> },
     { title: "Calender", link: "/calender", icon: <CalendarMonthIcon /> },
     { title: "Chat", link: "/chats", icon: <ChatIcon /> },
-    { title: "Analytics", link: "/analytics", icon: <BarChartIcon /> },
+    // { title: "Analytics", link: "/analytics", icon: <BarChartIcon /> },
   ];
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -237,8 +237,10 @@ export default function Dashboard2() {
                         minWidth: 0,
                         mr: open ? 3 : "auto",
                         justifyContent: "center",
+
                       }}
-                    >
+
+>
                       {item.icon}
                     </ListItemIcon>
                     <ListItemText
@@ -275,9 +277,7 @@ export default function Dashboard2() {
               </ListItem>
             ))}
           </List>
-          <Divider />
 
-          <Divider />
           <div className="h-full flex items-end ">
             <ListItem
               onClick={() => {
@@ -308,7 +308,7 @@ export default function Dashboard2() {
                   </ListItemIcon>
                 )}
                 <ListItemText
-                  className="text-center p-2 bg-[#FF725E] rounded-lg text-secondary"
+                  className="text-center p-2 bg-primary rounded-lg text-secondary"
                   primary={"Logout"}
                   sx={{ opacity: open ? 1 : 0 }}
                 />
@@ -332,7 +332,7 @@ export default function Dashboard2() {
               <Routes>
                 <Route path="/*" element={<Dashboard />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
-                <Route path="/myprofile" element={<MyProfile />} />
+                <Route path="/myprofile" element={<MyProfile2 />} />
                 <Route path="/calender" element={<Calender />} />
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/chats" element={<ChatScreen />} />

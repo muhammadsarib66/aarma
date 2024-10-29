@@ -3,7 +3,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 // import { toast } from "react-toastify";
-import { Button, Input, Textarea, Tooltip } from "@material-tailwind/react";
+import { Button, Input, Textarea } from "@material-tailwind/react";
 import InputField from "../../components/InputField";
 import { Select, Option } from "@material-tailwind/react";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,6 +19,8 @@ const style = {
   border: "none",
   bgcolor: "background.paper",
   boxShadow: 24,
+  borderRadius: "10px",
+
   p: 4,
 };
 
@@ -70,14 +72,22 @@ export default function ActivityModal() {
   return (
     <>
       <div>
-        <Tooltip placement="bottom" content="update Activity">
+      <Button
+          placeholder={""}
+          onClick={handleOpen}
+          className="cursor-pointer w-fit px-8 py-2 h-9  bg-primary rounded-full text-white flex items-center gap-2 font-semibold  "
+        >
+          <i className="font-semibold fa-solid fa-plus"></i>
+          Update Activity
+        </Button>
+        {/* <Tooltip placement="bottom" content="update Activity">
           <div
             onClick={handleOpen}
             className="cursor-pointer w-16 h-16 bg-black rounded-full text-white flex items-center justify-center text-2xl fixed bottom-12 right-20"
           >
             <i className="fa-solid fa-plus"></i>
           </div>
-        </Tooltip>
+        </Tooltip> */}
 
         <Modal
           open={isOpen}
@@ -87,9 +97,9 @@ export default function ActivityModal() {
         >
           <Box className=" w-[500px] flex flex-col gap-4" sx={style}>
             <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-semibold">Activity </h1>
-              <span> <i className="text-2xl cursor-pointer fa-solid fa-xmark " onClick={handleClose}></i>
-               </span>
+            <h1 className="text-2xl text-gray-800 font-semibold">
+
+              Update  Activity </h1>
             </div>
             <Textarea  value={message}
               onChange={(e:any) => setMessage(e.target.value)}
@@ -120,7 +130,7 @@ export default function ActivityModal() {
                   ))}
               </Select>
             </div>
-            <Input required placeholder={""} type="file" accept=".pdf" onChange={handleChangeFile} crossOrigin="" />
+            <Input required label="Add File" placeholder={""} type="file" accept=".pdf" onChange={handleChangeFile} crossOrigin="" />
           
             <div>
               {fileURL && (
@@ -134,9 +144,15 @@ export default function ActivityModal() {
                 </div>
               )}
             </div>
-            <Button placeholder={"update Activity"} onClick={handleSubmit}>
-              update Activity
+            <span className="flex w-full gap-2">
+            <Button className="bg-[#EDEDED] text-gray-700 w-full "   placeholder={''} onClick={handleClose}>
+              Cancel
+              </Button> 
+            <Button className="bg-primary w-full"  placeholder={''} onClick={handleSubmit}>
+              Update
             </Button>
+          </span>
+
           </Box>
         </Modal>
       </div>

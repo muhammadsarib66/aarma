@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import InputField from "../../components/InputField";
@@ -12,6 +11,7 @@ import { setProfileModal } from "../../features/slicer/ProfileUploadSlicer";
 import { modalPortfolioClose } from "../../features/slicer/AddPortfolioSlicer";
 import { setVerifyModal } from "../../features/slicer/ProfileVerifySlicer";
 import { setCoverModal } from "../../features/slicer/ProfileUploadCoverSlicer";
+import { Button } from "@material-tailwind/react";
 
 const style = {
   position: "absolute" ,
@@ -92,8 +92,7 @@ export default function ProfileInfoModal() {
   return (
     <div>
       <span className="flex gap-3">
-      <i className={`fa-solid ${ProfileData?.categories?.length>0 && ProfileData?.tagline && ProfileData?.bio && ProfileData?.email  && ProfileData?.firstName&& ProfileData?.lastName ?"text-green-500" : "text-gray-300"} text-2xl fa-circle-check`}></i>
-      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid ${profileInfoModal?"fa-chevron-up" :"fa-chevron-down"}`}></i>
+      <i onClick={handleOpen} className={` cursor-pointer text-2xl fa-solid fa-chevron-right`}></i>
       {/* <i
         
         
@@ -154,11 +153,11 @@ export default function ProfileInfoModal() {
               </div>
             ))}
           </div>
-          <span className="flex justify-end gap-2">
-            <Button onClick={handleClose}>
+          <span className="flex w-full  gap-2">
+            <Button className="w-full bg-[#EDEDED] text-gray-700" onClick={handleClose}  placeholder={''}>
               Cancel
               </Button> 
-            <Button variant="contained" onClick={addProfileInfo}>
+            <Button   placeholder={''}  className="w-full bg-primary" onClick={addProfileInfo}>
               Save
             </Button>
           </span>     

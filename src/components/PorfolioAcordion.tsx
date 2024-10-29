@@ -54,7 +54,6 @@ export default function PorfolioAcordion  () {
     dispatch(DeletePortfolioAPi(deleteItem));
     setOpen1(false);
     
-    // setDeleteModal(true)
   }
 
   useEffect(() => {
@@ -64,44 +63,72 @@ export default function PorfolioAcordion  () {
     dispatch(GetPortfolioAPi());
   }, [dispatch]);
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsPerPage = 2; // Number of items to display per page
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => Math.max(prevIndex - itemsPerPage, 0));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      Math.min(prevIndex + itemsPerPage, PortfolioData.length - itemsPerPage)
+    );
+  };
+
   return (
-    <div className="px-3 my-10 py-4 bg-onSecondary">
-      <div className="flex gap-4 items-center  pb-4 ">
-        <h1 className="text-2xl capitalize font-semibold  text-onPrimary ">
-          Portfolios{" "}
-          {PortfolioData?.length > 0 ? `(${PortfolioData?.length})` : ""}
-        </h1>
-        <AddPortfolioModal icon={true}/>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 md:gap-4  place-items-center md:place-items-start ">
-      {PortfolioData &&   PortfolioData?.map((item: any , ind : any) => (
-  <div  className="group object-center flex flex-col gap-2" key={ind}>
-    {item?.photos && item?.photos.length > 0 && (
-      <div  onClick={()=>handleOpen(item)}  className="relative group">
-        <img
-          src={baseUrl + item?.photos[0]}
-          className="w-64 sm:w-56 h-48 object-cover border-2 border-gray-300 rounded-xl"
-          alt="portfolio image"
-        />
-        <div className="hidden absolute top-0 group-hover:flex justify-center items-center left-0 w-full h-full bg-opacity-50 bg-black rounded-xl">
-          <div
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent propagation to the parent
-              handleDeletePortfolio(item?._id);
-            }}
-            className="border-green-500 border-2 rounded-full w-12 h-12 flex cursor-pointer items-center justify-center"
-          >
-            <i className="text-green-500 fa-solid fa-trash text-xl"></i>
-          </div>
+    <div className="px-4   pb-8 ">
+      
+<div className="flex items-center mb-4 justify-between">
+        <p className="font-semibold text-2xl flex items-center   gap-2">Portfolio {PortfolioData.length} <span> <AddPortfolioModal icon={true} />
+          
+           </span></p>
+        {/* <AddPortfolioModal /> */}
+        <div className="flex gap-3">
+          <i
+            className={`text-3xl fa-solid text-[#DEDEDE] fa-circle-chevron-left ${
+              currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+            }`}
+            onClick={handlePrev}
+          ></i>
+          <i
+            className={`text-3xl fa-solid text-[#DEDEDE] fa-circle-chevron-right ${
+              currentIndex >= PortfolioData.length - itemsPerPage ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+            }`}
+            onClick={handleNext}
+          ></i>
         </div>
       </div>
-    )}
-    <p  className="group-hover:underline capitalize text-primary font-bold">
-      {item?.title}
-    </p>
-  </div>
-)) }
-     </div>
+      
+   
+     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 place-items-center md:place-items-start">
+        {PortfolioData &&
+          PortfolioData.slice(currentIndex, currentIndex + itemsPerPage).map((item: any, ind: any) => (
+            <div className="group object-center flex max-w-56 max-h-[38vh]  overflow-hidden bg-[#F3F3F3] flex-col  rounded-xl gap-2" key={ind}>
+              {item?.photos && item?.photos.length > 0 && (
+                <div onClick={() => handleOpen(item)} className="  rounded-t-xl h-48 relative group">
+                  <img
+                    src={baseUrl + item?.photos[0]}
+                    className="w-64 sm:w-56  max-w-56 h-48 object-cover  rounded-t-xl"
+                    alt="portfolio image"
+                  />
+                  <div className="hidden  absolute top-0 group-hover:flex justify-center items-center left-0 w-full h-48 bg-opacity-50 bg-black rounded-t-xl">
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent propagation to the parent
+                        handleDeletePortfolio(item?._id);
+                      }}
+                      className="border-red-500 border-2 rounded-full w-12 h-12 flex cursor-pointer items-center justify-center"
+                    >
+                      <i className="text-red-500 fa-solid fa-trash text-xl"></i>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <p className="group-hover:underline capitalize py-5  max-w-56  overflow-hidden mx-4 text-onPrimary text-lg font-bold ">{item?.title}</p>
+            </div>
+          ))}
+      </div>
      {
       PortfolioData && PortfolioData.length === 0 &&
     <div className="flex justify-center items-center h-72 bg-secondary rounded-lg">
