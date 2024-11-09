@@ -1,40 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "./Slicer";
+import { GetBookingApi } from "./GetBookingSlicer";
 
-export const GetMyProfile: any = createAsyncThunk(
-  "aarma/GetMyProfile",
-  async (_, { rejectWithValue }) => {
+export const CancelBookingApi: any = createAsyncThunk(
+  "aarma/Cancelbooking",
+  async (Id: any, { rejectWithValue, dispatch }) => {
+    console.log(Id)
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
-      const response = await axios.get(`${baseUrl}event-managers/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      
-      // console.log(response?.data, "===>")
-      return response.data;
-    } catch (error : any) {
+      const response = await axios.post(
+        `${baseUrl}bookings/cancel-booking`,
+        { bookingId: Id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success( response.data?.message ??  "Booking deleted successfully");
+
+      dispatch(GetBookingApi());
+      return response.data.data;
+    } catch (error: any) {
       // Handle the error
       if (error.response) {
         // Request was made and server responded with status code that falls out of the range of 2xx
-        toast.error("error while fetching userProfile");
-        // console.log(error.response.data);
+        toast.error("Failed to delete Booking");
       } else if (error.request) {
         // The request was made but no response was received
         toast.error("No response received from the server");
-        console.log(error.request);
       } else {
         // Something happened in setting up the request that triggered an error
         toast.error("An error occurred while processing your request");
-        console.log("Error", error.message);
       }
-
       // Use rejectWithValue to propagate the error to the rejected action
       return rejectWithValue(error.message);
     }
@@ -44,33 +48,27 @@ export const GetMyProfile: any = createAsyncThunk(
 const initialState = {
   isLoading: false,
   isError: false,
-  ProfileData: [],
-  ProfileCompletnes : ""
 };
 
-const GetMyProfileSlicer = createSlice({
-  name: "GetMyProfile",
+const CancelBookingSlicer = createSlice({
+  name: "Cancelbooking",
   initialState,
-  reducers: {
-    // Reducer logic here
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(GetMyProfile.pending, (state) => {
+    builder.addCase(CancelBookingApi.pending, (state) => {
       state.isLoading = true;
       state.isError = false;
     });
-    builder.addCase(GetMyProfile.fulfilled, (state, action) => {
+    builder.addCase(CancelBookingApi.fulfilled, (state) => {
       state.isLoading = false;
       state.isError = false;
-      const { completenessPercentage  , data} = action.payload;
-      state.ProfileData = data;
-      state.ProfileCompletnes = completenessPercentage
     });
-    builder.addCase(GetMyProfile.rejected, (state) => {
+    builder.addCase(CancelBookingApi.rejected, (state) => {
       state.isLoading = false;
       state.isError = true;
     });
   },
 });
 
-export default GetMyProfileSlicer.reducer;
+// export const {  } = BookingInfoSlicer.actions;
+export default CancelBookingSlicer.reducer;

@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import ChatImg from "../../assets/images/Chat.svg";
-import { io } from "socket.io-client";
 import moment from "moment";
 import TruncateMarkup from "react-truncate-markup";
 import CustomOffer from "../../components/CustomOffer";
@@ -18,9 +17,8 @@ import {
 } from "@material-tailwind/react";
 import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
-import { baseUrl } from "../../features/slicer/Slicer";
 import notisound from "../../audio/notification.mp3"
-
+import { socket } from "../../features/slicer/Slicer";
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: "#44b700",
@@ -54,7 +52,6 @@ const ChatScreen = () => {
   const user = localStorage.getItem("user");
   const { _id } = user ? JSON.parse(user) : null;
 
-  const socket = useMemo(() => io(baseUrl), []);
   const messagesData = [
     {
       id: 10,
@@ -265,25 +262,26 @@ const ChatScreen = () => {
 // console.log(chats,'all chats')
   // console.log("=>",chats)
   const handleSelectChat = (person: any) => {
-    // console.log(person, "person");
+
     setSingleChat(person);
-  console.log(person,"person")
+  
     setActiveChat((prevState: any) => {
       return prevState === person._id ? null : person._id;
     });
   
+    // console.log(person?._id,'roomChat')
     socket.emit("joinRoom", person?._id);
   
-    // Listen for room messages
+  // Listen for room messages
     socket.off("roomMessages"); // Ensure to remove previous listeners
     socket.on("roomMessages", (data) => {
-      console.log(data, "all mesage")
+      // console.log(data, "all mesage")
       setClientActiveChat(data);
       setChats(data?.messages);
       // console.log(data);
     });
   };
-  console.log(chats)
+  // console.log(chats)
   const handleSendMessage = () => {
     if (inputStr.trim() === "") {
       toast.error("please type a message");
@@ -301,7 +299,7 @@ const ChatScreen = () => {
     // setChats((prev: any) => [...prev, sending]); // will comit
    
     socket.emit("sendMessage", sending);
-    console.log(sending, "sending");
+    // console.log(sending, "sending");
     setInputStr(""); // Clear input field after sending
   };
   const handleKeyDown = (event:any) => {
@@ -321,22 +319,22 @@ const ChatScreen = () => {
       setusersConv(data);
     };
   
-    const handleMessageDetected = (data: any) => {
-      console.log(data, "detectedddd");
-      setChats((prev: any) => [...prev, data]);
-    };
-    const handleOfferUpdated = (data: any) => { // for bokking offer accpeted or Rejected
+   
+    const handleOfferUpdated = (data: any) => {
+      // console.log(data, "offer updated");
+
+       // for bokking offer accpeted or Rejected
       const audio = new Audio(notisound);
       const all_chats = [...chats];
       const message_index = chats.findIndex((item: { _id: any; }) => item?._id == data?.data?._id);
       all_chats[message_index] = data?.data;
       setChats(all_chats);
-      console.log(data, "offer updated");
+      // console.log(data, "offer updated");
       if(data?.data?.offer?.offer_statuscode == 'REJECTED'){
         audio.play();
         toast.error(data?.message)
       }
-      else if(data?.data?.offer?.offer_statuscode == 'ACCEPTED'){
+      if(data?.data?.offer?.offer_statuscode == 'ACCEPTED'){
         audio.play();
         toast.success(data?.message)
      
@@ -346,19 +344,33 @@ const ChatScreen = () => {
     socket.on("message-recieved", handleMessageReceived);
     socket.emit("fetch-myRooms", _id);
     socket.on("myRooms", handleRoomsFetched);
-    socket.on("message-detected", handleMessageDetected);
+    
     socket.on("offer-updated",handleOfferUpdated)
   
     // Clean up listeners on unmount
     return () => {
       socket.off("message-recieved", handleMessageReceived);
       socket.off("myRooms", handleRoomsFetched);
-      socket.off("message-detected", handleMessageDetected);
+      // socket.off("message-detected", handleMessageDetected);
       socket.off("roomMessages");
       socket.off("offer-updated",handleOfferUpdated)
     };
   }, [_id,chats]);
 
+
+const handleMessageDetected = (data:any) => {
+  console.log(data, "detectedddd");
+setChats((prev: any) => [...prev, data]);
+};
+
+// Set up the socket event listener
+useEffect(() => {
+  socket.on("message-detected", handleMessageDetected);
+
+  return () => {
+    socket.off("message-detected", handleMessageDetected);
+  };
+}, [chats]);
   useEffect(() => {
     const scrollableDiv = scrollableDivRef.current as HTMLElement | null; // Explicitly specify the type as HTMLElement or null
     if (scrollableDiv) {

@@ -22,7 +22,7 @@ export const GetBookingApi: any = createAsyncThunk(
       );
 
       toast.success(response.data.message);
-      console.log(response?.data?.data);
+      // console.log(response?.data?.data);
       return response.data.data;
     } catch (error: any) {
       // Handle the error
@@ -71,7 +71,7 @@ const GetBookingSlicer = createSlice({
       state.isLoading = false;
       state.isError = false;
       state.BookingsData = action.payload;
-      console.log(action.payload);
+      // console.log(action.payload);
     });
     builder.addCase(GetBookingApi.rejected, (state) => {
       state.isLoading = false;

@@ -8,12 +8,15 @@ const ProgressBar2 = ({
   
 }:any) => {
   return (
-    <div className="w-full bg-gray-200 h-5 rounded-full">
+    <div className="relative w-full bg-gray-300 h-5 rounded-full">
       <div
-        className={`flex justify-center items-center h-5 text-xs ${bgColor} ${textColor} rounded-full`}
+        className={` flex justify-center items-center h-5 text-xs ${bgColor} ${textColor} rounded-full`}
         style={{ width: `${progress}%`,  }}
       >
+        <p className=" absolute  left-[50%]">
+
         {progress}%
+        </p>
       </div>
     </div>
   );

@@ -16,6 +16,21 @@ const Dashboard = () => {
   const { ProfileData, ProfileCompletnes, isLoading } = useSelector(
     (state: any) => state.GetMyProfileSlicer
   );
+  const { isLoading: ProfileInfoLoader } = useSelector(
+    (state: any) => state.ProfileInfoSlicer
+  );
+  const { isLoading: ProfileUploadLoader } = useSelector(
+    (state: any) => state.ProfileUploadSlicer
+  );
+  const { isLoading: AddPortfolioLoader } = useSelector(
+    (state: any) => state.AddPortfolioSlicer
+  );
+  const { isLoading: ProfileUploadCoverLoader } = useSelector(
+    (state: any) => state.ProfileUploadCoverSlicer
+  );
+  const { isLoading: ProfileVerifyLoader } = useSelector(
+    (state: any) => state.ProfileVerifySlicer
+  );
   const { BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
 // console.log(BookingsData)
 
@@ -226,9 +241,8 @@ const BookingsTab =[ {
       </div>
 
       <div className="">
-        {isLoading ? (
-          <Loader />
-        ) : (ProfileData &&
+        {
+         (ProfileData &&
             (!ProfileData?.portfolio || ProfileData?.portfolio.length === 0)) ||
           !ProfileData?.profile ||
           !ProfileData?.coverPhoto ||
@@ -236,6 +250,12 @@ const BookingsTab =[ {
           <SplashScreen />
         ) : null}
       </div>
+      { isLoading && <Loader />}
+      { ProfileInfoLoader && <Loader />}
+      { ProfileUploadLoader && <Loader />}
+      { AddPortfolioLoader && <Loader />}
+      { ProfileUploadCoverLoader && <Loader />}
+      { ProfileVerifyLoader && <Loader />}
     </div>
   );
 };

@@ -28,9 +28,8 @@ export default function ProfileInfoModal() {
   const dispatch = useDispatch()
   const { categoryData } = useSelector((state: any) => state.CategorySlicer);
   const {isLoading} = useSelector((state:any)=> state.ProfileInfoSlicer);
-  const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
+  // const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
   const {profileInfoModal} = useSelector((state:any)=> state.ProfileInfoSlicer);
-  console.log( ProfileData)
   const [selectedOptions, setSelectedOptions] = useState<any>([]);
   const [bio , setBio] = useState('')
   const [tagline , setTagline] = useState('')
@@ -72,13 +71,12 @@ export default function ProfileInfoModal() {
     else{
 
     
-    console.log(selectedOptions);
     const Obj = {
          bio,
          tagline,
         categories: selectedOptions,
         };
-        console.log(Obj)      
+        // console.log(Obj)      
         dispatch(ProfileInfoApi(Obj))
         
     setBio('')

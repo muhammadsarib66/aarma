@@ -2,18 +2,22 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { Card, CardBody, Chip } from "@material-tailwind/react";
+import { Button, Card, CardBody, Chip } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { BookingInfoApi } from "../../features/slicer/BookingInfoSlicer";
 import Header from "../../components/Header";
+import { CancelBookingApi } from "../../features/slicer/CancelBookingSlicer";
+import { GetBookingApi } from "../../features/slicer/GetBookingSlicer";
+import Loader from "../../components/Loader";
 
 export default function Bookings() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {  BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
+  const {isLoading,  BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
+  console.log(BookingsData)
   const { BookingInfo } = useSelector((state: any) => state.BookingInfoSlicer);
   const [statusTab, setStatusTab] = useState<any>("active");
   const [search, setSearch] = useState<any>("");
@@ -24,9 +28,11 @@ export default function Bookings() {
     "Client Name",
     "client Email",
     "Total Guests",
+    "Booking Detail",
     "Event Start ",
     "Event End ",
     "Status",
+    "Action"
   ];
   const FilterTab = [
     {
@@ -43,6 +49,11 @@ export default function Bookings() {
     },
   ];
 
+  const handleCancelBooking = (id: any) => {
+    console.log(id);
+    dispatch(CancelBookingApi(id));
+    // navigate(`/cancelbooking`);
+  }
   const handleNavigateItem = (item: any) => {
     console.log(item?._id);
     dispatch(BookingInfoApi(item?._id));
@@ -92,8 +103,15 @@ export default function Bookings() {
     }
   }, [search, BookingsData, statusTab]);
 
+  useEffect(()=>{
+    dispatch(GetBookingApi())
+  },[])
+
+
+
   return (
     <section className=" container mx-auto  flex flex-col gap-8  ">
+      {isLoading  && <Loader />}
       <Header
         heading={"Event Portal / Bookings"}
         // headingDetail="See information about Bookings"
@@ -138,7 +156,6 @@ export default function Bookings() {
                   <>
                     <tr
                       className="text-left cursor-grab "
-                      onClick={() => handleNavigateItem(item)}
                       key={item?._id}
                     >
                       <td className={classes}>
@@ -156,6 +173,14 @@ export default function Bookings() {
                           
                           {item?.client?.email}
                         </p>
+                      </td>
+                      <td  className={classes}>
+                          
+                          <Button 
+                          size="sm"
+                      onClick={() => handleNavigateItem(item)}
+                          
+                          > See Details</Button>
                       </td>
                       <td className={classes}>
                          <p className="font-semibold text-gray-700 text-sm">
@@ -191,6 +216,9 @@ export default function Bookings() {
                               : undefined
                           }
                         />
+                      </td>
+                      <td className={classes}>
+                          <Button  size="sm" disabled={item?.booking_statuscode == "COMPLETED"? true:false} color={item?.booking_statuscode == "COMPLETED"?"green":'red'} onClick={()=>handleCancelBooking(item?._id)}>{item?.booking_statuscode == "COMPLETED"?"Completed":"Cancel Booking"}</Button>
                       </td>
                     </tr>
                   </>

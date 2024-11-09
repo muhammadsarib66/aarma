@@ -19,6 +19,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import {
   Link,
+  Navigate,
+  Outlet,
   Route,
   Routes,
   useLocation,
@@ -117,6 +119,14 @@ const Drawer = styled(MuiDrawer, {
     "& .MuiDrawer-paper": closedMixin(theme),
   }),
 }));
+
+const ProtectedRoute = ({ profileCompleteness, children }:any) => {
+  if (profileCompleteness < 100) {
+    return <Navigate to="/" replace />; // Redirect to profile completion page
+  }
+  return children ? children : <Outlet />;
+};
+
 
 export default function Dashboard2() {
   const [open, setOpen] = useState(false);
@@ -329,7 +339,20 @@ export default function Dashboard2() {
         //  'dsadsadasdas'
          }
           <div className="w-full ">
-              <Routes>
+          <Routes>
+    <Route path="/*" element={<Dashboard />} />
+    <Route path="/Dashboard" element={<Dashboard />} />
+    <Route path="/profile" element={<MyProfile2 />} /> {/* Profile completion page */}
+
+    {/* Protected Routes */}
+    <Route element={<ProtectedRoute profileCompleteness={ProfileCompletnes} />}>
+      <Route path="/calender" element={<Calender />} />
+      <Route path="/bookings" element={<Bookings />} />
+      <Route path="/chats" element={<ChatScreen />} />
+      <Route path="/bookingsdetail" element={<BoookingDetail />} />
+    </Route>
+  </Routes>
+              {/* <Routes>
                 <Route path="/*" element={<Dashboard />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/myprofile" element={<MyProfile2 />} />
@@ -337,7 +360,7 @@ export default function Dashboard2() {
                 <Route path="/bookings" element={<Bookings />} />
                 <Route path="/chats" element={<ChatScreen />} />
                 <Route path="/bookingsdetail" element={<BoookingDetail />} />
-              </Routes>         
+              </Routes>          */}
           </div>
         </div>
         

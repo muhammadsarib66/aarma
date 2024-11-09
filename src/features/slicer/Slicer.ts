@@ -1,16 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
+// import { useMemo } from "react";
+// import { useMemo } from "react";
 import { io } from "socket.io-client";
 // export const baseUrl = "http://192.168.100.80:3002/";
-export const baseUrl = "https://aarmaapis.veriorinc.com/";
-// login : "m2iyf@rowdydow.com" pas: 123456 
+// export const baseUrl = "http://192.168.100.91:3002/";
+export const baseUrl = "http://192.168.10.6:3002/";
+// export const baseUrl = "https://aarmaapis.veriorinc.com/";
+// login : "yawavat848@anypng.com" pas: 123123  // current 
 // login : "bwwdt@rowdydow.com" pas: 123123 
+
 export const token = "";
 export const config = {
   headers: {
     Authorization: `Bearer ${token}`,
   },
 };
-export const socket = io(baseUrl);
+// export const socket = useMemo(() => io(baseUrl), []);
+
+ export const socket = io(baseUrl);
 
 const initialState = {
   testValue: 1,
