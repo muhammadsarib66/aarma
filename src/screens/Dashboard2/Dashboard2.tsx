@@ -342,7 +342,7 @@ export default function Dashboard2() {
           <Routes>
     <Route path="/*" element={<Dashboard />} />
     <Route path="/Dashboard" element={<Dashboard />} />
-    <Route path="/profile" element={<MyProfile2 />} /> {/* Profile completion page */}
+    <Route path="/myprofile" element={<MyProfile2 />} /> {/* Profile completion page */}
 
     {/* Protected Routes */}
     <Route element={<ProtectedRoute profileCompleteness={ProfileCompletnes} />}>

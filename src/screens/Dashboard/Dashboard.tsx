@@ -144,8 +144,8 @@ const BookingsTab =[ {
               className="text-blue-500"
             />
           </svg>
-          <div className="text-primary font-semibold">
-            <p>
+          <div className="text-primary font-semibold text-center w-full flex justify-center">
+            <p className="w-[60%] text-center  ">
               {ProfileCompletnes === 100
                 ? `${ProfileCompletnes}%  Profile Completed`
                 : "Complete Your Profile to get more opportunities"}

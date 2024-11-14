@@ -49,10 +49,10 @@ function App() {
       const audio = new Audio(notisound);
       audio.play();
     };
-
+console.log(userData?._id,"user id")
     const handleNewMessage = (data: any) => {
-      console.log("user MEsage",data?.sender?.user , userData?._id,"========>")
-      if (data?.sender == userData?._id) return;
+      console.log("user MEsage",data , userData?._id,"========>")
+      if (data?.sender?._id == userData?._id) return;
       const profile = data?.sender?.profile
         ? baseUrl + data?.sender?.profile
         : "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
@@ -73,8 +73,8 @@ function App() {
     };
 
     socket.on("all-bookings-update", (data)=>{console.log(data,'updated dataarha booking ka')});
-    // socket.on("message-detected", handleNewMessage);
-    socket.on("booking-canceled", (data:any)=>{
+    socket.on("message-detected", handleNewMessage);
+    socket.on("booking-canceled", (_:any)=>{
       dispatch(GetBookingApi())
       console.log('booking-booking-canceled','======> workings')
     });
