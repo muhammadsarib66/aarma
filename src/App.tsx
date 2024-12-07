@@ -75,6 +75,7 @@ console.log(userData?._id,"user id")
     socket.on("all-bookings-update", (data)=>{console.log(data,'updated dataarha booking ka')});
     socket.on("message-detected", handleNewMessage);
     socket.on("booking-canceled", (_:any)=>{
+      console.log(_)
       dispatch(GetBookingApi())
       console.log('booking-booking-canceled','======> workings')
     });
