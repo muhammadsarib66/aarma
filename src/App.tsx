@@ -39,7 +39,7 @@ function App() {
         toast.error("Error parsing saved credentials:", error.message);
       }
 
-      socket.emit("join", {userData: userData?._id, role: "event-manager"});
+      socket.emit("join",{userId: userData?._id ,role :"event-manager"});
     }
   }, []);
 
@@ -52,7 +52,7 @@ function App() {
 console.log(userData?._id,"user id")
     const handleNewMessage = (data: any) => {
       console.log("user MEsage",data , userData?._id,"========>")
-      if (data?.sender?._id == userData?._id) return;
+      if (data?.sender == userData?._id) return;
       const profile = data?.sender?.profile
         ? baseUrl + data?.sender?.profile
         : "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";

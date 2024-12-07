@@ -18,7 +18,7 @@ import {
 import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
 import notisound from "../../audio/notification.mp3"
-import { socket } from "../../features/slicer/Slicer";
+import { baseUrl, socket } from "../../features/slicer/Slicer";
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: "#44b700",
@@ -260,7 +260,8 @@ const ChatScreen = () => {
   const [inputStr, setInputStr] = useState("");
   const scrollableDivRef = useRef(null);
 // console.log(chats,'all chats')
-  // console.log("=>",chats)
+  // console.log("=========================>",chats,"'=============================")
+  
   const handleSelectChat = (person: any) => {
     console.log(person)
     setSingleChat(person);
@@ -282,13 +283,31 @@ const ChatScreen = () => {
     });
   };
   // console.log(chats)
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (file) {
+    setSelectedImage(file);
+    setImagePreview(URL.createObjectURL(file));
+  
+  }
+  console.log(file, "file");
+};
+
+const handleRemoveImage = () => {
+  setSelectedImage(null);
+  setImagePreview(null);
+};
+  
   const handleSendMessage = () => {
-    if (inputStr.trim() === "") {
-      toast.error("please type a message");
+    if (inputStr.trim() === "" && !selectedImage) {
+      toast.error("please type a message or select an image");
       return;
     }
   
-    const sending = {
+    const sending: any = {
       messageContent: inputStr,
       sender: _id,
       senderType: "EventManager",
@@ -296,11 +315,20 @@ const ChatScreen = () => {
       client: clientActiveChat?.room?.client?._id,
       messageType: "text",
     };
-    // setChats((prev: any) => [...prev, sending]); // will comit
-   
-    socket.emit("sendMessage", sending);
-    // console.log(sending, "sending");
-    setInputStr(""); // Clear input field after sending
+  
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        sending.images = reader.result;
+        socket.emit("sendMessage", sending);
+        setInputStr(""); // Clear input field after sending
+        setSelectedImage(null); // Clear selected image after sending
+      };
+      reader.readAsDataURL(selectedImage);
+    } else {
+      socket.emit("sendMessage", sending);
+      setInputStr(""); // Clear input field after sending
+    }
   };
   const handleKeyDown = (event:any) => {
     if (event.key === "Enter") {
@@ -338,6 +366,10 @@ const ChatScreen = () => {
         audio.play();
         toast.success(data?.message)
      
+    }
+    if(data?.data?.offer?.offer_statuscode == 'WITHDRAWN'){
+      audio.play();
+      toast.error(data?.message)
     }
   }
 
@@ -603,21 +635,26 @@ useEffect(() => {
                         </Card>
                       ) || item?.messageType === "text" && (
                         <div
-                        className={`${
-                          item?.sender?._id == _id
-                            ? "bg-primary text-white text-right"
-                            : "bg-white "
-                        } text-black text-sm max-w-[60%] p-2 rounded-lg`}
-                      >
-                        <p className="text-left break-words"> {item?.messageContent}</p>
-                        <p
-                          className={`text-xs text-black ${
-                            item?.sender?._id == _id ? "text-right text-white" : "text-right"
-                          }`}
-                        >
-                          {moment(item?.messaged_on).format('HH:mm')}
-                        </p>
-                      </div>
+  className={`${
+    item?.sender?._id == _id
+      ? "bg-primary text-white text-right"
+      : "bg-white "
+  } text-black text-sm max-w-[60%] p-2 rounded-lg`}
+>
+  {item?.images && (
+    <img src={baseUrl + item.images} alt="message image" className="max-w-full h-auto mb-2 rounded-lg" />
+  )}
+  {item?.messageContent && (
+    <p className="text-left break-words"> {item?.messageContent}</p>
+  )}
+  <p
+    className={`text-xs text-black ${
+      item?.sender?._id == _id ? "text-right text-white" : "text-right"
+    }`}
+  >
+    {moment(item?.messaged_on).format('HH:mm')}
+  </p>
+</div>
                       )}
                       {item?.sender?._id === _id && (
                         <Avatar
@@ -629,7 +666,7 @@ useEffect(() => {
                   ))}
                 <div ref={scrollableDivRef}></div>
               </div>
-              <div className="chat bg-gray-100 flex items-center   gap-4  p-4">
+              {/* <div className="chat bg-gray-100 flex items-center   gap-4  p-4">
                 <div className="text-gray-700 rounded-full bg-white items-center justify-center gap-1 p-3 w-full bg-white-500 flex">
                   <input
                     value={inputStr}
@@ -646,13 +683,81 @@ useEffect(() => {
                   clientId={clientActiveChat?.room?.client?._id}
                 />
 
-                <div
+<div>
+    <input
+      type="file"
+      accept="image/*"
+      id="imageInput"
+      style={{ display: 'none' }}
+      onChange={handleImageChange}
+    />
+    <label htmlFor="imageInput">
+    <i className="fa-solid fa-paperclip"></i>
+
+    </label>
+   
+     <div
                   onClick={handleSendMessage}
                   className="cursor-pointer bg-white flex items-center justify-center  rounded-full h-14 w-14   "
                 >
                   <i className="text-2xl text-blue-500 fa-solid fa-paper-plane"></i>
                 </div>
-              </div>
+  </div>
+               
+              </div> */}
+              <div className="chat relative bg-gray-100 flex flex-col gap-4 p-4">
+    {imagePreview && (
+      <div className="absolute bottom-16 mb-4">
+        <img src={imagePreview} alt="Selected" className="w-40 H-40 object-contain rounded-lg" />
+        <button
+          onClick={handleRemoveImage}
+          className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-8 h-8 p-1"
+        >
+          {/* <FontAwesomeIcon icon={faTimes} /> */}
+          <i className="fa-solid fa-xmark"></i>
+          {/* <i className="fa-solid fa-paperclip"></i> */}
+          {/* <i className="text-2xl text-blue-500 fa-solid fa-paper-plane"></i> */}
+        </button>
+      </div>
+    )}
+    <div className="flex items-center gap-4">
+      <div className="text-gray-700 rounded-full bg-white items-center justify-center gap-1 p-3 w-full flex">
+        <input
+          value={inputStr}
+          onChange={(e) => setInputStr(e.target.value)}
+          onKeyDown={handleKeyDown}
+          type="text"
+          className="w-full"
+          placeholder="Type a message"
+        />
+      </div>
+      <CustomOffer
+        senderId={_id}
+        clientId={clientActiveChat?.room?.client?._id}
+      />
+      <div className="flex items-center gap-2">
+        <input
+          type="file"
+          accept="image/*"
+          id="imageInput"
+          style={{ display: 'none' }}
+          onChange={handleImageChange}
+        />
+        <label htmlFor="imageInput" className="cursor-pointer">
+          {/* <FontAwesomeIcon icon={faPaperclip} size="2x" /> */}
+          <i className="fa-solid fa-paperclip"></i>
+          {/* <i className="text-2xl text-blue-500 fa-solid fa-paper-plane"></i> */}
+        </label>
+        <div
+          onClick={handleSendMessage}
+          className="cursor-pointer bg-white flex items-center justify-center rounded-full h-14 w-14"
+        >
+           <i className="text-2xl text-blue-500 fa-solid fa-paper-plane"></i>
+          {/* <FontAwesomeIcon icon={faPaperPlane} className="text-2xl text-blue-500" /> */}
+        </div>
+      </div>
+    </div>
+  </div>
             </div>
           ) : (
             <div className="w-full flex h-screen  flex-col pt-20 gap-4 justify-center items-center ">
