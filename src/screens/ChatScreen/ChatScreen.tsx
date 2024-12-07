@@ -262,7 +262,7 @@ const ChatScreen = () => {
 // console.log(chats,'all chats')
   // console.log("=>",chats)
   const handleSelectChat = (person: any) => {
-
+    console.log(person)
     setSingleChat(person);
   
     setActiveChat((prevState: any) => {
@@ -501,7 +501,7 @@ useEffect(() => {
                               />
                             )}
                             {item?.isOfferIncluded &&
-                            item?.messageType === "offer" ? (
+                            item?.messageType === "offer" && (
                               <Card
                                   className="mt-6 w-96" placeholder={undefined}                        >
                                 <CardBody className="flex flex-col gap-3" placeholder={undefined}>
@@ -601,23 +601,23 @@ useEffect(() => {
                             </div>
                           </CardFooter>
                         </Card>
-                      ) : (
+                      ) || item?.messageType === "text" && (
                         <div
-                          className={`${
-                            item?.sender?._id == _id
-                              ? "bg-primary text-white text-right"
-                              : "bg-white "
-                          }  text-black  text-sm w-[40%] p-2 rounded-lg`}
+                        className={`${
+                          item?.sender?._id == _id
+                            ? "bg-primary text-white text-right"
+                            : "bg-white "
+                        } text-black text-sm max-w-[60%] p-2 rounded-lg`}
+                      >
+                        <p className="text-left break-words"> {item?.messageContent}</p>
+                        <p
+                          className={`text-xs text-black ${
+                            item?.sender?._id == _id ? "text-right text-white" : "text-right"
+                          }`}
                         >
-                          <p className="text-left"> {item?.messageContent}</p>
-                          <p
-                            className={`text-xs text-black ${
-                              item?.sender?._id == _id ? "text-right text-white" : "text-right"
-                            }`}
-                          >
-                            {moment(item?.messaged_on).format('HH:mm')}
-                          </p>
-                        </div>
+                          {moment(item?.messaged_on).format('HH:mm')}
+                        </p>
+                      </div>
                       )}
                       {item?.sender?._id === _id && (
                         <Avatar

@@ -39,7 +39,7 @@ function App() {
         toast.error("Error parsing saved credentials:", error.message);
       }
 
-      socket.emit("join", userData?._id);
+      socket.emit("join", {userData: userData?._id, role: "event-manager"});
     }
   }, []);
 

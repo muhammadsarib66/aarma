@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // import { useMemo } from "react";
 import { io } from "socket.io-client";
 // export const baseUrl = "http://192.168.100.80:3002/";
-export const baseUrl = "http://192.168.100.91:3002/";
+export const baseUrl = "http://192.168.100.20:3002/";
 // export const baseUrl = "http://192.168.18.181:3002/";
 // export const baseUrl = "https://aarmaapis.veriorinc.com/";
 // login : "yawavat848@anypng.rcom" pas: 123123  // current 
