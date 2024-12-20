@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { baseUrl, socket } from "./Slicer";
+import { baseUrl, config, socket, token } from "./Slicer";
 import { BookingInfoApi } from "./BookingInfoSlicer";
 
 
@@ -10,18 +10,13 @@ export const DeleteActivityApi: any = createAsyncThunk(
   "aarma/DeleteActivity",
   async (Obj : any, { rejectWithValue ,dispatch  }) => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
       const response = await axios.post(
         `${baseUrl}bookings/delete-activity`,
         {  activityId: Obj?.id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        config
       );
       toast.success("Activity point deleted successfully");
       dispatch(BookingInfoApi(Obj?.BookingID));

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDispatch, useSelector } from "react-redux";
-import { baseUrl } from "../features/slicer/Slicer";
+import { baseUrl, token } from "../features/slicer/Slicer";
 import { GetMyProfile } from "../features/slicer/GetMyProfileSlicer";
 import { GetPortfolioAPi } from "../features/slicer/GetPorfolioSlicer";
 import { Box, Button, Divider, Modal } from "@mui/material";
@@ -57,7 +57,6 @@ export default function PorfolioAcordion  () {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (token) dispatch(getAllCatApi() as any); // Add 'as any' to fix the type error
     dispatch(GetMyProfile());
     dispatch(GetPortfolioAPi());

@@ -8,7 +8,7 @@ import Loader from "../../components/Loader";
 import { SplashScreen } from "../../components/SplashScreen";
 import { useSelector } from "react-redux";
 import logo from "../../assets/images/Hero.png";
-import { baseUrl } from "../../features/slicer/Slicer";
+import { baseUrl, userData } from "../../features/slicer/Slicer";
 import ProgressBar2 from "../../components/ProgressBar2";
 import EvenLogo from "./../../assets/images/eventLogo.svg"
 
@@ -44,7 +44,7 @@ const BookingsTab =[ {
   bookings: BookingsData?.cancelled?.length,
   title : "Cancelled"
 }]
-  const { fullname } = JSON.parse(localStorage.getItem("user") || "{}") || {};
+  const { fullname } = userData
   const circumference = 2 * Math.PI * 120;
 
   return (

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { baseUrl } from "./Slicer";
+import { baseUrl, config } from "./Slicer";
 import { toast } from "react-toastify";
 import { GetMyProfile } from "./GetMyProfileSlicer";
 import { GetPortfolioAPi } from "./GetPorfolioSlicer";
@@ -9,20 +9,13 @@ import { GetPortfolioAPi } from "./GetPorfolioSlicer";
 export const AddPortfolioApi: any = createAsyncThunk(
   "aarma/AddPortfolioApi",
   async (portfolio: any, { dispatch }) => {
-    // console.log(portfolio);
-    const token = localStorage.getItem("token");
 
     return await axios
-      .post(`${baseUrl}portfolio/add-portfolio`, portfolio, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(`${baseUrl}portfolio/add-portfolio`, portfolio,config)
       .then((resp) => {
         toast.success(resp?.data?.message);
         dispatch(GetMyProfile());
         dispatch(GetPortfolioAPi());
-        // console.log(resp.data.data);
 
         return resp.data;
       })
@@ -57,7 +50,6 @@ const AddPortfolioSlicer = createSlice({
     });
     builder.addCase(AddPortfolioApi.fulfilled, (state) => {
       state.isLoading = false;
-      // console.log(localStorage.getItem("token"));
     });
     builder.addCase(AddPortfolioApi.rejected, (state) => {
       state.isLoading = false;

@@ -2,21 +2,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { baseUrl } from "./Slicer";
+import { baseUrl, config, token } from "./Slicer";
 
 export const GetPortfolioAPi: any = createAsyncThunk(
   "aarma/GetPortfolio",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
-      const response = await axios.get(`${baseUrl}portfolio/my-portfolios`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`${baseUrl}portfolio/my-portfolios`, config);
 
       toast.success(response.data.message);
       // console.log(response?.data?.data);

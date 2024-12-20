@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { baseUrl, socket } from "./Slicer";
+import { baseUrl, socket, token } from "./Slicer";
 import { toast } from "react-toastify";
 import { BookingInfoApi } from "./BookingInfoSlicer";
 
@@ -9,7 +9,6 @@ export const AddPlannerApi: any = createAsyncThunk(
   "aarma/AddPlanner",
   async (Planner: any, { dispatch }) => {
     const {bookingId} = Planner
-    const token = localStorage.getItem("token");
     return await axios
       .post(`${baseUrl}bookings/add-planner-points`, Planner, {
         headers: {
@@ -48,7 +47,6 @@ const AddPlannerSlicer = createSlice({
     });
     builder.addCase(AddPlannerApi.fulfilled, (state) => {
       state.isLoading = false;
-      // console.log(localStorage.getItem("token"));
     });
     builder.addCase(AddPlannerApi.rejected, (state) => {
       state.isLoading = false;

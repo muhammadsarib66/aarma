@@ -1,21 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { baseUrl } from "./Slicer";
+import { baseUrl, config, token } from "./Slicer";
 
 export const GetMyProfile: any = createAsyncThunk(
   "aarma/GetMyProfile",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
-      const response = await axios.get(`${baseUrl}event-managers/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`${baseUrl}event-managers/me`, config);
       
       // console.log(response?.data, "===>")
       return response.data;

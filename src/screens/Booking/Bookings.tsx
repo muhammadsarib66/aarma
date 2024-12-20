@@ -16,13 +16,15 @@ import Loader from "../../components/Loader";
 export default function Bookings() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {isLoading,  BookingsData } = useSelector((state: any) => state.GetBookingSlicer);
-  console.log(BookingsData)
+  const { isLoading, BookingsData } = useSelector(
+    (state: any) => state.GetBookingSlicer
+  );
+  console.log(BookingsData);
   const { BookingInfo } = useSelector((state: any) => state.BookingInfoSlicer);
   const [statusTab, setStatusTab] = useState<any>("active");
   const [search, setSearch] = useState<any>("");
   const [filterData, setFilterData] = useState<any>([]);
-  console.log(BookingInfo,"======='booking");
+  console.log(BookingInfo, "======='booking");
   const HeadingTabs = [
     "Event Title",
     "Client Name",
@@ -32,7 +34,7 @@ export default function Bookings() {
     "Event Start ",
     "Event End ",
     "Status",
-    "Action"
+    "Action",
   ];
   const FilterTab = [
     {
@@ -53,7 +55,7 @@ export default function Bookings() {
     console.log(id);
     dispatch(CancelBookingApi(id));
     // navigate(`/cancelbooking`);
-  }
+  };
   const handleNavigateItem = (item: any) => {
     console.log(item?._id);
     dispatch(BookingInfoApi(item?._id));
@@ -103,15 +105,13 @@ export default function Bookings() {
     }
   }, [search, BookingsData, statusTab]);
 
-  useEffect(()=>{
-    dispatch(GetBookingApi())
-  },[])
-
-
+  useEffect(() => {
+    dispatch(GetBookingApi());
+  }, []);
 
   return (
     <section className=" container mx-auto  flex flex-col gap-8  ">
-      {isLoading  && <Loader />}
+      {isLoading && <Loader />}
       <Header
         heading={"Event Portal / Bookings"}
         // headingDetail="See information about Bookings"
@@ -154,49 +154,44 @@ export default function Bookings() {
 
                 return (
                   <>
-                    <tr
-                      className="text-left cursor-grab "
-                      key={item?._id}
-                    >
+                    <tr className="text-left cursor-grab " key={item?._id}>
                       <td className={classes}>
                         <p className="font-semibold text-gray-700 text-sm">
                           {item?.eventTitle}
                         </p>
                       </td>
                       <td className={classes}>
-                      <p className="font-semibold text-gray-700 text-sm">
+                        <p className="font-semibold text-gray-700 text-sm">
                           {item?.client?.fullname}
                         </p>
                       </td>
                       <td className={classes}>
-                         <p className="font-semibold text-gray-700 text-sm">
-                          
+                        <p className="font-semibold text-gray-700 text-sm">
                           {item?.client?.email}
                         </p>
                       </td>
-                      <td  className={classes}>
-                          
-                          <Button 
+                      <td className={classes}>
+                        <Button
+                          placeholder={""}
                           size="sm"
-                      onClick={() => handleNavigateItem(item)}
-                          
-                          > See Details</Button>
+                          onClick={() => handleNavigateItem(item)}
+                        >
+                          {" "}
+                          See Details
+                        </Button>
                       </td>
                       <td className={classes}>
-                         <p className="font-semibold text-gray-700 text-sm">
-                          
+                        <p className="font-semibold text-gray-700 text-sm">
                           {item?.totalGuests}
                         </p>
                       </td>
                       <td className={classes}>
-                         <p className="font-semibold text-gray-700 text-sm">
-                          
+                        <p className="font-semibold text-gray-700 text-sm">
                           {moment(item?.eventStartDate).format("MMM Do YY")}
                         </p>
                       </td>
                       <td className={classes}>
-                         <p className="font-semibold text-gray-700 text-sm">
-                          
+                        <p className="font-semibold text-gray-700 text-sm">
                           {moment(item?.eventEndDate).format("MMM Do YY")}
                         </p>
                       </td>
@@ -218,7 +213,25 @@ export default function Bookings() {
                         />
                       </td>
                       <td className={classes}>
-                          <Button  size="sm" disabled={item?.booking_statuscode == "COMPLETED"? true:false} color={item?.booking_statuscode == "COMPLETED"?"green":'red'} onClick={()=>handleCancelBooking(item?._id)}>{item?.booking_statuscode == "COMPLETED"?"Completed":"Cancel Booking"}</Button>
+                        <Button
+                          placeholder={""}
+                          size="sm"
+                          disabled={
+                            item?.booking_statuscode == "COMPLETED"
+                              ? true
+                              : false
+                          }
+                          color={
+                            item?.booking_statuscode == "COMPLETED"
+                              ? "green"
+                              : "red"
+                          }
+                          onClick={() => handleCancelBooking(item?._id)}
+                        >
+                          {item?.booking_statuscode == "COMPLETED"
+                            ? "Completed"
+                            : "Cancel Booking"}
+                        </Button>
                       </td>
                     </tr>
                   </>

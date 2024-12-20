@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
-import { baseUrl } from "../features/slicer/Slicer";
+import { baseUrl, token } from "../features/slicer/Slicer";
 const Navbar = () => {
   const {ProfileData} = useSelector((state:any)=> state.GetMyProfileSlicer);
 
@@ -15,7 +15,6 @@ const Navbar = () => {
   // const { UserData } = useSelector((state: any) => state.LoginSlicer);
   // const isAuthenticated = UserData?.email;
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -27,8 +26,9 @@ const Navbar = () => {
   const handleClose2: any = () => {
     setAnchorEl(null);
     console.log("logout");
-    localStorage.removeItem("ArmaCredienials");
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("arma-user");
+    sessionStorage.removeItem("arma-event-token");
+    sessionStorage.removeItem("formData");
     window.location.reload();
     navigate("/login");
   };

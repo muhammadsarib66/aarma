@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { baseUrl } from "./Slicer";
+import { baseUrl, config } from "./Slicer";
 import { toast } from "react-toastify";
 import { GetMyProfile } from "./GetMyProfileSlicer";
 import { GetPortfolioAPi } from "./GetPorfolioSlicer";
@@ -10,14 +10,9 @@ export const DeletePortfolioAPi: any = createAsyncThunk(
   "aarma/DeletePortfolioAPi",
   async (id: any, { dispatch }) => {
     console.log(id);
-    const token = localStorage.getItem("token");
 
     return await axios
-      .post(`${baseUrl}portfolio/delete-portfolio`, {portfolioId:id}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(`${baseUrl}portfolio/delete-portfolio`, {portfolioId:id}, config)
       .then((resp) => {
         toast.success(resp?.data?.message);
         dispatch(GetMyProfile());
@@ -53,7 +48,6 @@ const DeletePortfolio = createSlice({
     });
     builder.addCase(DeletePortfolioAPi.fulfilled, (state) => {
       state.isLoading = false;
-      // console.log(localStorage.getItem("token"));
     });
     builder.addCase(DeletePortfolioAPi.rejected, (state) => {
       state.isLoading = false;

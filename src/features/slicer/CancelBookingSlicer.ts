@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { baseUrl } from "./Slicer";
+import { baseUrl, config, token } from "./Slicer";
 import { GetBookingApi } from "./GetBookingSlicer";
 
 export const CancelBookingApi: any = createAsyncThunk(
@@ -10,18 +10,13 @@ export const CancelBookingApi: any = createAsyncThunk(
   async (Id: any, { rejectWithValue, dispatch }) => {
     console.log(Id)
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
       const response = await axios.post(
         `${baseUrl}bookings/cancel-booking`,
         { bookingId: Id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        config
       );
       toast.success( response.data?.message ??  "Booking deleted successfully");
 
@@ -70,5 +65,4 @@ const CancelBookingSlicer = createSlice({
   },
 });
 
-// export const {  } = BookingInfoSlicer.actions;
 export default CancelBookingSlicer.reducer;

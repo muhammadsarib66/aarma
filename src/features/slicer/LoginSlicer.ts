@@ -49,8 +49,8 @@ const LoginSlicer = createSlice({
 
       const { data, token } = action.payload;
       state.UserData = data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(data));
+      sessionStorage.setItem("arma-event-token", token);
+      sessionStorage.setItem("arma-user", JSON.stringify(data));
     });
     builder.addCase(LoginAccApi.rejected, (state) => {
       state.isLoading = false;

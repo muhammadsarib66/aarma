@@ -30,7 +30,7 @@ import {
 import Dashboard from "../Dashboard/Dashboard";
 import Avatar from "@mui/material/Avatar";
 import { useSelector, useDispatch } from "react-redux";
-import { baseUrl } from "../../features/slicer/Slicer";
+import { baseUrl, token } from "../../features/slicer/Slicer";
 import { getAllCatApi } from "../../features/slicer/CategorySlicer";
 import { GetMyProfile } from "../../features/slicer/GetMyProfileSlicer";
 import { GetPortfolioAPi } from "../../features/slicer/GetPorfolioSlicer";
@@ -157,7 +157,6 @@ export default function Dashboard2() {
     // { title: "Analytics", link: "/analytics", icon: <BarChartIcon /> },
   ];
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (token) dispatch(getAllCatApi() as any); // Add 'as any' to fix the type error
     dispatch(GetMyProfile());
     dispatch(GetPortfolioAPi());
@@ -291,8 +290,9 @@ export default function Dashboard2() {
           <div className="h-full flex items-end ">
             <ListItem
               onClick={() => {
-                localStorage.removeItem("ArmaCredienials");
-                localStorage.removeItem("token");
+                sessionStorage.removeItem("arma-event-token");
+                sessionStorage.removeItem("token");
+                sessionStorage.removeItem("formData");
                 window.location.reload();
                 navigate("/login");
               }}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl, setIsModalOpen } from "./Slicer";
@@ -6,7 +7,6 @@ import { toast } from "react-toastify";
 interface UserData {
   email: string;
   password: string;
-  // Add other properties if needed
 }
 
 export const createAccountApi = createAsyncThunk(
@@ -32,7 +32,6 @@ export const createAccountApi = createAsyncThunk(
       }
     } catch (error:any) {
       toast.error(error.response.data.message);
-      // toast.error("Ensure data is not in prev account");
       return Promise.reject(error);
     }
   }

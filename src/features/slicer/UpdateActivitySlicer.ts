@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { baseUrl, socket } from "./Slicer";
+import { baseUrl, config, socket } from "./Slicer";
 import { toast } from "react-toastify";
-// import { useSelector } from "react-redux";
 import { BookingInfoApi } from "./BookingInfoSlicer";
 
 export const updateActivityApi: any = createAsyncThunk(
@@ -13,13 +12,8 @@ export const updateActivityApi: any = createAsyncThunk(
         // const { BookingInfo } = useSelector((state: any) => state.BookingInfoSlicer);
         
     // const {bookingId} = Planner
-    const token = localStorage.getItem("token");
     return await axios
-      .post(`${baseUrl}bookings/add-activity`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(`${baseUrl}bookings/add-activity`, formData, config)
       .then((resp) => {
         toast.success(resp?.data?.message);
         console.log(resp?.data)
@@ -52,7 +46,6 @@ const UpdateActivitySlicer = createSlice({
     });
     builder.addCase(updateActivityApi.fulfilled, (state) => {
       state.isLoading = false;
-      // console.log(localStorage.getItem("token"));
     });
     builder.addCase(updateActivityApi.rejected, (state) => {
       state.isLoading = false;

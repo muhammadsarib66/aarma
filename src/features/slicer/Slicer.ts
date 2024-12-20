@@ -2,19 +2,22 @@ import { createSlice } from "@reduxjs/toolkit";
 // import { useMemo } from "react";
 // import { useMemo } from "react";
 import { io } from "socket.io-client";
-// export const baseUrl = "http://192.168.100.80:3002/";
-export const baseUrl = "http://192.168.100.4:3002/";
+// export const baseUrl = "http://192.168.100.30:3002/";
+// export const baseUrl = "http://192.168.100.4:3002/";
 // export const baseUrl = "http://192.168.18.181:3002/";
-// export const baseUrl = "https://aarmaapis.veriorinc.com/";
+export const baseUrl = "https://aarmaapis.veriorinc.com/";
 // login : "yawavat848@anypng.rcom" pas: 123123  // current 
 // login : "bwwdt@rowdydow.com" pas: 123123 
 
-export const token = "";
+export const userData = JSON.parse(sessionStorage.getItem('arma-user') || '{}');
+export const token = sessionStorage.getItem("arma-event-token");
+
 export const config = {
   headers: {
     Authorization: `Bearer ${token}`,
   },
 };
+
 // export const socket = useMemo(() => io(baseUrl), []);
 
  export const socket = io(baseUrl);

@@ -56,7 +56,7 @@ const SignUp = () => {
       setSubmitting(true);
       // Perform form submission logic here
       // console.log(values);
-      localStorage.setItem("formData", JSON.stringify(values));
+      sessionStorage.setItem("formData", JSON.stringify(values));
       setFormData(values)
       dispatch(createAccountApi(values) as  any ); // Add type assertion to dispatch function call
       resetForm(); // Fix: Pass formData as an argument to createAccountApi

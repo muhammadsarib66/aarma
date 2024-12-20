@@ -2,23 +2,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { baseUrl } from "./Slicer";
+import { baseUrl, config, token } from "./Slicer";
 
 export const GetBookingApi: any = createAsyncThunk(
   "aarma/GetBooking",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
       const response = await axios.get(
         `${baseUrl}bookings/event-manager-bookings`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        config
       );
 
       toast.success(response.data.message);

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { baseUrl } from "./Slicer";
+import { baseUrl, config } from "./Slicer";
 import { toast } from "react-toastify";
 import { GetMyProfile } from "./GetMyProfileSlicer";
 
@@ -9,14 +9,9 @@ export const ProfileVerificationApi: any = createAsyncThunk(
   "aarma/ProfileVerificationApi",
   async (infoData: any, { dispatch }) => {
     console.log(infoData);
-    const token = localStorage.getItem("token");
 
     return await axios
-      .post(`${baseUrl}event-managers/submit-profile`, infoData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(`${baseUrl}event-managers/submit-profile`, infoData, config)
       .then((resp) => {
         dispatch(GetMyProfile())
         toast.success(resp?.data?.message);
@@ -54,7 +49,6 @@ const ProfileVerifySlicer = createSlice({
     builder.addCase(ProfileVerificationApi.fulfilled, (state) => {
       state.isLoading = false;
 
-      // console.log(localStorage.getItem("token"));
     });
     builder.addCase(ProfileVerificationApi.rejected, (state) => {
       state.isLoading = false;

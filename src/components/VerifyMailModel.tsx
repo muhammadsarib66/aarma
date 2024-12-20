@@ -3,7 +3,7 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsModelClose } from "../features/slicer/Slicer";
+import { setIsModelClose, token } from "../features/slicer/Slicer";
 import { useEffect, useState } from "react";
 import { createAccountApi } from "../features/slicer/RequestAccountSlicer";
 import Loader from "./Loader";
@@ -32,7 +32,6 @@ const VerifyMailModel = ({ formData }: any) => {
   // console.log(ReqAccData)
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
   const handleClose = () => dispatch(setIsModelClose());
 
   const handleOTPChange = (
@@ -64,7 +63,7 @@ const VerifyMailModel = ({ formData }: any) => {
     if (otp.join("").length < 6) {
       toast.error("Please Enter 6 digit OTP");
     } else {
-      const dataString = localStorage.getItem("formData");
+      const dataString = sessionStorage.getItem("formData");
       const data = JSON.parse(dataString as string);
 
       const Obj = {

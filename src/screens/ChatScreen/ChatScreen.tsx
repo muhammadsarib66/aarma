@@ -18,7 +18,7 @@ import {
 import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
 import notisound from "../../audio/notification.mp3"
-import { baseUrl, socket } from "../../features/slicer/Slicer";
+import { baseUrl, socket, userData } from "../../features/slicer/Slicer";
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: "#44b700",
@@ -49,8 +49,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const ChatScreen = () => {
-  const user = localStorage.getItem("user");
-  const { _id } = user ? JSON.parse(user) : null;
+  const { _id } = userData;
 
   const messagesData = [
     {

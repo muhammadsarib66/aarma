@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { baseUrl } from "./Slicer";
+import { baseUrl, config } from "./Slicer";
 import { toast } from "react-toastify";
 import { GetMyProfile } from "./GetMyProfileSlicer";
 
@@ -9,14 +9,9 @@ export const ProfileUploadCoverApi: any = createAsyncThunk(
   "aarma/ProfileUploadCover",
   async (upCover: any, {dispatch}) => {
     console.log(upCover);
-    const token = localStorage.getItem("token");
 
     return await axios
-      .post(`${baseUrl}event-managers/upload-cover`, upCover, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(`${baseUrl}event-managers/upload-cover`, upCover,config)
       .then((resp) => {
         toast.success(resp?.data?.message);
         console.log(resp.data);
@@ -53,7 +48,7 @@ const ProfileUploadCoverSlicer = createSlice({
     builder.addCase(ProfileUploadCoverApi.fulfilled, (state) => {
       state.isLoading = false;
 
-      // console.log(localStorage.getItem("token"));
+      // console.log(e.getItem("token"));
     });
     builder.addCase(ProfileUploadCoverApi.rejected, (state) => {
       state.isLoading = false;
