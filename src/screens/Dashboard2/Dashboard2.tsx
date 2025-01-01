@@ -26,7 +26,6 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-// import MyProfile from "../Myprofile/MyProfile";
 import Dashboard from "../Dashboard/Dashboard";
 import Avatar from "@mui/material/Avatar";
 import { useSelector, useDispatch } from "react-redux";
@@ -39,7 +38,6 @@ import ChatIcon from "@mui/icons-material/Chat";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
-// import BarChartIcon from "@mui/icons-material/BarChart";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ChatScreen from "../ChatScreen/ChatScreen";
 import Bookings from "../Booking/Bookings";
@@ -336,7 +334,6 @@ export default function Dashboard2() {
         >
           { location.pathname === "/chats" ? null : 
     <DrawerHeader />
-        //  'dsadsadasdas'
          }
           <div className="w-full ">
           <Routes>
@@ -352,15 +349,7 @@ export default function Dashboard2() {
       <Route path="/bookingsdetail" element={<BoookingDetail />} />
     </Route>
   </Routes>
-              {/* <Routes>
-                <Route path="/*" element={<Dashboard />} />
-                <Route path="/Dashboard" element={<Dashboard />} />
-                <Route path="/myprofile" element={<MyProfile2 />} />
-                <Route path="/calender" element={<Calender />} />
-                <Route path="/bookings" element={<Bookings />} />
-                <Route path="/chats" element={<ChatScreen />} />
-                <Route path="/bookingsdetail" element={<BoookingDetail />} />
-              </Routes>          */}
+            
           </div>
         </div>
         

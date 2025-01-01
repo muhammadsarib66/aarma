@@ -18,7 +18,9 @@ import {
 import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
 import notisound from "../../audio/notification.mp3"
-import { baseUrl, socket, userData } from "../../features/slicer/Slicer";
+import { baseUrl, setIsImageFilterOpen, socket, userData } from "../../features/slicer/Slicer";
+import { useDispatch } from "react-redux";
+import { ImageModal } from "../../components/ImageModal";
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: "#44b700",
@@ -49,6 +51,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const ChatScreen = () => {
+  const dispatch = useDispatch()
   const { _id } = userData;
 
   const messagesData = [
@@ -258,24 +261,26 @@ const ChatScreen = () => {
   const [chats, setChats] = useState<any>([]);
   const [inputStr, setInputStr] = useState("");
   const scrollableDivRef = useRef(null);
-// console.log(chats,'all chats')
+  const [ImageUrl, setImageUrl] = useState<any>(null)
   // console.log("=========================>",chats,"'=============================")
   
   const handleSelectChat = (person: any) => {
-    console.log(person)
     setSingleChat(person);
-  
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setSelectedImage(null);
+    setImagePreview(null);
     setActiveChat((prevState: any) => {
       return prevState === person._id ? null : person._id;
     });
   
     // console.log(person?._id,'roomChat')
     socket.emit("joinRoom", person?._id);
-  
+
   // Listen for room messages
     socket.off("roomMessages"); // Ensure to remove previous listeners
     socket.on("roomMessages", (data) => {
-      // console.log(data, "all mesage")
       setClientActiveChat(data);
       setChats(data?.messages);
       // console.log(data);
@@ -283,29 +288,33 @@ const ChatScreen = () => {
   };
   // console.log(chats)
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const file = event.target.files?.[0];
-  if (file) {
-    setSelectedImage(file);
-    setImagePreview(URL.createObjectURL(file));
-  
-  }
-  console.log(file, "file");
-};
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+      setSelectedImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
-const handleRemoveImage = () => {
-  setSelectedImage(null);
-  setImagePreview(null);
-};
-  
+  const handleRemoveImage = () => {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setSelectedImage(null);
+    setImagePreview(null);
+  };
+
   const handleSendMessage = () => {
     if (inputStr.trim() === "" && !selectedImage) {
-      toast.error("please type a message or select an image");
+      toast.error("Please type a message or select an image");
       return;
     }
-  
+
     const sending: any = {
       messageContent: inputStr,
       sender: _id,
@@ -314,7 +323,7 @@ const handleRemoveImage = () => {
       client: clientActiveChat?.room?.client?._id,
       messageType: "text",
     };
-  
+
     if (selectedImage) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -322,6 +331,7 @@ const handleRemoveImage = () => {
         socket.emit("sendMessage", sending);
         setInputStr(""); // Clear input field after sending
         setSelectedImage(null); // Clear selected image after sending
+        handleRemoveImage();
       };
       reader.readAsDataURL(selectedImage);
     } else {
@@ -329,7 +339,8 @@ const handleRemoveImage = () => {
       setInputStr(""); // Clear input field after sending
     }
   };
-  const handleKeyDown = (event:any) => {
+
+  const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
       handleSendMessage();
     }
@@ -394,6 +405,12 @@ const handleMessageDetected = (data:any) => {
 setChats((prev: any) => [...prev, data]);
 };
 
+const handleOpenImage = (image:any)=>{
+  setImageUrl(baseUrl+image)
+  console.log('open image',image)
+  dispatch(setIsImageFilterOpen(true))
+  
+}
 // Set up the socket event listener
 useEffect(() => {
   socket.on("message-detected", handleMessageDetected);
@@ -414,7 +431,7 @@ useEffect(() => {
       <div className=" bg-gray-100 grid  p-4 grid-cols-12 gap-4">
         <div className="bg-white p-6 md:col-span-3 col-span-4 flex   flex-col gap-4  rounded-md">
           <div>
-            <h1> Active Users</h1>
+            <h1> Active Users 😉</h1>
           </div>
           <div className="flex  items-center  space-x-5  overflow-hidden">
             {messagesData.map(
@@ -641,7 +658,9 @@ useEffect(() => {
   } text-black text-sm max-w-[60%] p-2 rounded-lg`}
 >
   {item?.images && (
-    <img src={baseUrl + item.images} alt="message image" className="max-w-full h-auto mb-2 rounded-lg" />
+    <img src={baseUrl + item.images} 
+    onClick={()=>{handleOpenImage(item.images)}}
+    alt="message image" className=" cursor-pointer max-w-full h-auto mb-2 rounded-lg" />
   )}
   {item?.messageContent && (
     <p className="text-left break-words"> {item?.messageContent}</p>
@@ -665,98 +684,57 @@ useEffect(() => {
                   ))}
                 <div ref={scrollableDivRef}></div>
               </div>
-              {/* <div className="chat bg-gray-100 flex items-center   gap-4  p-4">
-                <div className="text-gray-700 rounded-full bg-white items-center justify-center gap-1 p-3 w-full bg-white-500 flex">
-                  <input
-                    value={inputStr}
-                    onChange={(e) => setInputStr(e.target.value)}
-                onKeyDown={handleKeyDown}
-
-                    type="text"
-                    className=" w-full   "
-                    placeholder="Type a message"
-                  />
-                </div>
-                <CustomOffer
-                  senderId={_id}
-                  clientId={clientActiveChat?.room?.client?._id}
-                />
-
-<div>
-    <input
-      type="file"
-      accept="image/*"
-      id="imageInput"
-      style={{ display: 'none' }}
-      onChange={handleImageChange}
-    />
-    <label htmlFor="imageInput">
-    <i className="fa-solid fa-paperclip"></i>
-
-    </label>
-   
-     <div
-                  onClick={handleSendMessage}
-                  className="cursor-pointer bg-white flex items-center justify-center  rounded-full h-14 w-14   "
-                >
-                  <i className="text-2xl text-blue-500 fa-solid fa-paper-plane"></i>
-                </div>
-  </div>
-               
-              </div> */}
               <div className="chat relative bg-gray-100 flex flex-col gap-4 p-4">
-    {imagePreview && (
-      <div className="absolute bottom-16 mb-4">
-        <img src={imagePreview} alt="Selected" className="w-40 H-40 object-contain rounded-lg" />
-        <button
-          onClick={handleRemoveImage}
-          className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-8 h-8 p-1"
-        >
-          {/* <FontAwesomeIcon icon={faTimes} /> */}
-          <i className="fa-solid fa-xmark"></i>
-          {/* <i className="fa-solid fa-paperclip"></i> */}
-          {/* <i className="text-2xl text-blue-500 fa-solid fa-paper-plane"></i> */}
-        </button>
-      </div>
-    )}
-    <div className="flex items-center gap-4">
-      <div className="text-gray-700 rounded-full bg-white items-center justify-center gap-1 p-3 w-full flex">
-        <input
-          value={inputStr}
-          onChange={(e) => setInputStr(e.target.value)}
-          onKeyDown={handleKeyDown}
-          type="text"
-          className="w-full"
-          placeholder="Type a message"
+      {imagePreview && (
+        <div className="absolute bottom-16 mb-4">
+          <img
+            src={imagePreview}
+            alt="Selected"
+            className="w-40 h-40 object-contain rounded-lg"
+          />
+          <button
+            onClick={handleRemoveImage}
+            className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-8 h-8 p-1"
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      )}
+      <div className="flex items-center gap-4">
+        <div className="text-gray-700 rounded-full bg-white items-center justify-center gap-1 p-3 w-full flex">
+          <input
+            value={inputStr}
+            onChange={(e) => setInputStr(e.target.value)}
+            onKeyDown={handleKeyDown}
+            type="text"
+            className="w-full"
+            placeholder="Type a message"
+          />
+        </div>
+        <CustomOffer
+          senderId={_id}
+          clientId={clientActiveChat?.room?.client?._id}
         />
-      </div>
-      <CustomOffer
-        senderId={_id}
-        clientId={clientActiveChat?.room?.client?._id}
-      />
-      <div className="flex items-center gap-2">
-        <input
-          type="file"
-          accept="image/*"
-          id="imageInput"
-          style={{ display: 'none' }}
-          onChange={handleImageChange}
-        />
-        <label htmlFor="imageInput" className="cursor-pointer">
-          {/* <FontAwesomeIcon icon={faPaperclip} size="2x" /> */}
-          <i className="fa-solid fa-paperclip"></i>
-          {/* <i className="text-2xl text-blue-500 fa-solid fa-paper-plane"></i> */}
-        </label>
-        <div
-          onClick={handleSendMessage}
-          className="cursor-pointer bg-white flex items-center justify-center rounded-full h-14 w-14"
-        >
-           <i className="text-2xl text-blue-500 fa-solid fa-paper-plane"></i>
-          {/* <FontAwesomeIcon icon={faPaperPlane} className="text-2xl text-blue-500" /> */}
+        <div className="flex items-center gap-2">
+          <input
+            type="file"
+            accept="image/*"
+            id="imageInput"
+            style={{ display: "none" }}
+            onChange={handleImageChange}
+          />
+          <label htmlFor="imageInput" className="cursor-pointer">
+            <i className="fa-solid fa-paperclip"></i>
+          </label>
+          <div
+            onClick={handleSendMessage}
+            className="cursor-pointer bg-white flex items-center justify-center rounded-full h-14 w-14"
+          >
+            <i className="text-2xl text-blue-500 fa-solid fa-paper-plane"></i>
+          </div>
         </div>
       </div>
     </div>
-  </div>
             </div>
           ) : (
             <div className="w-full flex h-screen  flex-col pt-20 gap-4 justify-center items-center ">
@@ -854,7 +832,7 @@ useEffect(() => {
           )}
         </div>
       </div>
-     
+          <ImageModal  Image={ImageUrl}/>
     </section>
     );
 };

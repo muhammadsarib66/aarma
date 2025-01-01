@@ -44,7 +44,7 @@ const BookingsTab =[ {
   bookings: BookingsData?.cancelled?.length,
   title : "Cancelled"
 }]
-  const { fullname } = userData
+   userData
   const circumference = 2 * Math.PI * 120;
 
   return (
@@ -81,7 +81,7 @@ const BookingsTab =[ {
       </div>
       <div className="flex flex-col  gap-8">
         <p className="text-3xl font-semibold">
-          Welcome <span className="text-primary capitalize">{fullname} </span>{" "}
+          Welcome <span className="text-primary capitalize">{userData?.fullname} </span>{" "}
           <br />
         </p>
         <div className="bg-primary text-white p-4 rounded-full flex flex-col  justify-center items-center">

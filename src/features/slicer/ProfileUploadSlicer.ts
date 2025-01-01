@@ -9,7 +9,7 @@ import { GetMyProfile } from "./GetMyProfileSlicer";
 export const ProfileUploadProfileApi: any = createAsyncThunk(
   "aarma/ProfileUploadProfileApi",
   async (profile: any , {dispatch}) => {
-    console.log(profile);
+    console.log(profile,'sss');
 
     return await axios
       .post(`${baseUrl}event-managers/upload-profile`, profile, config)

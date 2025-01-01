@@ -38,14 +38,15 @@ const App: React.FC = () => {
     }
   }, [dispatch, token, userData]);
 
+  const playNotificationSound = () => {
+    const audio = new Audio(notisound);
+    audio.play();
+  };
   useEffect(() => {
-    const playNotificationSound = () => {
-      const audio = new Audio(notisound);
-      audio.play();
-    };
 
     const handleNewMessage = (data: any) => {
-      if (data?.sender === userData?._id) return;
+      console.log(data,'sssss')
+      if (data?.sender?._id == userData?._id) return;
 
       const profile = data?.sender?.profile
         ? `${baseUrl}${data.sender.profile}`

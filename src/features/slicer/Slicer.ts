@@ -1,24 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { useMemo } from "react";
-// import { useMemo } from "react";
 import { io } from "socket.io-client";
-// export const baseUrl = "http://192.168.100.30:3002/";
-// export const baseUrl = "http://192.168.100.4:3002/";
-// export const baseUrl = "http://192.168.18.181:3002/";
-export const baseUrl = "https://aarmaapis.veriorinc.com/";
-// login : "yawavat848@anypng.rcom" pas: 123123  // current 
-// login : "bwwdt@rowdydow.com" pas: 123123 
+export const baseUrl = "http://192.168.100.20:3002/";
+// export const baseUrl = "https://aarmaapis.veriorinc.com/";
+// login : "saribnoor0310@gmail.com" pas: 123123  // current 
 
 export const userData = JSON.parse(sessionStorage.getItem('arma-user') || '{}');
 export const token = sessionStorage.getItem("arma-event-token");
-
+console.log( userData)
 export const config = {
   headers: {
     Authorization: `Bearer ${token}`,
   },
 };
-
-// export const socket = useMemo(() => io(baseUrl), []);
 
  export const socket = io(baseUrl);
 
@@ -29,7 +22,7 @@ const initialState = {
   Incprogress: 16.6,
   isModalOpen: false,
   SignUpData: "",
-  
+  ImageFilterOpen: false,
 };
 
 const Slicer = createSlice({
@@ -61,6 +54,9 @@ const Slicer = createSlice({
     setSignUpForm: (state, action) => {
       state.SignUpData = action.payload;
     },
+    setIsImageFilterOpen: (state,action) => {
+      state.ImageFilterOpen = action.payload;
+    }
   },
 });
 
@@ -70,6 +66,7 @@ export const {
   setIsModalOpen,
   setIsModelClose,
   setSignUpForm,
+  setIsImageFilterOpen
 } = Slicer.actions;
 export default Slicer.reducer;
 

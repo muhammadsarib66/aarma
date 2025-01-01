@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import img from "../../assets/images/contactus.png";
 import { Card, CardBody } from "@material-tailwind/react";
 import { Divider } from "@mui/material";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BookingInfoApi } from "../../features/slicer/BookingInfoSlicer";
+import { baseUrl } from "../../features/slicer/Slicer";
 
 const EventInfo = () => {
   const getBookingID = localStorage.getItem("BookingInfoId");
@@ -25,6 +25,7 @@ const EventInfo = () => {
     dispatch(BookingInfoApi(bokId))
 
   },[])
+  console.log(BookingInfo,'bookinginfo')
 
   return (
     <div className="grid grid-cols-2 mt-4 shadow-lg ">
@@ -48,7 +49,7 @@ const EventInfo = () => {
 
             <Divider />
             <div className="flex flex-col items-center justify-center p-4 w-full ">
-              <img src={img} className="rounded-full object-cover w-44 h-44" />
+              <img src={baseUrl +  BookingInfo?.data?.client?.profile} className="rounded-full object-cover w-44 h-44" />
               <p className="font-semibold">{userData?.client?.fullname}</p>
               <p className="font-thin text-gray-600 text-xs">
                 {userData?.client?.email}

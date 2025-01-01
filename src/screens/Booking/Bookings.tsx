@@ -30,10 +30,13 @@ export default function Bookings() {
     "Client Name",
     "client Email",
     "Total Guests",
+    "Budget",
     "Booking Detail",
+    "Review",
     "Event Start ",
     "Event End ",
     "Status",
+
     "Action",
   ];
   const FilterTab = [
@@ -134,7 +137,7 @@ export default function Bookings() {
         >
           <table className=" font-Poppins w-full table-auto text-center mx-auto  ">
             <thead>
-              <tr className="text-left ">
+              <tr className="text-center ">
                 {HeadingTabs?.map((head) => (
                   <th
                     key={head}
@@ -167,7 +170,10 @@ export default function Bookings() {
                       </td>
                       <td className={classes}>
                         <p className="font-semibold text-gray-700 text-sm">
-                          {item?.client?.email}
+                          {/* {item?.client?.email}  */}
+                          {item?.client?.email.length > 10
+                            ? `${item?.client?.email.substring(0, 10)}...`
+                            : item?.client?.email}
                         </p>
                       </td>
                       <td className={classes}>
@@ -187,12 +193,17 @@ export default function Bookings() {
                       </td>
                       <td className={classes}>
                         <p className="font-semibold text-gray-700 text-sm">
-                          {moment(item?.eventStartDate).format("MMM Do YY")}
+                          ${item?.budget}
                         </p>
                       </td>
                       <td className={classes}>
                         <p className="font-semibold text-gray-700 text-sm">
-                          {moment(item?.eventEndDate).format("MMM Do YY")}
+                          {moment(item?.eventStartDate).format("L")}
+                        </p>
+                      </td>
+                      <td className={classes}>
+                        <p className="font-semibold text-gray-700 text-sm">
+                          {moment(item?.eventEndDate).format("L")}
                         </p>
                       </td>
                       <td className={`${classes} flex justify-center`}>

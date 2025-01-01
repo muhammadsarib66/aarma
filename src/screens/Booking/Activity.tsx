@@ -29,7 +29,7 @@ const Activity = () => {
   const [ActivityId, setActivityId] = useState(null);
   const [open, setOpen] = useState(false);
 
-  console.log(BookingInfo);
+  console.log(activity);
 
   const handleActivity = (id: any) => {
     setOpen(true);

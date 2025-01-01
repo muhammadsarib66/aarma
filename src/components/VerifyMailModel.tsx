@@ -5,11 +5,11 @@ import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsModelClose, token } from "../features/slicer/Slicer";
 import { useEffect, useState } from "react";
-import { createAccountApi } from "../features/slicer/RequestAccountSlicer";
 import Loader from "./Loader";
 import { VerifyOtpApi } from "../features/slicer/VerifyOtpSlicer";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { ResendOtpApi } from "../features/slicer/ResendOtpSlicer";
 
 const style = {
   position: "absolute",
@@ -76,8 +76,8 @@ const VerifyMailModel = ({ formData }: any) => {
     }
   };
   const ResendEmail = () => {
-    // console.log(formData);
-    dispatch(createAccountApi(formData) as any);
+    // console.log(formData?.email);
+    dispatch(ResendOtpApi(formData?.email) as any);
   };
 
   useEffect(() => {
