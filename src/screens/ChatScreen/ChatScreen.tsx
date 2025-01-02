@@ -262,53 +262,58 @@ const ChatScreen = () => {
   const [inputStr, setInputStr] = useState("");
   const scrollableDivRef = useRef(null);
   const [ImageUrl, setImageUrl] = useState<any>(null)
-  // console.log("=========================>",chats,"'=============================")
-  
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const handleSelectChat = (person: any) => {
     setSingleChat(person);
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
-    setSelectedImage(null);
-    setImagePreview(null);
+   
     setActiveChat((prevState: any) => {
       return prevState === person._id ? null : person._id;
     });
   
+
     // console.log(person?._id,'roomChat')
     socket.emit("joinRoom", person?._id);
 
   // Listen for room messages
     socket.off("roomMessages"); // Ensure to remove previous listeners
     socket.on("roomMessages", (data) => {
+      console.log(data,'room messages')
       setClientActiveChat(data);
       setChats(data?.messages);
       // console.log(data);
     });
   };
-  // console.log(chats)
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  
+  console.log(usersConv,'chatssss')
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
       setSelectedImage(file);
       setImagePreview(URL.createObjectURL(file));
+
+      // Reset the input value to allow selecting the same file again
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
-
   const handleRemoveImage = () => {
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
     setSelectedImage(null);
     setImagePreview(null);
+
+    // Reset the input value when removing the image
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
+  // const handleRemoveImage = () => {
+  //   setSelectedImage(null);
+  //   setImagePreview(null);
+  // };
   const handleSendMessage = () => {
     if (inputStr.trim() === "" && !selectedImage) {
       toast.error("Please type a message or select an image");
@@ -348,10 +353,27 @@ const ChatScreen = () => {
   const handleWithDrawOffer = (id: any) => {
     socket.emit("withdraw-offer", id);
   };
+
+  const handleMessageDetected = (data: any) => {
+    console.log(data, "detectedddd");
+    setChats((prevChats: any) => {
+      const chatIndex = prevChats.findIndex((chat: any) => {
+        chat?.sender?._id == data.chatRoom?.client
+
+        // console.log(chat?.sender?._id ,'same', data.chatRoom?.client)
+      });
+      if (chatIndex != -1) {
+        const updatedChats = [...prevChats];
+        updatedChats[chatIndex] = data;
+        return updatedChats;
+      } else {
+        return [...prevChats, data];
+      }
+    });
+  };
+  
   useEffect(() => {
-    const handleMessageReceived = (data: any) => {
-      console.log(data, "received");
-    };
+  
   
     const handleRoomsFetched = (data: any) => {
       setusersConv(data);
@@ -382,32 +404,33 @@ const ChatScreen = () => {
       toast.error(data?.message)
     }
   }
+  const fetchOnlineClients = (data:any) =>{
+    console.log(data,'come from sockets')
+  }
 
-    socket.on("message-recieved", handleMessageReceived);
+
     socket.emit("fetch-myRooms", _id);
     socket.on("myRooms", handleRoomsFetched);
+    socket.on("online-clients", fetchOnlineClients);
     
     socket.on("offer-updated",handleOfferUpdated)
   
     // Clean up listeners on unmount
     return () => {
-      socket.off("message-recieved", handleMessageReceived);
       socket.off("myRooms", handleRoomsFetched);
       // socket.off("message-detected", handleMessageDetected);
       socket.off("roomMessages");
       socket.off("offer-updated",handleOfferUpdated)
+      socket.off("online-clients",fetchOnlineClients)
     };
   }, [_id,chats]);
 
 
-const handleMessageDetected = (data:any) => {
-  console.log(data, "detectedddd");
-setChats((prev: any) => [...prev, data]);
-};
+
 
 const handleOpenImage = (image:any)=>{
   setImageUrl(baseUrl+image)
-  console.log('open image',image)
+  // console.log('open image',image)
   dispatch(setIsImageFilterOpen(true))
   
 }
@@ -485,9 +508,10 @@ useEffect(() => {
                               </h1>
                               <p className="text-[8px] md:text-xs  font-semibold">
                                 {" "}
-                                {moment(person?.lastMessage?.messaged_on)
+                                {/* {moment(person?.lastMessage?.messaged_on)
                                   .startOf("hour")
-                                  .fromNow()}
+                                  .fromNow()} */}
+                                    {moment(person?.lastMessage?.messaged_on).fromNow()}
                               </p>
                             </div>
                             <TruncateMarkup lines={1}>
@@ -720,11 +744,12 @@ useEffect(() => {
             type="file"
             accept="image/*"
             id="imageInput"
+            ref={fileInputRef}
             style={{ display: "none" }}
             onChange={handleImageChange}
           />
           <label htmlFor="imageInput" className="cursor-pointer">
-            <i className="fa-solid fa-paperclip"></i>
+            <i className="text-2xl text-blue-500 fa-regular fa-file-image"></i>
           </label>
           <div
             onClick={handleSendMessage}
@@ -749,9 +774,9 @@ useEffect(() => {
             </div>
           )}
         </div>
-        <div className="bg-white hidden md:block md:col-span-3 shadow-md  rounded-md p-6">
-          {singleChat ? (
-            <div>
+        <div className="bg-white hidden md:block md:col-span-3 shadow-md   rounded-md p-6">
+          {singleChat && (
+            <div >
               <div className="flex items-center gap-4">
                 <i
                   className="text-xl fa-solid fa-xmark cursor-pointer"
@@ -825,11 +850,13 @@ useEffect(() => {
                 </div>
               </div>
             </div>
-          ) : (
-            <div>
-              <h1 className="capitalize">click on the Chat to open User Detail </h1>
-            </div>
-          )}
+          )
+          //  : (
+          //   <div>
+          //     <h1 className="capitalize">click on the Chat to open User Detail </h1>
+          //   </div>
+          // )
+          }
         </div>
       </div>
           <ImageModal  Image={ImageUrl}/>
