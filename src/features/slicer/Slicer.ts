@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
-// export const baseUrl = "http://192.168.100.20:3002/";
+// export const baseUrl = "http://192.168.100.19:3002/";
 export const baseUrl = "https://aarmaapis.veriorinc.com/";
-// login : "saribnoor0310@gmail.com" pas: 123123  // current 
 
 export const userData = JSON.parse(sessionStorage.getItem('arma-user') || '{}');
 export const token = sessionStorage.getItem("arma-event-token");

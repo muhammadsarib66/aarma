@@ -271,13 +271,12 @@ const ChatScreen = () => {
     setActiveChat((prevState: any) => {
       return prevState === person._id ? null : person._id;
     });
-  
 
     // console.log(person?._id,'roomChat')
     socket.emit("joinRoom", person?._id);
 
   // Listen for room messages
-    socket.off("roomMessages"); // Ensure to remove previous listeners
+    socket.off("roomMessages"); 
     socket.on("roomMessages", (data) => {
       console.log(data,'room messages')
       setClientActiveChat(data);
@@ -286,7 +285,6 @@ const ChatScreen = () => {
     });
   };
   
-  console.log(usersConv,'chatssss')
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -294,7 +292,6 @@ const ChatScreen = () => {
       setSelectedImage(file);
       setImagePreview(URL.createObjectURL(file));
 
-      // Reset the input value to allow selecting the same file again
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -304,16 +301,11 @@ const ChatScreen = () => {
     setSelectedImage(null);
     setImagePreview(null);
 
-    // Reset the input value when removing the image
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
-  // const handleRemoveImage = () => {
-  //   setSelectedImage(null);
-  //   setImagePreview(null);
-  // };
   const handleSendMessage = () => {
     if (inputStr.trim() === "" && !selectedImage) {
       toast.error("Please type a message or select an image");
@@ -334,14 +326,14 @@ const ChatScreen = () => {
       reader.onloadend = () => {
         sending.images = reader.result;
         socket.emit("sendMessage", sending);
-        setInputStr(""); // Clear input field after sending
-        setSelectedImage(null); // Clear selected image after sending
+        setInputStr(""); // Clear input field 
+        setSelectedImage(null); 
         handleRemoveImage();
       };
       reader.readAsDataURL(selectedImage);
     } else {
       socket.emit("sendMessage", sending);
-      setInputStr(""); // Clear input field after sending
+      setInputStr(""); 
     }
   };
 
@@ -355,22 +347,24 @@ const ChatScreen = () => {
   };
 
   const handleMessageDetected = (data: any) => {
-    console.log(data, "detectedddd");
+    console.log(data, 'sockettt data receiving')
+    
     setChats((prevChats: any) => {
-      const chatIndex = prevChats.findIndex((chat: any) => {
-        chat?.sender?._id == data.chatRoom?.client
+        const chatIndex = prevChats.findIndex((chat: any) => 
+            chat?.chatRoom?._id === data.chatRoom?._id
+        );
 
-        // console.log(chat?.sender?._id ,'same', data.chatRoom?.client)
-      });
-      if (chatIndex != -1) {
-        const updatedChats = [...prevChats];
-        updatedChats[chatIndex] = data;
-        return updatedChats;
-      } else {
-        return [...prevChats, data];
-      }
+        if (chatIndex !== -1) {
+            // Create new array with all previous chats
+            const updatedChats = [...prevChats];
+            // Push the new data to matched chat
+            updatedChats.push(data);
+            return updatedChats;
+        }
+        
+        return prevChats;
     });
-  };
+};
   
   useEffect(() => {
   
@@ -415,10 +409,8 @@ const ChatScreen = () => {
     
     socket.on("offer-updated",handleOfferUpdated)
   
-    // Clean up listeners on unmount
     return () => {
       socket.off("myRooms", handleRoomsFetched);
-      // socket.off("message-detected", handleMessageDetected);
       socket.off("roomMessages");
       socket.off("offer-updated",handleOfferUpdated)
       socket.off("online-clients",fetchOnlineClients)
@@ -454,7 +446,7 @@ useEffect(() => {
       <div className=" bg-gray-100 grid  p-4 grid-cols-12 gap-4">
         <div className="bg-white p-6 md:col-span-3 col-span-4 flex   flex-col gap-4  rounded-md">
           <div>
-            <h1> Active Users 😉</h1>
+            <h1> Active Users 👀</h1>
           </div>
           <div className="flex  items-center  space-x-5  overflow-hidden">
             {messagesData.map(
@@ -483,7 +475,6 @@ useEffect(() => {
               className="bg-gray-200 w-full"
               type="text"
                     placeholder="Search user"
-                    // onChange={(e) => setSearchName(e.target.value)}
                   />
                 </div>
                 <div>
@@ -507,10 +498,7 @@ useEffect(() => {
                                 {person?.client?.fullname}{" "}
                               </h1>
                               <p className="text-[8px] md:text-xs  font-semibold">
-                                {" "}
-                                {/* {moment(person?.lastMessage?.messaged_on)
-                                  .startOf("hour")
-                                  .fromNow()} */}
+                               
                                     {moment(person?.lastMessage?.messaged_on).fromNow()}
                               </p>
                             </div>
@@ -851,11 +839,6 @@ useEffect(() => {
               </div>
             </div>
           )
-          //  : (
-          //   <div>
-          //     <h1 className="capitalize">click on the Chat to open User Detail </h1>
-          //   </div>
-          // )
           }
         </div>
       </div>
